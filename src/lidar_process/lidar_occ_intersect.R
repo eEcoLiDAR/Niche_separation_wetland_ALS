@@ -1,0 +1,81 @@
+library(gdalUtils)
+library(rgdal)
+library(raster)
+library(dplyr)
+library(sdm)
+library(stringr)
+
+workingdir="D:/Koma/Paper2/Paper2_2019Nov/ahn3_2019_10_15_geotiffs/features_veg_10m_1m/"
+setwd(workingdir)
+
+junk <- list.files(pattern="_gps_time.tif")
+file.remove(junk)
+
+junk <- list.files(pattern="_intensity.tif")
+file.remove(junk)
+
+shp=readOGR(".","birds_swet_presatl")
+shp.df <- as(shp, "data.frame")
+
+shp_sel=subset(shp.df, select=c("coords.x1","coords.x2","species","occrrnc"))
+
+coordinates(shp_sel)=~coords.x1+coords.x2
+proj4string(shp_sel)<- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
+
+filelist=list.files(pattern = "*.tif")
+
+id=str_sub(filelist,1,25)
+id=unique(id)
+id=str_remove(id, "\\_$")
+
+list_forfea=list.files(pattern=id[1])
+feaname=str_remove(list_forfea, id[1])
+feaname=str_remove(feaname, ".tif")
+
+feaname=unique(feaname)
+
+for (i in id) {
+  print(i)
+  
+  rastlist=list.files(pattern=paste(i,"_",sep=""))
+  feaname=str_remove(rastlist, i)
+  feaname=str_remove(feaname, ".tif")
+  
+  rasters=stack(rastlist)
+  
+  crs(rasters) <- "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"
+  names(rasters) <- feaname
+  
+  writeRaster(rasters,paste(i,"merged.grd",sep=""),overwrite=TRUE)
+  
+}
+
+grdlist=list.files(pattern = "*.grd")
+
+for (j in grdlist) {
+  print(j)
+  
+  raster=stack(j)
+  print(dim(raster))
+  
+  possibleError=tryCatch(sdmData(occrrnc~.,train=shp_sel,predictors = raster), error = function(e) e)
+  
+  if(inherits(possibleError, "error")) next
+  
+  d <- sdmData(occrrnc~.,train=shp_sel,predictors = raster)
+  data=d@features
+    
+  name=sub('\\..*', "", j)
+  write.csv(data,paste(name,"_intersected.csv",sep=""))
+
+}
+
+files <- list.files(pattern = "*_intersected.csv")
+
+allcsv <- lapply(files,function(g){
+  read.csv(g, header=TRUE)
+})
+
+allcsv_df <- do.call(rbind.data.frame, allcsv)
+
+write.csv(allcsv_df,"veg_metrics_10m.csv")
