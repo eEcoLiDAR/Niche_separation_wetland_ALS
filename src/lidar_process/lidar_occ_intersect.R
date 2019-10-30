@@ -14,7 +14,8 @@ file.remove(junk)
 junk <- list.files(pattern="_intensity.tif")
 file.remove(junk)
 
-shp=readOGR(".","birds_swet_presatl")
+#shp=readOGR(".","birds_swet_presatl")
+shp=readOGR(".","birds_swet_absatl")
 shp.df <- as(shp, "data.frame")
 
 shp_sel=subset(shp.df, select=c("coords.x1","coords.x2","species","occrrnc"))
@@ -66,11 +67,13 @@ for (j in grdlist) {
   data=d@features
     
   name=sub('\\..*', "", j)
-  write.csv(data,paste(name,"_intersected.csv",sep=""))
+  #write.csv(data,paste(name,"_intersected.csv",sep=""))
+  write.csv(data,paste(name,"_intersected_abs.csv",sep=""))
 
 }
 
-files <- list.files(pattern = "*_intersected.csv")
+#files <- list.files(pattern = "*_intersected.csv")
+files <- list.files(pattern = "*_intersected_abs.csv")
 
 allcsv <- lapply(files,function(g){
   read.csv(g, header=TRUE)
@@ -78,4 +81,5 @@ allcsv <- lapply(files,function(g){
 
 allcsv_df <- do.call(rbind.data.frame, allcsv)
 
-write.csv(allcsv_df,"veg_metrics_10m.csv")
+#write.csv(allcsv_df,"veg_metrics_10m.csv")
+write.csv(allcsv_df,"veg_metrics_10m_abs.csv")
