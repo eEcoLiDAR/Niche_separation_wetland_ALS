@@ -14,11 +14,12 @@ file.remove(junk)
 junk <- list.files(pattern="_intensity.tif")
 file.remove(junk)
 
-#shp=readOGR(".","birds_swet_presatl")
-shp=readOGR(".","birds_swet_absatl")
+shp=readOGR(".","birds_swet_presatl")
+#shp=readOGR(".","birds_swet_absatl")
 shp.df <- as(shp, "data.frame")
+shp.df$id<- seq(1,length(shp.df$kmsquar))
 
-shp_sel=subset(shp.df, select=c("coords.x1","coords.x2","species","occrrnc"))
+shp_sel=subset(shp.df, select=c("coords.x1","coords.x2","species","occrrnc","id"))
 
 coordinates(shp_sel)=~coords.x1+coords.x2
 proj4string(shp_sel)<- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
@@ -65,15 +66,17 @@ for (j in grdlist) {
   
   d <- sdmData(occrrnc~.,train=shp_sel,predictors = raster)
   data=d@features
+  
+  intersect_data=merge(x = data, y = shp.df, by = c("id"), all.x = TRUE)
     
   name=sub('\\..*', "", j)
-  #write.csv(data,paste(name,"_intersected.csv",sep=""))
-  write.csv(data,paste(name,"_intersected_abs.csv",sep=""))
+  write.csv(intersect_data,paste(name,"_intersected.csv",sep=""))
+  #write.csv(intersect_data,paste(name,"_intersected_abs.csv",sep=""))
 
 }
 
-#files <- list.files(pattern = "*_intersected.csv")
-files <- list.files(pattern = "*_intersected_abs.csv")
+files <- list.files(pattern = "*_intersected.csv")
+#files <- list.files(pattern = "*_intersected_abs.csv")
 
 allcsv <- lapply(files,function(g){
   read.csv(g, header=TRUE)
@@ -81,5 +84,5 @@ allcsv <- lapply(files,function(g){
 
 allcsv_df <- do.call(rbind.data.frame, allcsv)
 
-#write.csv(allcsv_df,"veg_metrics_10m.csv")
-write.csv(allcsv_df,"veg_metrics_10m_abs.csv")
+write.csv(allcsv_df,"veg_metrics_10m.csv")
+#write.csv(allcsv_df,"veg_metrics_10m_abs.csv")
