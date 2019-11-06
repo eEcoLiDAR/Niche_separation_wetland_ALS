@@ -14,11 +14,12 @@ workingdirectory="D:/Sync/_Amsterdam/03_Paper2_bird_lidar_sdm/Analysis2019Nov/"
 setwd(workingdirectory)
 
 data=read.csv("veg_metrics_10m.csv")
-data$occ <- 1
 dataabs=read.csv("veg_metrics_10m_abs.csv")
-dataabs$occ <- 0
 
-data_merged=rbind(data,dataabs)
+data_sub=subset(data,select=c(39,40,5:17,18,35))
+dataabs_sub=subset(dataabs,select=c(39,40,5:17,18,32))
+
+data_merged=rbind(data_sub,dataabs_sub)
 
 
 # Corr environmental layers
@@ -45,7 +46,7 @@ corrplot(cor_env_all, type="upper", order="hclust",
          p.mat = p.mat, sig.level = 0.01)
 
 # VIF
-vif_merged=vifcor(data_merged[4:16], th=0.6, method='spearman')
+vif_merged=vifcor(data_merged[3:15], th=0.6, method='spearman')
 vif_pres=vifcor(data[4:16], th=0.6, method='spearman')
 
 data_noncor=subset(data,select=c("species","X_band_ratio_1_normalized_height_2","X_band_ratio_2_normalized_height_3",
