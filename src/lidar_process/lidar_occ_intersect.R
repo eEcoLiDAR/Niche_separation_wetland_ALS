@@ -58,7 +58,9 @@ for (j in grdlist) {
   print(j)
   
   raster=stack(j)
-  print(dim(raster))
+  
+  feaname_exp=str_remove(names(raster), "^X_")
+  names(raster)<-feaname_exp
   
   possibleError=tryCatch(sdmData(occrrnc~.,train=shp_sel,predictors = raster), error = function(e) e)
   
@@ -70,6 +72,7 @@ for (j in grdlist) {
   intersect_data=merge(x = data, y = shp.df, by = c("id"), all.x = TRUE)
     
   name=sub('\\..*', "", j)
+  
   write.csv(intersect_data,paste(name,"_intersected.csv",sep=""))
   #write.csv(intersect_data,paste(name,"_intersected_abs.csv",sep=""))
 
