@@ -5,7 +5,7 @@ library(stringr)
 
 ##
 
-workingdir="D:/Sync/_Amsterdam/03_Paper2_bird_lidar_sdm/Analysis2019Nov/"
+workingdir="D:/Koma/Paper2/Paper2_2019Nov/ahn3_2019_10_15_geotiffs/features_veg_10m_1m/"
 setwd(workingdir)
 
 filelist=list.files(pattern = "*95_normalized_height.tif")
@@ -22,7 +22,7 @@ for (i in filelist) {
   
   lowveg=focal(height_class,w=matrix(1,11,11), fun=sum, pad=TRUE,na.rm = TRUE)
   
-  beginCluster(3)
+  beginCluster(18)
   
   sd_dsm_5=clusterR(dsm, focal, args=list(w=matrix(1,5,5), fun=sd, pad=TRUE,na.rm = TRUE))
   med_dsm_5=clusterR(dsm, focal, args=list(w=matrix(1,5,5), fun=median, pad=TRUE,na.rm = TRUE))
