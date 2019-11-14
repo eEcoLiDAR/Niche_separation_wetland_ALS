@@ -10,7 +10,8 @@ library(GGally)
 
 library(usdm)
 
-workingdirectory="D:/Sync/_Amsterdam/03_Paper2_bird_lidar_sdm/Analysis2019Nov/"
+#workingdirectory="D:/Sync/_Amsterdam/03_Paper2_bird_lidar_sdm/Analysis2019Nov/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/03_Paper2_bird_lidar_sdm/Analysis2019Nov/"
 setwd(workingdirectory)
 
 data=read.csv("veg_metrics_10m.csv")
@@ -28,7 +29,7 @@ rietzanger=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Rietzange
 snor=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Snor"))
 
 # VIF
-vif_pres=vifcor(data[5:23], th=0.6, method='spearman')
+vif_pres=vifcor(data[5:23], th=0.6) # method='spearman'
 data_noncor=exclude(data,vif_pres)
 data_cor=subset(data,select=c("perc_95_normalized_height","entropy_norm_z","std_norm_z","perc_25_normalized_height"))
 
@@ -37,6 +38,8 @@ grotekarakiet_noncorr=exclude(grotekarakiet,vif_pres)
 kleinekarakiet_noncorr=exclude(kleinekarakiet,vif_pres)
 rietzanger_noncorr=exclude(rietzanger,vif_pres)
 snor_noncorr=exclude(snor,vif_pres)
+
+selfea=c("veg_dens_1_2m","veg_dens_2_3m","veg_dens_above_mean","dsm_med_50m","rough_10m","dsm_sd_50m","lowveg_count_50m","25th_perc","pulsepen","std")
 
 #PCA
 data.pca <- PCA(data[5:23], graph = FALSE)
@@ -97,9 +100,9 @@ fviz_pca_biplot(snor.pca,
                 legend.title = "Species") 
 
 # Pairsplot
-names(data_noncor) <- c("veg_dens_1_2m","veg_dens_2_3m","veg_dens_above_mean","rough_10m","dsm_sd_50m","lowveg_count_50m" ,"pulsepen")
+names(data_noncor) <- selfea
 data_noncor=cbind(data_noncor,data$species.y)
-colnames(data_noncor)[8] <- "species"
+colnames(data_noncor)[11] <- "species"
 
 data_noncor$species=str_replace(data_noncor$species,"Baardman","B")
 data_noncor$species=str_replace(data_noncor$species,"Grote Karekiet","GK")
@@ -127,35 +130,35 @@ data_cor$species=str_replace(data_cor$species,"Snor","S")
 
 ggpairs(data_cor, aes(colour =species, alpha = 0.4))
 
-names(baardman_noncorr) <- c("veg_dens_1_2m","veg_dens_2_3m","veg_dens_above_mean","rough_10m","dsm_sd_50m","lowveg_count_50m" ,"pulsepen")
+names(baardman_noncorr) <- selfea
 baardman_noncorr=cbind(baardman_noncorr,baardman$occrrnc)
-colnames(baardman_noncorr)[8] <- "occurrance"
+colnames(baardman_noncorr)[11] <- "occurrance"
 baardman_noncorr$occurrance=as.factor(baardman_noncorr$occurrance)
 
 ggpairs(baardman_noncorr, aes(colour =occurrance, alpha = 0.4))
 
-names(grotekarakiet_noncorr) <- c("veg_dens_1_2m","veg_dens_2_3m","veg_dens_above_mean","rough_10m","dsm_sd_50m","lowveg_count_50m" ,"pulsepen")
+names(grotekarakiet_noncorr) <- selfea
 grotekarakiet_noncorr=cbind(grotekarakiet_noncorr,grotekarakiet$occrrnc)
 colnames(grotekarakiet_noncorr)[8] <- "occurrance"
 grotekarakiet_noncorr$occurrance=as.factor(grotekarakiet_noncorr$occurrance)
 
 ggpairs(grotekarakiet_noncorr, aes(colour =occurrance, alpha = 0.4))
 
-names(kleinekarakiet_noncorr) <- c("veg_dens_1_2m","veg_dens_2_3m","veg_dens_above_mean","rough_10m","dsm_sd_50m","lowveg_count_50m" ,"pulsepen")
+names(kleinekarakiet_noncorr) <- selfea
 kleinekarakiet_noncorr=cbind(kleinekarakiet_noncorr,kleinekarakiet$occrrnc)
 colnames(kleinekarakiet_noncorr)[8] <- "occurrance"
 kleinekarakiet_noncorr$occurrance=as.factor(kleinekarakiet_noncorr$occurrance)
 
 ggpairs(kleinekarakiet_noncorr, aes(colour =occurrance, alpha = 0.4))
 
-names(rietzanger_noncorr) <- c("veg_dens_1_2m","veg_dens_2_3m","veg_dens_above_mean","rough_10m","dsm_sd_50m","lowveg_count_50m" ,"pulsepen")
+names(rietzanger_noncorr) <- selfea
 rietzanger_noncorr=cbind(rietzanger_noncorr,rietzanger$occrrnc)
 colnames(rietzanger_noncorr)[8] <- "occurrance"
 rietzanger_noncorr$occurrance=as.factor(rietzanger_noncorr$occurrance)
 
 ggpairs(rietzanger_noncorr, aes(colour =occurrance, alpha = 0.4))
 
-names(snor_noncorr) <- c("veg_dens_1_2m","veg_dens_2_3m","veg_dens_above_mean","rough_10m","dsm_sd_50m","lowveg_count_50m" ,"pulsepen")
+names(snor_noncorr) <- selfea
 snor_noncorr=cbind(snor_noncorr,snor$occrrnc)
 colnames(snor_noncorr)[8] <- "occurrance"
 snor_noncorr$occurrance=as.factor(snor_noncorr$occurrance)
