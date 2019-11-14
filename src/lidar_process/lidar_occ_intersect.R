@@ -14,10 +14,15 @@ file.remove(junk)
 junk <- list.files(pattern="_intensity.tif")
 file.remove(junk)
 
-shp=readOGR(".","birds_swet_presatl")
+#shp=readOGR(".","birds_swet_presatl")
 #shp=readOGR(".","birds_swet_absatl")
+#shp=readOGR(".","GreedW_avi_wacq")
+shp=readOGR(".","ReedW_avi_wacq")
+#shp=readOGR(".","SaviW_avi_wacq")
+#shp=readOGR(".","BReed_avi_wacq")
+
 shp.df <- as(shp, "data.frame")
-shp.df$id<- seq(1,length(shp.df$kmsquar))
+shp.df$id<- seq(1,length(shp.df$occrrn))
 
 shp_sel=subset(shp.df, select=c("coords.x1","coords.x2","species","occrrnc","id"))
 
@@ -73,13 +78,21 @@ for (j in grdlist) {
     
   name=sub('\\..*', "", j)
   
-  write.csv(intersect_data,paste(name,"_intersected.csv",sep=""))
+  #write.csv(intersect_data,paste(name,"_intersected.csv",sep=""))
   #write.csv(intersect_data,paste(name,"_intersected_abs.csv",sep=""))
+  #write.csv(intersect_data,paste(name,"_intersected_GreedW.csv",sep=""))
+  write.csv(intersect_data,paste(name,"_intersected_ReedW.csv",sep=""))
+  #write.csv(intersect_data,paste(name,"_intersected_SaviW.csv",sep=""))
+  #write.csv(intersect_data,paste(name,"_intersected_BReed.csv",sep=""))
 
 }
 
-files <- list.files(pattern = "*_intersected.csv")
+#files <- list.files(pattern = "*_intersected.csv")
 #files <- list.files(pattern = "*_intersected_abs.csv")
+#files <- list.files(pattern = "*_intersected_GreedW.csv")
+files <- list.files(pattern = "*_intersected_ReedW.csv")
+#files <- list.files(pattern = "*_intersected_SaviW.csv")
+#files <- list.files(pattern = "*_intersected_BReed.csv")
 
 allcsv <- lapply(files,function(g){
   read.csv(g, header=TRUE)
@@ -87,5 +100,9 @@ allcsv <- lapply(files,function(g){
 
 allcsv_df <- do.call(rbind.data.frame, allcsv)
 
-write.csv(allcsv_df,"veg_metrics_10m.csv")
+#write.csv(allcsv_df,"veg_metrics_10m.csv")
 #write.csv(allcsv_df,"veg_metrics_10m_abs.csv")
+#write.csv(allcsv_df,"veg_metrics_10m_GreedW.csv")
+write.csv(allcsv_df,"veg_metrics_10m_ReedW.csv")
+#write.csv(allcsv_df,"veg_metrics_10m_SaviW.csv")
+#write.csv(allcsv_df,"veg_metrics_10m_BReed.csv")
