@@ -109,6 +109,12 @@ data_noncor$species=str_replace(data_noncor$species,"Snor","S")
 
 ggpairs(data_noncor, aes(colour =species, alpha = 0.4))
 
+ggpairs(data_noncor,
+             columns=1:8, 
+             upper = list(continuous = "density"),
+             title="Noncorrelated lidar metrics",
+        aes(colour =species, alpha = 0.4))
+
 names(data_cor) <- c("veg_height","fhd","std_h","p25")
 data_cor=cbind(data_cor,data$species.y)
 colnames(data_cor)[5] <- "species"
