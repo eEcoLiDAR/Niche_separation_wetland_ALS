@@ -30,6 +30,7 @@ snor=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Snor"))
 # VIF
 vif_pres=vifcor(data[5:23], th=0.6, method='spearman')
 data_noncor=exclude(data,vif_pres)
+data_cor=subset(data,select=c("perc_95_normalized_height","entropy_norm_z","std_norm_z","perc_25_normalized_height"))
 
 baardman_noncorr=exclude(baardman,vif_pres)
 grotekarakiet_noncorr=exclude(grotekarakiet,vif_pres)
@@ -107,6 +108,18 @@ data_noncor$species=str_replace(data_noncor$species,"Rietzanger","R")
 data_noncor$species=str_replace(data_noncor$species,"Snor","S")
 
 ggpairs(data_noncor, aes(colour =species, alpha = 0.4))
+
+names(data_cor) <- c("veg_height","fhd","std_h","p25")
+data_cor=cbind(data_cor,data$species.y)
+colnames(data_cor)[5] <- "species"
+
+data_cor$species=str_replace(data_cor$species,"Baardman","B")
+data_cor$species=str_replace(data_cor$species,"Grote Karekiet","GK")
+data_cor$species=str_replace(data_cor$species,"Kleine Karekiet","KK")
+data_cor$species=str_replace(data_cor$species,"Rietzanger","R")
+data_cor$species=str_replace(data_cor$species,"Snor","S")
+
+ggpairs(data_cor, aes(colour =species, alpha = 0.4))
 
 names(baardman_noncorr) <- c("veg_dens_1_2m","veg_dens_2_3m","veg_dens_above_mean","rough_10m","dsm_sd_50m","lowveg_count_50m" ,"pulsepen")
 baardman_noncorr=cbind(baardman_noncorr,baardman$occrrnc)
