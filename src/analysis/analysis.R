@@ -10,8 +10,8 @@ library(GGally)
 
 library(usdm)
 
-#workingdirectory="D:/Sync/_Amsterdam/03_Paper2_bird_lidar_sdm/Analysis2019Nov/"
-workingdirectory="C:/Koma/Sync/_Amsterdam/03_Paper2_bird_lidar_sdm/Analysis2019Nov/"
+workingdirectory="D:/Sync/_Amsterdam/03_Paper2_bird_lidar_sdm/Analysis2019Nov/"
+#workingdirectory="C:/Koma/Sync/_Amsterdam/03_Paper2_bird_lidar_sdm/Analysis2019Nov/"
 setwd(workingdirectory)
 
 data=read.csv("veg_metrics_10m.csv")
