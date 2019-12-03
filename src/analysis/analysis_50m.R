@@ -39,7 +39,7 @@ data_sel=subset(data,select=c(21,24,30,6,8,19,20,33))
 
 data_test=gather(data_sel,-species.x,key = "var", value = "value")
 
-data_test_onlyone=data_test[data_test$var=="lowveg_count_50m",]
+data_test_onlyone=data_test[data_test$var=="lowveg_med_20m",]
 
 # Tukey test
 data.lm <- lm(data_test_onlyone$value ~ data_test_onlyone$species.x, data = data_test_onlyone)
