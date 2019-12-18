@@ -86,11 +86,11 @@ grid.clim.rietzanger<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.c
 grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.snor, sp=scores.sp.snor, R=250, th.sp=0.05,th.env=0.05) 
 
 par(mfrow=c(2,3))
-ecospat.plot.niche(grid.clim.baardman)
-ecospat.plot.niche(grid.clim.grotekarakiet)
-ecospat.plot.niche(grid.clim.kleinekarakiet)
-ecospat.plot.niche(grid.clim.rietzanger)
-ecospat.plot.niche(grid.clim.snor)
+ecospat.plot.niche(grid.clim.baardman,title="Bearded Readling")
+ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
+ecospat.plot.niche(grid.clim.kleinekarakiet,title="Reed Warbler")
+ecospat.plot.niche(grid.clim.rietzanger,title="Sedge Warbler")
+ecospat.plot.niche(grid.clim.snor,title="Savi's Warbler")
 ecospat.plot.contrib(contrib=pca.env$co, eigen=pca.env$eig)
 
 
@@ -132,9 +132,9 @@ grid.clim.rietzanger<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.c
 grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.snor, sp=scores.sp.snor, R=250, th.sp=0.05,th.env=0.05) 
 
 par(mfrow=c(2,3))
-ecospat.plot.niche(grid.clim.baardman)
-ecospat.plot.niche(grid.clim.grotekarakiet)
-ecospat.plot.niche(grid.clim.kleinekarakiet)
-ecospat.plot.niche(grid.clim.rietzanger)
-ecospat.plot.niche(grid.clim.snor)
+ecospat.plot.niche(grid.clim.baardman,title="Bearded Readling")
+ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
+ecospat.plot.niche(grid.clim.kleinekarakiet,title="Reed Warbler")
+ecospat.plot.niche(grid.clim.rietzanger,title="Sedge Warbler")
+ecospat.plot.niche(grid.clim.snor,title="Savi's Warbler")
 ecospat.plot.contrib(contrib=pca.env$co, eigen=pca.env$eig)
