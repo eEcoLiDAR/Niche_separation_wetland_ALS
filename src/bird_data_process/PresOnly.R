@@ -5,7 +5,13 @@ Aim: Pre-process presence-only data
 
 library(rgdal)
 library(raster)
-library(sf)
+
+library(dplyr)
+library(stringr)
+library(tidyr)
+
+library(ggplot2)
+library(gridExtra)
 
 source("D:/GitHub/eEcoLiDAR/PhDPaper2_wetlandniche/src/bird_data_process/Func_ProcessOcc.R")
 
@@ -48,3 +54,18 @@ bird_ahn3ac$landcover_lgn8=bird_ahn3ac_lgn8[,1]
 
 #Export
 raster::shapefile(bird_ahn3ac, "Birds_wextra.shp",overwrite=TRUE)
+
+# Quick analysis
+bird_extra=bird_ahn3ac@data
+
+# same year?
+bird_extra$acq_sync <- bird_extra$year == bird_extra$Jaar
+bird_extra=bird_extra[bird_extra$acq_syn=="TRUE",]
+
+# landcover
+landcovers <- bird_extra %>%
+  group_by(landcover_lgn8,species) %>%
+  summarise(nofobs = length(species))
+
+ggplot(landcovers, aes(fill=species, y=nofobs, x=as.character(landcover_lgn8))) + 
+  geom_bar(position="stack", stat="identity")
