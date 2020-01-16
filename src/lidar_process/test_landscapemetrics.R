@@ -47,9 +47,11 @@ plot(result[[1]][["lsm_l_te"]])
 show_patches(height_class_masked, class = "all", labels = TRUE)
 
 # Patch metrics
-patch_metrics <- dplyr::bind_rows(
+metrics <- dplyr::bind_rows(
   lsm_p_area(height_class_masked),
-  lsm_p_enn(height_class_masked)
+  lsm_p_enn(height_class_masked),
+  lsm_c_ndca(height_class_masked),
+  lsm_l_te(height_class_masked)
 )
 
 show_correlation(patch_metrics, method = "pearson")
