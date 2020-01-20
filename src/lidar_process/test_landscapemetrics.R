@@ -1,7 +1,7 @@
 library(raster)
 library(rgdal)
 
-library(landscapemetrics)
+library(spatialEco)
 
 ##
 
@@ -35,26 +35,8 @@ wetland_mask_resampled=resample(wetland_mask,height_class_sel)
 
 height_class_masked <- mask(height_class_sel, wetland_mask_resampled)
 
-# landscape metrics
-
-check_landscape(height_class_masked)
-
-moving_window <- matrix(1, nrow = 3, ncol = 3)
-result <- window_lsm(height_class_masked , window = moving_window, what = c("lsm_l_te"))
-plot(result[[1]][["lsm_l_te"]])
-
-
-show_patches(height_class_masked, class = "all", labels = TRUE)
-
-# Patch metrics
-metrics <- dplyr::bind_rows(
-  lsm_p_area(height_class_masked),
-  lsm_p_enn(height_class_masked),
-  lsm_c_ndca(height_class_masked),
-  lsm_l_te(height_class_masked)
-)
-
-show_correlation(patch_metrics, method = "pearson")
-show_lsm(height_class_masked, what = "lsm_p_area", class = "global", label_lsm = FALSE)
-
-patches_r=get_patches(height_class_masked)
+# landscape in moving windows - landscape level between height classes
+landsc_m_mv_np <- focal.lmetrics(height_class_masked, w=3, land.value = 1, metric = "n.patches")
+landsc_m_mv_ed <- focal.lmetrics(height_class_masked, w=3, land.value = 1, metric = "edge.density")
+landsc_m_mv_propl <- focal.lmetrics(height_class_masked, w=3, land.value = 1, metric = "prop.landscape")
+landsc_m_mv_tarea <- focal.lmetrics(height_class_masked, w=3, land.value = 1,metric = "total.area")
