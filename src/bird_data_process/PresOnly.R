@@ -5,6 +5,7 @@ Aim: Pre-process presence-only data
 
 library(rgdal)
 library(raster)
+library(sp)
 
 library(dplyr)
 library(stringr)
@@ -14,6 +15,7 @@ library(ggplot2)
 library(gridExtra)
 
 library(spThin)
+library(spatialEco)
 
 source("D:/GitHub/eEcoLiDAR/PhDPaper2_wetlandniche/src/bird_data_process/Func_ProcessOcc.R")
 
@@ -87,3 +89,10 @@ thinned_dataset_full <-
 
 # Maximized
 thinned=thin.max(birds[ which( birds$species == "Baardman" ) , ], c("y", "x"), 200)
+
+# Sample distance
+baardman_test=bird[ which( bird$species == "Baardman" ) , ]
+coordinates(baardman_test) <- ~ x+y
+
+sub.baardman_test <- subsample.distance(baardman_test, n = 250, d = 20) 
+subpp.baardman_tst <- pp.subsample(baardman_test, n=250, window='hull')   
