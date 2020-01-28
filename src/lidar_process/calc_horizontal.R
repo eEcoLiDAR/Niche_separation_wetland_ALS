@@ -3,12 +3,14 @@ library(snow)
 library(rgdal)
 library(stringr)
 
+library(spatialEco)
+
 ##
 
-workingdir="D:/Koma/Paper2/Paper2_2019Nov/ahn3_2019_10_15_geotiffs/features_veg_10m_1m/"
+workingdir="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/masked/"
 setwd(workingdir)
 
-filelist=list.files(pattern = "*95_normalized_height.tif")
+filelist=list.files(pattern = "*95_normalized_height_masked.tif")
 
 for (i in filelist) {
   print(i)
@@ -16,46 +18,33 @@ for (i in filelist) {
   dsm=raster(i)
   proj4string(dsm) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
   
-  rough_dsm=terrain(dsm,opt="roughness",neighbors=4)
+  #create height classes
   
-  height_class=reclassify(dsm, c(-Inf,4,0, 4,Inf,1))
-  highveg=focal(height_class,w=matrix(1,11,11), fun=sum, pad=TRUE,na.rm = TRUE)
+  height_class=reclassify(dsm, c(-Inf,5,0, 5,Inf,1))
+  
+  #calc. hor variability
   
   lowveg=dsm
-  lowveg[lowveg>4] <- NA
+  lowveg[lowveg>5] <- NA
   
-  beginCluster(18)
+  beginCluster(2)
   
   sd_dsm_11=clusterR(dsm, focal, args=list(w=matrix(1,11,11), fun=sd, pad=TRUE,na.rm = TRUE))
-  med_dsm_11=clusterR(dsm, focal, args=list(w=matrix(1,11,11), fun=median, pad=TRUE,na.rm = TRUE))
-  
-  sd_dsm_21=clusterR(dsm, focal, args=list(w=matrix(1,21,21), fun=sd, pad=TRUE,na.rm = TRUE))
-  med_dsm_21=clusterR(dsm, focal, args=list(w=matrix(1,21,21), fun=median, pad=TRUE,na.rm = TRUE))
-  
-  sd_lowveg_5=clusterR(lowveg, focal, args=list(w=matrix(1,5,5), fun=sd, pad=TRUE,na.rm = TRUE))
-  med_lowveg_5=clusterR(lowveg, focal, args=list(w=matrix(1,5,5), fun=median, pad=TRUE,na.rm = TRUE))
-  range_lowveg_5=clusterR(lowveg, focal, args=list(w=matrix(1,5,5), fun=range, pad=TRUE,na.rm = TRUE))
-  
   sd_lowveg_11=clusterR(lowveg, focal, args=list(w=matrix(1,11,11), fun=sd, pad=TRUE,na.rm = TRUE))
-  med_lowveg_11=clusterR(lowveg, focal, args=list(w=matrix(1,11,11), fun=median, pad=TRUE,na.rm = TRUE))
-  rangemed_lowveg_11=clusterR(range_lowveg_5, focal, args=list(w=matrix(1,11,11), fun=median, pad=TRUE,na.rm = TRUE))
   
   endCluster()
   
-  name=str_sub(i,1,25)
+  # landscape str
   
-  writeRaster(rough_dsm,paste(name,"_dsm_roughness_10m.tif",sep=""),overwrite=TRUE)
+  landsc_m_mv_np <- focal.lmetrics(height_class, w=11, land.value = 1, metric = "n.patches")
+  landsc_m_mv_ed <- focal.lmetrics(height_class, w=11, land.value = 1, metric = "edge.density")
+  landsc_m_mv_propl <- focal.lmetrics(height_class, w=11, land.value = 1, metric = "prop.landscape")
+  
+  # export
+  
+  name=str_sub(i,1,-5)
+  
   writeRaster(sd_dsm_11,paste(name,"_dsm_sd_50m.tif",sep=""),overwrite=TRUE)
-  writeRaster(med_dsm_11,paste(name,"_dsm_med_50m.tif",sep=""),overwrite=TRUE)
-  writeRaster(sd_dsm_21,paste(name,"_dsm_sd_100m.tif",sep=""),overwrite=TRUE)
-  writeRaster(med_dsm_21,paste(name,"_dsm_med_100m.tif",sep=""),overwrite=TRUE)
-  writeRaster(highveg,paste(name,"_highveg_count_50m.tif",sep=""),overwrite=TRUE)
-  
-  writeRaster(sd_lowveg_5,paste(name,"_lowveg_med_20m.tif",sep=""),overwrite=TRUE)
-  writeRaster(med_lowveg_5,paste(name,"_lowveg_sd_20m.tif",sep=""),overwrite=TRUE)
-  writeRaster(range_lowveg_5,paste(name,"_lowveg_range_20m.tif",sep=""),overwrite=TRUE)
-  writeRaster(sd_lowveg_11,paste(name,"_lowveg_med_50m.tif",sep=""),overwrite=TRUE)
-  writeRaster(med_lowveg_11,paste(name,"_lowveg_sd_50m.tif",sep=""),overwrite=TRUE)
-  writeRaster(rangemed_lowveg_11,paste(name,"_lowveg_medrange_50m.tif",sep=""),overwrite=TRUE)
+  writeRaster(sd_lowveg_11,paste(name,"_lowveg_sd_50m.tif",sep=""),overwrite=TRUE)
   
 }

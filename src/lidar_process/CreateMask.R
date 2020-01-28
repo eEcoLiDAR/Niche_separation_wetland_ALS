@@ -13,6 +13,8 @@ library(stringr)
 workingdirectory="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/"
 setwd(workingdirectory)
 
+dir.create("masked")
+
 landcoverfile="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/landcover/UvA_LGN2018/LGN2018.tif"
 humanobjectfile="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/human_objects/powerlines_buff20.shp"
 
@@ -27,7 +29,7 @@ proj4string(landcover) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38
 
 filelist=list.files(pattern = "*.tif")
 
-for (i in filelist[1:3]) {
+for (i in filelist) {
   print(i)
   
   lidar=stack(i)
@@ -54,7 +56,7 @@ for (i in filelist[1:3]) {
   
   getfilename=str_sub(i,1,-5)
   
-  writeRaster(H90perc_masked_2,paste(getfilename,"_masked.tif"),overwrite=TRUE)
+  writeRaster(H90perc_masked_2,paste(workingdirectory,"/masked/",getfilename,"_masked.tif",sep=""),overwrite=TRUE)
   
 }
 
