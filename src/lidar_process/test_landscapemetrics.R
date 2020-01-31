@@ -1,7 +1,10 @@
 library(raster)
 library(rgdal)
+library(sf)
+library(dplyr)
 
 library(spatialEco)
+library(landscapemetrics)
 
 ##
 
@@ -40,3 +43,8 @@ landsc_m_mv_np <- focal.lmetrics(height_class_masked, w=3, land.value = 1, metri
 landsc_m_mv_ed <- focal.lmetrics(height_class_masked, w=3, land.value = 1, metric = "edge.density")
 landsc_m_mv_propl <- focal.lmetrics(height_class_masked, w=3, land.value = 1, metric = "prop.landscape")
 landsc_m_mv_tarea <- focal.lmetrics(height_class_masked, w=3, land.value = 1,metric = "total.area")
+
+landsc_m_mv_np_agr <- aggregate(landsc_m_mv_np, fact=3, fun=mean)
+landsc_m_mv_ed_agr <- aggregate(landsc_m_mv_ed, fact=3, fun=mean)
+landsc_m_mv_propl_agr <- aggregate(landsc_m_mv_propl, fact=3, fun=mean)
+
