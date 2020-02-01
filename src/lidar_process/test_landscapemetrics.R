@@ -48,11 +48,17 @@ my_grid = st_sf(geom = my_grid_geom)
 plot(height_class_sel)
 plot(my_grid, add = TRUE)
 
-my_metric = sample_lsm(height_class_sel, my_grid,level = "landscape", metric = "ed")
-my_metric
+my_metric_ed = sample_lsm(height_class_sel, my_grid,level = "landscape", metric = "ed")
+my_metric_np = sample_lsm(height_class_sel, my_grid,level = "landscape", metric = "np")
+my_metric_ta = sample_lsm(height_class_sel, my_grid,level = "landscape", metric = "ta")
 
-my_grid = bind_cols(my_grid, my_metric)
-plot(my_grid["value2"])
+my_grid_ed = bind_cols(my_grid, my_metric_ed)
+my_grid_np = bind_cols(my_grid, my_metric_np)
+my_grid_ta = bind_cols(my_grid, my_metric_ta)
+
+plot(my_grid_ed["value"])
+plot(my_grid_np["value"])
+plot(my_grid_ta["value"])
 
 r <- raster(my_grid, res = 50)
-my_grid_r <- fasterize(my_grid, r, field = "value2", fun="max")
+my_metric_ed_r <- fasterize(my_grid, r, field = "value2", fun="max")
