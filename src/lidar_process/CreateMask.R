@@ -44,7 +44,7 @@ for (i in filelist) {
   lgn8_water_mask_resampled=resample(lgn8_water_mask,lidar)
   
   # apply
-  H90perc_masked <- mask(lidar, lgn8_water_mask_resampled)
+  lidar_masked <- mask(lidar, lgn8_water_mask_resampled)
   
   # Create powerline mask
   humanobj_sel=crop(humanobject,extent(lidar))
@@ -52,11 +52,11 @@ for (i in filelist) {
   humanobj_rast_resampled=resample(humanobj_rast,lidar)
   
   #apply
-  H90perc_masked_2 <- mask(H90perc_masked, humanobj_rast_resampled,maskvalue=0)
+  lidar_masked_2 <- mask(lidar_masked, humanobj_rast_resampled,maskvalue=0)
   
   getfilename=str_sub(i,1,-5)
   
-  writeRaster(H90perc_masked_2,paste(workingdirectory,"/masked/",getfilename,"_masked.tif",sep=""),overwrite=TRUE)
+  writeRaster(lidar_masked_2,paste(workingdirectory,"/masked/",getfilename,"_masked.tif",sep=""),overwrite=TRUE)
   
 }
 
