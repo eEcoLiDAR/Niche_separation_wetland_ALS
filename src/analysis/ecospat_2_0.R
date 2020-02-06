@@ -72,7 +72,7 @@ grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scor
 grid.clim.rietzanger<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.rietzanger, sp=scores.sp.rietzanger, R=100, th.sp=0.05,th.env=0.05) 
 grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.snor, sp=scores.sp.snor, R=100, th.sp=0.05,th.env=0.05) 
 
-par(mfrow=c(2,3))
+par(mfrow=c(2,2))
 #ecospat.plot.niche(grid.clim.baardman,title="Bearded Readling")
 ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
 ecospat.plot.niche(grid.clim.kleinekarakiet,title="Reed Warbler")
