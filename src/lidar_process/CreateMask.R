@@ -10,13 +10,14 @@ library(stringr)
 
 # Initialize
 
-workingdirectory="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/"
+#workingdirectory="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/"
+workingdirectory="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data/"
 setwd(workingdirectory)
 
 dir.create("masked")
 
-landcoverfile="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/landcover/UvA_LGN2018/LGN2018.tif"
-humanobjectfile="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/human_objects/powerlines_buff20.shp"
+landcoverfile="D:/Koma/_PhD/Chapter3/Data_Preprocess/input_formask/LGN2018.tif"
+humanobjectfile="D:/Koma/_PhD/Chapter3/Data_Preprocess/input_formask/powerlines_buff20.shp"
 
 #Import
 
@@ -48,15 +49,21 @@ for (i in filelist) {
   
   # Create powerline mask
   humanobj_sel=crop(humanobject,extent(lidar))
-  humanobj_rast <- rasterize(humanobj_sel, lidar,field="hoogtenive")
-  humanobj_rast_resampled=resample(humanobj_rast,lidar)
   
-  #apply
-  lidar_masked_2 <- mask(lidar_masked, humanobj_rast_resampled,maskvalue=0)
-  
-  getfilename=str_sub(i,1,-5)
-  
-  writeRaster(lidar_masked_2,paste(workingdirectory,"/masked/",getfilename,"_masked.tif",sep=""),overwrite=TRUE)
+  if (is.null(humanobj_sel)) {
+    getfilename=str_sub(i,1,-5)
+    writeRaster(lidar_masked,paste(workingdirectory,"/masked/",getfilename,"_masked.tif",sep=""),overwrite=TRUE)
+  } else {
+    humanobj_rast <- rasterize(humanobj_sel, lidar,field="hoogtenive")
+    humanobj_rast_resampled=resample(humanobj_rast,lidar)
+    
+    #apply
+    lidar_masked_2 <- mask(lidar_masked, humanobj_rast_resampled,maskvalue=0)
+    
+    getfilename=str_sub(i,1,-5)
+    
+    writeRaster(lidar_masked_2,paste(workingdirectory,"/masked/",getfilename,"_masked.tif",sep=""),overwrite=TRUE)
+  }
   
 }
 
