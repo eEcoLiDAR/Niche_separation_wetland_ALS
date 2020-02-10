@@ -5,7 +5,7 @@ library(dplyr)
 library(sdm)
 library(stringr)
 
-workingdir="D:/Koma/Paper2/Paper2_2019Nov/ahn3_2019_10_15_geotiffs/features_veg_10m_1m/"
+workingdir="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/masked/"
 setwd(workingdir)
 
 junk <- list.files(pattern="_gps_time.tif")
@@ -29,7 +29,7 @@ shp_sel=subset(shp.df, select=c("coords.x1","coords.x2","species","occrrnc","id"
 coordinates(shp_sel)=~coords.x1+coords.x2
 proj4string(shp_sel)<- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
 
-filelist=list.files(pattern = "*.tif")
+filelist=list.files(pattern = "*.tif") # need to rename the files: same start all-> veg, ahn3cj intead of ud, two numer for tile identification
 
 id=str_sub(filelist,1,25)
 id=unique(id)
