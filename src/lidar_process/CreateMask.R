@@ -11,7 +11,7 @@ library(stringr)
 # Initialize
 
 #workingdirectory="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/"
-workingdirectory="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data/"
+workingdirectory="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/"
 setwd(workingdirectory)
 
 dir.create("masked")
