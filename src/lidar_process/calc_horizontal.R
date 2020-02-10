@@ -11,7 +11,8 @@ library(spatialEco)
 
 ##
 
-workingdir="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/masked/"
+#workingdir="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/masked/"
+workingdir="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data/masked/"
 setwd(workingdir)
 
 filelist=list.files(pattern = "*95_normalized_height_masked.tif")
