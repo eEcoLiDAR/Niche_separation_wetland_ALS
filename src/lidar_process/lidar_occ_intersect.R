@@ -5,7 +5,7 @@ library(dplyr)
 library(sdm)
 library(stringr)
 
-workingdir="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/masked/"
+workingdir="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/50m/"
 setwd(workingdir)
 
 # import bird observation data - need to be set all trough the script the right input shp and the shp should be located in the working directory together with the grd file
