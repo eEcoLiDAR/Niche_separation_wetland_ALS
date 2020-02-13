@@ -6,21 +6,24 @@ library(corrplot)
 library(dplyr)
 library(stringr)
 
-workingdirectory="D:/Sync/_Amsterdam/03_Paper2_bird_lidar_sdm/Analysis2019Nov/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v1/"
 setwd(workingdirectory)
 
-data=read.csv("veg_metrics_50m.csv")
+data=read.csv("veg_metrics_50m_pres.csv")
 dataabs=read.csv("veg_metrics_50m_abs.csv")
 
-data_sub=subset(data,select=c(29,32,17,30,8,5,6,26,16,25,19,33,50))
-dataabs_sub=subset(dataabs,select=c(29,32,17,30,8,5,6,26,16,25,19,33,47))
+data_sub=subset(data,select=c(5:20,24,38))
+dataabs_sub=subset(dataabs,select=c(5:20,33,35))
 
 data_merged=rbind(data_sub,dataabs_sub)
+names(data_merged) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height25","veg_height95","dsm_sd_50m","dsm_sd_100m",
+                        "lowveg_sd_50m", "lowveg_sd_100m", "lowveg_prop_50m", "lowveg_prop_100m","trees_prop_50m", "trees_prop_100m",
+                        "veg_cover","veg_var","species.x","occ")
 
 # PCA
 par(mfrow=c(1,1))
 
-res.pca=PCA(data_merged[,1:11], scale.unit = TRUE, ncp = 5, graph = FALSE)
+res.pca=PCA(data_merged[,1:14], scale.unit = TRUE, ncp = 5, graph = FALSE)
 
 fviz_pca_var(res.pca, col.var = "contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")
@@ -36,6 +39,26 @@ fviz_contrib(res.pca, choice = "var", axes = 1, top = 10)
 fviz_contrib(res.pca, choice = "var", axes = 2, top = 10)
 fviz_contrib(res.pca, choice = "var", axes = 3, top = 10)
 
+#PCA per class
+par(mfrow=c(1,1))
+
+res1.pca=PCA(data_merged[,c(1,2,3,5)], scale.unit = TRUE, ncp = 5, graph = FALSE)
+
+fviz_pca_var(res1.pca, col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")
+)
+
+res2.pca=PCA(data_merged[,c(4,6,15,16)], scale.unit = TRUE, ncp = 5, graph = FALSE)
+
+fviz_pca_var(res2.pca, col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")
+)
+
+res3.pca=PCA(data_merged[,c(7,9,11,13)], scale.unit = TRUE, ncp = 5, graph = FALSE)
+
+fviz_pca_var(res3.pca, col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")
+)
 
 # ecospat run 1
 
@@ -45,7 +68,7 @@ kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Klein
 rietzanger=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Rietzanger"))
 snor=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Snor"))
 
-pca.env<-dudi.pca(data_merged[,1:11],scannf=FALSE,nf=2)
+pca.env<-dudi.pca(data_merged[,1:14],scannf=FALSE,nf=2)
 par(mfrow=c(1,1))
 ecospat.plot.contrib(contrib=pca.env$co, eigen=pca.env$eig)
 
@@ -54,17 +77,17 @@ scores.globclim<-pca.env$li
 #scores.sp.baardman<-suprow(pca.env,baardman[which(baardman[,30]==1),1:28])$li
 #scores.clim.baardman<-suprow(pca.env,baardman[,1:28])$li
 
-scores.sp.grotekarakiet<-suprow(pca.env,grotekarakiet[which(grotekarakiet[,13]==1),1:11])$li
-scores.clim.grotekarakiet<-suprow(pca.env,grotekarakiet[,1:11])$li
+scores.sp.grotekarakiet<-suprow(pca.env,grotekarakiet[which(grotekarakiet[,18]==1),1:14])$li
+scores.clim.grotekarakiet<-suprow(pca.env,grotekarakiet[,1:14])$li
 
-scores.sp.kleinekarakiet<-suprow(pca.env,kleinekarakiet[which(kleinekarakiet[,13]==1),1:11])$li
-scores.clim.kleinekarakiet<-suprow(pca.env,kleinekarakiet[,1:11])$li
+scores.sp.kleinekarakiet<-suprow(pca.env,kleinekarakiet[which(kleinekarakiet[,18]==1),1:14])$li
+scores.clim.kleinekarakiet<-suprow(pca.env,kleinekarakiet[,1:14])$li
 
-scores.sp.rietzanger<-suprow(pca.env,rietzanger[which(rietzanger[,13]==1),1:11])$li
-scores.clim.rietzanger<-suprow(pca.env,rietzanger[,1:11])$li
+scores.sp.rietzanger<-suprow(pca.env,rietzanger[which(rietzanger[,18]==1),1:14])$li
+scores.clim.rietzanger<-suprow(pca.env,rietzanger[,1:14])$li
 
-scores.sp.snor<-suprow(pca.env,snor[which(snor[,13]==1),1:11])$li
-scores.clim.snor<-suprow(pca.env,snor[,1:11])$li
+scores.sp.snor<-suprow(pca.env,snor[which(snor[,18]==1),1:14])$li
+scores.clim.snor<-suprow(pca.env,snor[,1:14])$li
 
 #grid.clim.baardman<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.baardman, sp=scores.sp.baardman, R=250, th.sp=0.05,th.env=0.05)
 grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.grotekarakiet, sp=scores.sp.grotekarakiet, R=100, th.sp=0.05,th.env=0.05) 
