@@ -16,85 +16,62 @@ library(sdm)
 
 ###  Set global variables
 full_path="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/50m/"
+setwd(full_path)
 
 lidarfile="Merged_lidar_50m.tif"
-
-setwd(full_path)
+grotekarakietfile="grotekarakiet_atlas.shp"
+kleinekarakietfile="kleinekarakiet_atlas.shp"
 
 ### Import data
 
-bird_baardman <- readOGR(dsn=birdfile_baardman)
+grotekarakiet <- readOGR(dsn=grotekarakietfile)
 
 latlong_proj <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")
-bird_baardman_wgs84 <- spTransform(bird_baardman, latlong_proj)
+grotekarakiet_wgs84 <- spTransform(grotekarakiet, latlong_proj)
 
-bird_baardman_wgs84.df <- as(bird_baardman_wgs84, "data.frame")
-names(bird_baardman_wgs84.df ) <- c("occurrence","Longitude","Latitude")
+grotekarakiet_wgs84.df <- as(grotekarakiet_wgs84, "data.frame")
+names(grotekarakiet_wgs84.df ) <- c("species","occurrence","Longitude","Latitude")
 
-bird_snor <- readOGR(dsn=birdfile_snor)
-bird_snor_wgs84 <- spTransform(bird_snor, latlong_proj)
+kleinekarakiet <- readOGR(dsn=kleinekarakietfile)
+kleinekarakiet_wgs84 <- spTransform(kleinekarakiet, latlong_proj)
 
-bird_snor_wgs84.df <- as(bird_snor_wgs84, "data.frame")
-names(bird_snor_wgs84.df ) <- c("occurrence","Longitude","Latitude")
+kleinekarakiet_wgs84.df <- as(kleinekarakiet_wgs84, "data.frame")
+names(kleinekarakiet_wgs84.df ) <- c("species","occurrence","Longitude","Latitude")
 
 lidarmetrics=stack(lidarfile)
 
 crs(lidarmetrics) <- "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"
 lidarmetrics_wgs84 <-projectRaster(from = lidarmetrics, crs=crs("+proj=longlat +ellps=WGS84 +datum=WGS84"))
+writeRaster(lidarmetrics_wgs84,"lidarmetrics_wgs84.tif",overwrite=TRUE)
 
 ###  Correlation analysis
-#raster.cor.matrix(lidarmetrics)
-raster.cor.plot(lidarmetrics)
-
-v <- vifstep(lidarmetrics,th=10)
-v
-lidarmetrics2 <- exclude(lidarmetrics,v)
-
-###  SDM with ENMtools
-
-baardman_onlypres <- enmtools.species()
-baardman_onlypres
-
-baardman_onlypres$species.name <- "Panurus biarmicus"
-baardman_onlypres$presence.points <- bird_baardman_wgs84.df[ which(bird_baardman_wgs84.df$occurrence==1),2:3]
-
-interactive.plot.enmtools.species(baardman_onlypres)
-
-baardman_onlypres$range <- background.raster.buffer(baardman_onlypres$presence.points,5000,mask=lidarmetrics_wgs84)
-baardman.glm <- enmtools.glm(species = baardman_onlypres, env = lidarmetrics_wgs84, test.prop = 0.3)
-
-baardman.glm$test.evaluation
 
 # Prepare SDM with true pres-abs
-baardman <- enmtools.species()
+grotekarakiet <- enmtools.species()
 
-baardman$species.name <- "Panurus biarmicus"
-baardman$presence.points <- bird_baardman_wgs84.df[ which(bird_baardman_wgs84.df$occurrence==1),2:3]
-baardman$background.points <- bird_baardman_wgs84.df[ which(bird_baardman_wgs84.df$occurrence==0),2:3]
+grotekarakiet$species.name <- "Acrocephalus arundinaceus"
+grotekarakiet$presence.points <-grotekarakiet_wgs84.df[ which(grotekarakiet_wgs84.df$occurrence==1),3:4]
+grotekarakiet$background.points <- grotekarakiet_wgs84.df[ which(grotekarakiet_wgs84.df$occurrence==0),3:4]
 
-baardman.glm <- enmtools.glm(species = baardman, env = lidarmetrics_wgs84, test.prop = 0.3,rts.reps=5)
+grotekarakiet.rf <- enmtools.rf(species = grotekarakiet, env = lidarmetrics_wgs84, test.prop = 0.3,rts.reps=5)
 
-baardman.glm$response.plots$pulse_pen_ratio_all
-baardman.glm$response.plots$roughness.1
-baardman.glm$response.plots$max_z__nonground
-
-visualize.enm(baardman.glm, lidarmetrics_wgs84, layers = c("roughness.1", "pulse_pen_ratio_all"), plot.test.data = TRUE)
+visualize.enm(grotekarakiet.rf, lidarmetrics_wgs84, layers = c("Merged_lidar_50m.1", "Merged_lidar_50m.6"), plot.test.data = TRUE)
 
 # Prepare an other SDM with true pres-abs
-snor <- enmtools.species()
+kleinekarakiet <- enmtools.species()
 
-snor$species.name <- "Locustella luscinioides"
-snor$presence.points <- bird_snor_wgs84.df[ which(bird_snor_wgs84.df$occurrence==1),2:3]
-snor$background.points <- bird_snor_wgs84.df[ which(bird_snor_wgs84.df$occurrence==0),2:3]
+kleinekarakiet$species.name <- "Acrocephalus scirpaceus"
+kleinekarakiet$presence.points <- kleinekarakiet_wgs84.df[ which(kleinekarakiet_wgs84.df$occurrence==1),3:4]
+kleinekarakiet$background.points <- kleinekarakiet_wgs84.df[ which(kleinekarakiet_wgs84.df$occurrence==0),3:4]
 
-snor.glm <- enmtools.glm(species = snor, env = lidarmetrics_wgs84, test.prop = 0.3,rts.reps=5)
+kleinekarakiet.rf <- enmtools.rf(species = kleinekarakiet, env = lidarmetrics_wgs84, test.prop = 0.3,rts.reps=5)
 
 ### Hypho testing
 #Breath
-raster.breadth(baardman.glm)
+raster.breadth(grotekarakiet.rf)
 
 #Niche overlap
-over=raster.overlap(baardman.glm,snor.glm)
+over=raster.overlap(grotekarakiet.rf,kleinekarakiet.rf)
 
 # niche identity testing
 id.gam <- identity.test(baardman,snor,env=lidarmetrics_wgs84,nreps = 5, type= "glm",f=pres~kurto_z_all+pulse_pen_ratio_all+var_z_nonground)
@@ -105,16 +82,16 @@ bg.gam <- background.test(baardman,snor,env=lidarmetrics_wgs84,nreps = 5, type= 
 bg.gam
 
 ### Ensemble with sdm
-data_forsdm <- sdmData(formula=occurrence~., train=bird_baardman, predictors=lidarmetrics)
+data_forsdm <- sdmData(formula=occ~., train=grotekarakiet, predictors=lidarmetrics)
 data_forsdm
 
-model1 <- sdm(occurrence~.,data=data_forsdm,methods=c('glm','gam','brt','rf','svm','mars'),replication=c('boot'),n=2)
+model1 <- sdm(occ~.,data=data_forsdm,methods=c('glm','gam','brt','rf','svm','mars'),replication=c('boot'),n=2)
 model1
 
-rcurve(model1,id = 1,mean=F,confidence = T)
+rcurve(model1,id = 5,mean=F,confidence = T)
 a <- getResponseCurve(model1,id=5)
 
-feaimp_1=getVarImp(model1,id = 1)
+feaimp_1=getVarImp(model1,id = 5)
 plot(feaimp_1,'auc')
 plot(feaimp_1,'cor')
 
