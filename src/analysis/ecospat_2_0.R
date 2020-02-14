@@ -6,19 +6,19 @@ library(corrplot)
 library(dplyr)
 library(stringr)
 
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v1/"
+workingdirectory="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/50m/"
 setwd(workingdirectory)
 
 data=read.csv("veg_metrics_50m_pres.csv")
 dataabs=read.csv("veg_metrics_50m_abs.csv")
 
-data_sub=subset(data,select=c(5:20,24,38))
-dataabs_sub=subset(dataabs,select=c(5:20,33,35))
+data_sub=subset(data,select=c(5:20,24,38,42,43))
+dataabs_sub=subset(dataabs,select=c(5:20,33,35,42,43))
 
 data_merged=rbind(data_sub,dataabs_sub)
 names(data_merged) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height25","veg_height95","dsm_sd_50m","dsm_sd_100m",
                         "lowveg_sd_50m", "lowveg_sd_100m", "lowveg_prop_50m", "lowveg_prop_100m","trees_prop_50m", "trees_prop_100m",
-                        "veg_cover","veg_var","species.x","occ")
+                        "veg_cover","veg_var","species.x","occ","x","y")
 
 # PCA
 par(mfrow=c(1,1))
@@ -67,6 +67,12 @@ grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Grote 
 kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Kleine Karekiet"))
 rietzanger=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Rietzanger"))
 snor=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Snor"))
+
+# Export as shp
+shp_sel=subset(snor, select=c("x","y","species.x","occ"))
+coordinates(shp_sel)=~x+y
+proj4string(shp_sel)<- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
+raster::shapefile(shp_sel, "snor_atlas.shp",overwrite=TRUE)
 
 pca.env<-dudi.pca(data_merged[,1:14],scannf=FALSE,nf=2)
 par(mfrow=c(1,1))

@@ -15,12 +15,9 @@ library(usdm)
 library(sdm)
 
 ###  Set global variables
-full_path="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v1/"
-#full_path="C:/Koma/Sync/_Amsterdam/00_PhD/Teaching/SDM/"
+full_path="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/50m/"
 
-birdfile_baardman="Baardman_bird_data_forSDM.shp"
-birdfile_snor="Snor_bird_data_forSDM.shp"
-lidarfile="lidarmetrics_forSDM.grd"
+lidarfile="Merged_lidar_50m.tif"
 
 setwd(full_path)
 
