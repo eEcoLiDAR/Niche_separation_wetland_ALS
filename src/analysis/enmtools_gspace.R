@@ -53,9 +53,8 @@ grotekarakiet$species.name <- "Acrocephalus arundinaceus"
 grotekarakiet$presence.points <-grotekarakiet_wgs84.df[ which(grotekarakiet_wgs84.df$occurrence==1),3:4]
 grotekarakiet$background.points <- grotekarakiet_wgs84.df[ which(grotekarakiet_wgs84.df$occurrence==0),3:4]
 
-grotekarakiet.rf <- enmtools.rf(species = grotekarakiet, env = lidarmetrics_wgs84, test.prop = 0.3,rts.reps=5)
+grotekarakiet.maxe <- enmtools.maxent(species = grotekarakiet, env = lidarmetrics_wgs84, test.prop = 0.3,rts.reps=5)
 
-visualize.enm(grotekarakiet.rf, lidarmetrics_wgs84, layers = c("Merged_lidar_50m.1", "Merged_lidar_50m.6"), plot.test.data = TRUE)
 
 # Prepare an other SDM with true pres-abs
 kleinekarakiet <- enmtools.species()
@@ -64,37 +63,20 @@ kleinekarakiet$species.name <- "Acrocephalus scirpaceus"
 kleinekarakiet$presence.points <- kleinekarakiet_wgs84.df[ which(kleinekarakiet_wgs84.df$occurrence==1),3:4]
 kleinekarakiet$background.points <- kleinekarakiet_wgs84.df[ which(kleinekarakiet_wgs84.df$occurrence==0),3:4]
 
-kleinekarakiet.rf <- enmtools.rf(species = kleinekarakiet, env = lidarmetrics_wgs84, test.prop = 0.3,rts.reps=5)
+kleinekarakiet.maxe <- enmtools.maxent(species = kleinekarakiet, env = lidarmetrics_wgs84, test.prop = 0.3,rts.reps=5)
 
 ### Hypho testing
-#Breath
-raster.breadth(grotekarakiet.rf)
 
 #Niche overlap
-over=raster.overlap(grotekarakiet.rf,kleinekarakiet.rf)
+over=raster.overlap(grotekarakiet.maxe,kleinekarakiet.maxe)
 
 # niche identity testing
-id.gam <- identity.test(baardman,snor,env=lidarmetrics_wgs84,nreps = 5, type= "glm",f=pres~kurto_z_all+pulse_pen_ratio_all+var_z_nonground)
-id.gam
+options(java.parameters = "-Xmx100g")
+
+id.maxe <- identity.test(grotekarakiet,kleinekarakiet,env=lidarmetrics_wgs84,nreps = 1, type= "mx")
+id.maxe
 
 # background test
 bg.gam <- background.test(baardman,snor,env=lidarmetrics_wgs84,nreps = 5, type= "glm",f=pres~kurto_z_all+pulse_pen_ratio_all+var_z_nonground)
 bg.gam
 
-### Ensemble with sdm
-data_forsdm <- sdmData(formula=occ~., train=grotekarakiet, predictors=lidarmetrics)
-data_forsdm
-
-model1 <- sdm(occ~.,data=data_forsdm,methods=c('glm','gam','brt','rf','svm','mars'),replication=c('boot'),n=2)
-model1
-
-rcurve(model1,id = 5,mean=F,confidence = T)
-a <- getResponseCurve(model1,id=5)
-
-feaimp_1=getVarImp(model1,id = 5)
-plot(feaimp_1,'auc')
-plot(feaimp_1,'cor')
-
-ens1 <- ensemble(model1, newdata=lidarmetrics, filename="",setting=list(method='weighted',stat='AUC',opt=2))
-
-niche(x=lidarmetrics,h=ens1,n=c("pulse_pen_ratio_all","max_z__nonground"))
