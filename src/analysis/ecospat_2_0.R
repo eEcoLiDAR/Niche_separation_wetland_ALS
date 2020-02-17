@@ -23,7 +23,7 @@ names(data_merged) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_
 # PCA
 par(mfrow=c(1,1))
 
-res.pca=PCA(data_merged[,1:12], scale.unit = TRUE, ncp = 5, graph = FALSE)
+res.pca=PCA(data_merged[,1:12], scale.unit = TRUE, ncp = 3, graph = FALSE)
 
 fviz_pca_var(res.pca, col.var = "contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")
