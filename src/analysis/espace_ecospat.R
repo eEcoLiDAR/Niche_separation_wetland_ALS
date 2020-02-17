@@ -36,7 +36,7 @@ snor=dplyr::filter(data_merged,str_detect(data_merged$species.x,"Snor"))
 
 #### PCA anal
 
-# Full
+# All together
 
 par(mfrow=c(1,1))
 
@@ -63,6 +63,31 @@ fviz_pca_biplot(pca.env,
                 pointshape = 21, pointsize = 2,
                 palette = c("blue","red"),
                 addEllipses = FALSE,
+                # Variables
+                col.var = "contrib",
+                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                
+                legend.title = list(fill = "Species", color = "Contrib"))
+
+# Absence as seperate species class
+
+data_merged_mod=data_merged
+levels(data_merged_mod$species.x) = c("Baardman","Grote Karekiet","Kleine Karekiet","Rietzanger","Snor", "None")
+data_merged_mod[data_merged_mod$occ==0,13] <- "None"
+
+
+pca.env2<-dudi.pca(data_merged_mod[,1:12],scannf=FALSE,center=TRUE,nf=3)
+
+fviz_pca_var(pca.env2, col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel = TRUE
+)
+
+fviz_pca_biplot(pca.env2, 
+                # Individuals
+                geom.ind = "point",
+                fill.ind = as.factor(data_merged_mod$species.x), col.ind = "black",
+                pointshape = 21, pointsize = 2,
+                addEllipses = TRUE,
                 # Variables
                 col.var = "contrib",
                 gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
