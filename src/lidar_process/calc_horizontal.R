@@ -16,7 +16,7 @@ workingdir="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selecte
 setwd(workingdir)
 
 filelist=list.files(pattern = "*95_normalized_height_masked.tif")
-radii=11
+radii=51
 
 for (i in filelist) {
   print(i)
