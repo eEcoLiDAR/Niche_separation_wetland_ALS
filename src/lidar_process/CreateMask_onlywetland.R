@@ -8,6 +8,36 @@ library(raster)
 library(dplyr)
 library(stringr)
 
+#### function
+
+mosaicList <- function(rasList){
+  
+  #Internal function to make a list of raster objects from list of files.
+  ListRasters <- function(list_names) {
+    raster_list <- list() # initialise the list of rasters
+    for (i in 1:(length(list_names))){ 
+      grd_name <- list_names[i] # list_names contains all the names of the images in .grd format
+      raster_file <- raster::raster(grd_name)
+    }
+    raster_list <- append(raster_list, raster_file) # update raster_list at each iteration
+  }
+  
+  #convert every raster path to a raster object and create list of the results
+  raster.list <-sapply(rasList, FUN = ListRasters)
+  
+  # edit settings of the raster list for use in do.call and mosaic
+  names(raster.list) <- NULL
+  #####This function deals with overlapping areas
+  raster.list$fun <- mean
+  
+  #run do call to implement mosaic over the list of raster objects.
+  mos <- do.call(raster::mosaic, raster.list)
+  
+  #set crs of output
+  crs(mos) <- crs(x = raster(rasList[1]))
+  return(mos)
+}
+
 # Initialize
 
 workingdirectory="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/"
@@ -50,3 +80,12 @@ for (i in filelist) {
   writeRaster(lidar_masked,paste(workingdirectory,"/onlywetland/",getfilename,"_onlywetland.tif",sep=""),overwrite=TRUE)
  
 }
+
+setwd(paste(workingdirectory,"/onlywetland/",sep=""))
+mask_tifs <- list.files(pattern = "*_onlywetland_mask.tif")
+
+# Merge wetland mask
+
+mask_merged=mosaicList(mask_tifs)
+writeRaster(mask_merged,"merged_mask_onlywetland.tif",overwrite=TRUE)
+  
