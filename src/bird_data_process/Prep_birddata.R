@@ -64,6 +64,10 @@ bird_ahn3ac=raster::intersect(bird_shp,ahn3_actime)
 bird_ahn3ac_lgn8=raster::extract(landcover,bird_ahn3ac)
 bird_ahn3ac$landcover_lgn8=bird_ahn3ac_lgn8[,1]
 
+# Year match
+bird_ahn3ac$acq_sync <- bird_ahn3ac$year == bird_ahn3ac$Jaar
+bird_terr_timematch_shp=bird_ahn3ac[bird_ahn3ac$acq_sync==TRUE,]
+
 #Export
 raster::shapefile(bird_ahn3ac, "Birds_territory_wextra.shp",overwrite=TRUE)
 
@@ -76,6 +80,16 @@ Sn <- subset(bird_ahn3ac, species %in% c('Snor'))
 raster::shapefile(GrW, "GrW_territory_wextra.shp",overwrite=TRUE)
 raster::shapefile(KK, "KK_territory_wextra.shp",overwrite=TRUE)
 raster::shapefile(Sn, "Sn_territory_wextra.shp",overwrite=TRUE)
+
+# Export per species with time match
+
+GrW_t <- subset(bird_terr_timematch_shp, species %in% c('Grote Karekiet'))
+KK_t <- subset(bird_terr_timematch_shp, species %in% c('Kleine Karekiet'))
+Sn_t <- subset(bird_terr_timematch_shp, species %in% c('Snor'))
+
+raster::shapefile(GrW_t, "GrW_territory_timematch.shp",overwrite=TRUE)
+raster::shapefile(KK_t, "KK_territory_timematch.shp",overwrite=TRUE)
+raster::shapefile(Sn_t, "Sn_territory_timematch.shp",overwrite=TRUE)
 
 ### Process presence in atlas mapping data 
 
