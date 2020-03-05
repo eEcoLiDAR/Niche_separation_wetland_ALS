@@ -1,6 +1,6 @@
 "
 @author: Zsofia Koma, UvA
-Aim: Pre-process presence-only data
+Aim: Pre-process bird data ( add LGN8 landcover + convert to shapefile)
 "
 
 library(rgdal)
@@ -27,13 +27,13 @@ birdfile="avimap_observations_reedland_birds.csv" # using the one which contains
 
 ahn3_actimefile="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/lidar_acquision/ahn3_measuretime.shp"
 landcoverfile="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/landcover/UvA_LGN2018/LGN2018.tif"
-humanobjectfile="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/human_objects/powerlines.shp"
+
+### Process territory mapping data
 
 #Import
 birds=read.csv(birdfile,sep=";")
 
 ahn3_actime = readOGR(dsn=ahn3_actimefile)
-humanobject = readOGR(dsn=humanobjectfile)
 
 landcover=stack(landcoverfile)
 proj4string(landcover) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
@@ -55,44 +55,15 @@ bird_ahn3ac=raster::intersect(bird_shp,ahn3_actime)
 bird_ahn3ac_lgn8=raster::extract(landcover,bird_ahn3ac)
 bird_ahn3ac$landcover_lgn8=bird_ahn3ac_lgn8[,1]
 
-# Intersect with human object 
-
 #Export
-raster::shapefile(bird_ahn3ac, "Birds_wextra.shp",overwrite=TRUE)
+raster::shapefile(bird_ahn3ac, "Birds_territory_wextra.shp",overwrite=TRUE)
 
-##### Quick analysis
-bird_extra=bird_ahn3ac@data
+# Export per species
 
-# same year?
-bird_extra$acq_sync <- bird_extra$year == bird_extra$Jaar
-bird_extra=bird_extra[bird_extra$acq_syn=="TRUE",]
+GrW <- subset(bird_ahn3ac, species %in% c('Grote Karekiet'))
+KK <- subset(bird_ahn3ac, species %in% c('Kleine Karekiet'))
+Sn <- subset(bird_ahn3ac, species %in% c('Snor'))
 
-# landcover
-landcovers <- bird_extra %>%
-  group_by(landcover_lgn8,species) %>%
-  summarise(nofobs = length(species))
-
-ggplot(landcovers, aes(fill=species, y=nofobs, x=as.character(landcover_lgn8))) + 
-  geom_bar(position="stack", stat="identity")
-
-# Thinning process
-
-# Random
-thinned_dataset_full <-
-  thin( loc.data = birds[ which( birds$species == "Baardman" ) , ], 
-        lat.col = "y", long.col = "x", 
-        spec.col = "occurrence", 
-        thin.par = 100, reps = 1, 
-        locs.thinned.list.return = TRUE, 
-        write.files = FALSE, 
-        write.log.file = FALSE)
-
-# Maximized
-thinned=thin.max(birds[ which( birds$species == "Baardman" ) , ], c("y", "x"), 200)
-
-# Sample distance
-baardman_test=bird[ which( bird$species == "Baardman" ) , ]
-coordinates(baardman_test) <- ~ x+y
-
-sub.baardman_test <- subsample.distance(baardman_test, n = 250, d = 20) 
-subpp.baardman_tst <- pp.subsample(baardman_test, n=250, window='hull')   
+raster::shapefile(GrW, "GrW_territory_wextra.shp",overwrite=TRUE)
+raster::shapefile(KK, "KK_territory_wextra.shp",overwrite=TRUE)
+raster::shapefile(Sn, "Sn_territory_wextra.shp",overwrite=TRUE)
