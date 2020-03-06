@@ -226,3 +226,4 @@ Sn_genabs.df$occurrence <- 0
 
 Sn_genabs.df_shp=CreateShape(Sn_genabs.df)
 raster::shapefile(Sn_genabs.df_shp, "Sn_genabs.shp",overwrite=TRUE)
+
