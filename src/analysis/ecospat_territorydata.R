@@ -54,12 +54,12 @@ fviz_pca_var(pca.env2, col.var = "contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel = TRUE
 )
 
-fviz_pca_biplot(pca.env2, 
+fviz_pca_biplot(pca.env2, axes=c(1,2), 
                 # Individuals
                 geom.ind = "point",
                 fill.ind = as.factor(data_merged_mod$species), col.ind = "black",
-                pointshape = 21, pointsize = 2,
-                palette=c("blue","green","purple","black"),
+                pointshape = 21, pointsize = 0.01,
+                palette=c("blue","green","purple","red","black"),
                 addEllipses = FALSE,
                 # Variables
                 col.var = "contrib",
@@ -83,6 +83,53 @@ factor_loadings=var$cor
 
 corrplot(as.matrix(var$cor), is.corr=FALSE,method="number",col=colorRampPalette(c("dodgerblue4","white","firebrick"))(200))
 
+# Per species
+
+grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
+kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine Karekiet"))
+snor=dplyr::filter(data_merged,str_detect(data_merged$species,"Snor"))
+
+pca.sp1<-dudi.pca(grotekarakiet[,1:10],scannf=FALSE,center=TRUE,nf=3)
+pca.sp2<-dudi.pca(kleinekarakiet[,1:10],scannf=FALSE,center=TRUE,nf=3)
+pca.sp3<-dudi.pca(snor[,1:10],scannf=FALSE,center=TRUE,nf=3)
+
+fviz_pca_biplot(pca.sp1, 
+                # Individuals
+                geom.ind = "point",
+                fill.ind = as.factor(grotekarakiet$occ), col.ind = "black",
+                pointshape = 21, pointsize = 1,
+                palette = c("blue","red"),
+                addEllipses = TRUE, ellipse.level = 0.9,
+                # Variables
+                col.var = "contrib",
+                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                legend.title = list(fill = "Species", color = "Contrib"))
+
+fviz_pca_biplot(pca.sp2, 
+                # Individuals
+                geom.ind = "point",
+                fill.ind = as.factor(kleinekarakiet$occ), col.ind = "black",
+                pointshape = 21, pointsize = 1,
+                palette = c("blue","red"),
+                addEllipses = TRUE, ellipse.level = 0.9,
+                # Variables
+                col.var = "contrib",
+                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                legend.title = list(fill = "Species", color = "Contrib"))
+
+fviz_pca_biplot(pca.sp3, 
+                # Individuals
+                geom.ind = "point",
+                fill.ind = as.factor(snor$occ), col.ind = "black",
+                pointshape = 21, pointsize = 1,
+                palette = c("blue","red"),
+                addEllipses = TRUE, ellipse.level = 0.9,
+                # Variables
+                col.var = "contrib",
+                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                legend.title = list(fill = "Species", color = "Contrib"))
+
+
 # ecospat run 1
 
 grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
@@ -104,9 +151,9 @@ scores.clim.kleinekarakiet<-suprow(pca.env,kleinekarakiet[,1:10])$li
 scores.sp.snor<-suprow(pca.env,snor[which(snor[,12]==1),1:10])$li
 scores.clim.snor<-suprow(pca.env,snor[,1:10])$li
 
-grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.grotekarakiet, sp=scores.sp.grotekarakiet, R=100, th.sp=0.2,th.env=0.05) 
-grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.kleinekarakiet, sp=scores.sp.kleinekarakiet, R=100, th.sp=0.2,th.env=0.05) 
-grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.snor, sp=scores.sp.snor, R=100, th.sp=0.2,th.env=0.05) 
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.grotekarakiet, sp=scores.sp.grotekarakiet, R=500, th.sp=0.2,th.env=0.05) 
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.kleinekarakiet, sp=scores.sp.kleinekarakiet, R=500, th.sp=0.2,th.env=0.05) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim, glob1=scores.clim.snor, sp=scores.sp.snor, R=500, th.sp=0.2,th.env=0.05) 
 
 par(mfrow=c(2,2))
 ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
