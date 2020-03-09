@@ -19,6 +19,8 @@ data_merged=subset(data_merged,select=c(4:15))
 names(data_merged) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height95","dsm_sd",
                         "lowveg_sd", "lowveg_prop","veg_cover","veg_var","species","occurrence")
 
+data_merged=data_merged[data_merged$veg_height95<30,]
+
 #### PCA anal
 
 # All together
