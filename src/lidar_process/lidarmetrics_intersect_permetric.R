@@ -19,7 +19,7 @@ proj4string(lidar) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.387638
 ## import GrW and prepare data for intersection
 
 GrW_abs=readOGR(".","GrW_genabs")
-GrW_pres=readOGR(".","GrW_territory_subs_20")
+GrW_pres=readOGR(".","GrW_territory_subs_10")
 
 GrW_pres.df <- as(GrW_pres, "data.frame")
 GrW_pres.df$id<- seq(1,length(GrW_pres.df$occrrn))
@@ -48,7 +48,7 @@ write.csv(data,"GrW_territory_intersected.csv")
 ## import Sn and prepare data for intersection
 
 Sn_abs=readOGR(".","Sn_genabs")
-Sn_pres=readOGR(".","Sn_territory_subs_20")
+Sn_pres=readOGR(".","Sn_territory_subs_10")
 
 Sn_pres.df <- as(Sn_pres, "data.frame")
 Sn_pres.df$id<- seq(1,length(Sn_pres.df$occrrn))
@@ -77,7 +77,7 @@ write.csv(data,"Sn_territory_intersected.csv")
 ## import KK and prepare data for intersection
 
 KK_abs=readOGR(".","KK_genabs")
-KK_pres=readOGR(".","KK_territory_subs_20")
+KK_pres=readOGR(".","KK_territory_subs_10")
 
 KK_pres.df <- as(KK_pres, "data.frame")
 KK_pres.df$id<- seq(1,length(KK_pres.df$occrrn))
