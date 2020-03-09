@@ -9,9 +9,9 @@ library(stringr)
 workingdirectory="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/all_10m/onlywetland/"
 setwd(workingdirectory)
 
-GrW=read.csv("GrW_territory_intersected.csv")
-KK=read.csv("KK_territory_intersected.csv")
-Sn=read.csv("Sn_territory_intersected.csv")
+GrW=read.csv("GrW_territory_intersected_20.csv")
+KK=read.csv("KK_territory_intersected_20.csv")
+Sn=read.csv("Sn_territory_intersected_20.csv")
 
 data_merged=rbind(GrW,KK,Sn)
 
@@ -171,8 +171,8 @@ ecospat.plot.contrib(contrib=pca.env$co, eigen=pca.env$eig)
 ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, cor=TRUE)
 ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.snor, cor=TRUE)
 
-eq.test_gr_k<-ecospat.niche.equivalency.test(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, rep=100, alternative = "greater")
-sim.test_gr_k<-ecospat.niche.similarity.test(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, rep=100, alternative = "greater", rand.type = 2)
+eq.test_gr_k<-ecospat.niche.equivalency.test(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, rep=100, alternative = "lower")
+sim.test_gr_k<-ecospat.niche.similarity.test(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, rep=100, alternative = "lower", rand.type = 2)
 
 ecospat.plot.overlap.test(eq.test_gr_k, "D", "Equivalency")
 ecospat.plot.overlap.test(sim.test_gr_k, "D", "Similarity")
