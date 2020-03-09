@@ -178,7 +178,7 @@ GrW_atl_abs_b_sp_union <- unionSpatialPolygons(GrW_atl_abs_b_sp,rep(1, length(Gr
 
 raster::shapefile(GrW_atl_abs_b_sp_union, "GrW_atl_abs_lg8_b1km_union.shp",overwrite=TRUE)
 
-GrW_genabs=spsample(GrW_atl_abs_b_sp_union,n=500,"random")
+GrW_genabs=spsample(GrW_atl_abs_b_sp_union,n=2500,"random")
 GrW_genabs.df=as.data.frame(GrW_genabs)
 
 GrW_genabs.df$species <- 'Grote Karekiet'
@@ -198,7 +198,7 @@ KK_atl_abs_b_sp_union <- unionSpatialPolygons(KK_atl_abs_b_sp,rep(1, length(KK_a
 
 raster::shapefile(KK_atl_abs_b_sp_union, "KK_atl_abs_lg8_b1km_union.shp",overwrite=TRUE)
 
-KK_genabs=spsample(KK_atl_abs_b_sp_union,n=500,"random")
+KK_genabs=spsample(KK_atl_abs_b_sp_union,n=2500,"random")
 KK_genabs.df=as.data.frame(KK_genabs)
 
 KK_genabs.df$species <- 'Kleine Karekiet'
@@ -218,7 +218,7 @@ Sn_atl_abs_b_sp_union <- unionSpatialPolygons(Sn_atl_abs_b_sp,rep(1, length(Sn_a
 
 raster::shapefile(Sn_atl_abs_b_sp_union, "Sn_atl_abs_lg8_b1km_union.shp",overwrite=TRUE)
 
-Sn_genabs=spsample(Sn_atl_abs_b_sp_union,n=500,"random")
+Sn_genabs=spsample(Sn_atl_abs_b_sp_union,n=2500,"random")
 Sn_genabs.df=as.data.frame(Sn_genabs)
 
 Sn_genabs.df$species <- 'Snor'
