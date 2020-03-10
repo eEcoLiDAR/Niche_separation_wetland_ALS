@@ -27,6 +27,12 @@ data_merged=data_merged[data_merged$veg_height95<20,]
 
 
 #### Ecospat
+pca.env<-dudi.pca(data_merged[,1:10],scannf=FALSE,center=TRUE,nf=3)
+pca.env_vis<-dudi.pca(data_merged[,1:10],scannf=FALSE,center=TRUE,nf=2)
+
+grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
+kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine Karekiet"))
+snor=dplyr::filter(data_merged,str_detect(data_merged$species,"Snor"))
 
 scores.globclim<-pca.env$li
 
@@ -41,14 +47,15 @@ scores.clim.snor<-suprow(pca.env,snor[,1:10])$li
 
 # PCA 1 vs PCA 2
 
-grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.grotekarakiet[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
-grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.kleinekarakiet[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
-grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.snor[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.grotekarakiet[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.kleinekarakiet[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.snor[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
 
 par(mfrow=c(2,2))
 ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
 ecospat.plot.niche(grid.clim.kleinekarakiet,title="Reed Warbler")
 ecospat.plot.niche(grid.clim.snor,title="Savi's Warbler")
+ecospat.plot.contrib(contrib=pca.env_vis$co, eigen=pca.env_vis$eig)
 
 # PCA 1 vs PCA 3
 
@@ -68,6 +75,7 @@ ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, quant=
                        interest=1, title= "GrW vs RW")
 ecospat.plot.niche.dyn(grid.clim.snor, grid.clim.kleinekarakiet, quant=0,
                        interest=1, title= "Sn vs RW")
+ecospat.plot.contrib(contrib=pca.env_vis$co, eigen=pca.env_vis$eig)
 
 
 # Tests PCA 1 vs PCA 2
