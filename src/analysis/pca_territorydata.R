@@ -152,3 +152,46 @@ fviz_pca_biplot(pca.sp3,
                 col.var = "contrib",
                 gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
                 legend.title = list(fill = "Species", color = "Contrib"))
+
+# Niche visualization
+
+#### Ecospat
+pca.env<-dudi.pca(data_merged[,1:10],scannf=FALSE,center=TRUE,nf=3)
+pca.env_vis<-dudi.pca(data_merged[,1:10],scannf=FALSE,center=TRUE,nf=2)
+
+grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
+kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine Karekiet"))
+snor=dplyr::filter(data_merged,str_detect(data_merged$species,"Snor"))
+
+scores.globclim<-pca.env$li
+
+scores.sp.grotekarakiet<-suprow(pca.env,grotekarakiet[which(grotekarakiet[,12]==1),1:10])$li
+scores.clim.grotekarakiet<-suprow(pca.env,grotekarakiet[,1:10])$li
+
+scores.sp.kleinekarakiet<-suprow(pca.env,kleinekarakiet[which(kleinekarakiet[,12]==1),1:10])$li
+scores.clim.kleinekarakiet<-suprow(pca.env,kleinekarakiet[,1:10])$li
+
+scores.sp.snor<-suprow(pca.env,snor[which(snor[,12]==1),1:10])$li
+scores.clim.snor<-suprow(pca.env,snor[,1:10])$li
+
+# PCA 1 vs PCA 2
+
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.grotekarakiet[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.kleinekarakiet[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.snor[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
+
+sp_GrW=data.frame(grid.clim.grotekarakiet[["sp"]])
+sp_Sn=data.frame(grid.clim.snor[["sp"]])
+sp_RW=data.frame(grid.clim.kleinekarakiet[["sp"]])
+
+sp_GrW$species <- "GrW"
+sp_Sn$species <- "Sn"
+sp_RW$species <- "RW"
+
+sp_pca=rbind(sp_GrW,sp_Sn,sp_RW)
+
+ggplot(sp_pca, aes(x=species, y=Axis1, color=species)) +
+  geom_boxplot()+theme_minimal()
+
+ggplot(sp_pca, aes(x=species, y=Axis2, color=species)) +
+  geom_boxplot()+theme_minimal() 
