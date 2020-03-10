@@ -77,9 +77,9 @@ GrW <- subset(bird_ahn3ac, species %in% c('Grote Karekiet'))
 KK <- subset(bird_ahn3ac, species %in% c('Kleine Karekiet'))
 Sn <- subset(bird_ahn3ac, species %in% c('Snor'))
 
-raster::shapefile(GrW, "GrW_territory_wextra.shp",overwrite=TRUE)
-raster::shapefile(KK, "KK_territory_wextra.shp",overwrite=TRUE)
-raster::shapefile(Sn, "Sn_territory_wextra.shp",overwrite=TRUE)
+raster::shapefile(GrW, "GrW_territory.shp",overwrite=TRUE)
+raster::shapefile(KK, "KK_territory.shp",overwrite=TRUE)
+raster::shapefile(Sn, "Sn_territory.shp",overwrite=TRUE)
 
 # Export per species with time match
 
@@ -93,13 +93,13 @@ raster::shapefile(Sn_t, "Sn_territory_timematch.shp",overwrite=TRUE)
 
 # Spatial thinning
 
-GrW_subs_20 <- subsample.distance(GrW, n = 2000, d = 10,replacement=FALSE) 
-KK_subs_20 <- subsample.distance(KK, n = 2000, d = 10,replacement=FALSE) 
-Sn_subs_20 <- subsample.distance(Sn, n = 2000, d = 10,replacement=FALSE) 
+GrW_subs_20 <- subsample.distance(GrW, n = 545, d = 20,replacement=FALSE) 
+KK_subs_20 <- subsample.distance(KK, n = 5000, d = 20,replacement=FALSE) # total would be 105982
+Sn_subs_20 <- subsample.distance(Sn, n = 5000, d = 20,replacement=FALSE) # total would be 11765
 
-raster::shapefile(GrW_subs_20, "GrW_territory_subs_10.shp",overwrite=TRUE)
-raster::shapefile(KK_subs_20, "KK_territory_subs_10.shp",overwrite=TRUE)
-raster::shapefile(Sn_subs_20, "Sn_territory_subs_10.shp",overwrite=TRUE)
+raster::shapefile(GrW_subs_20, "GrW_territory_subsall_20.shp",overwrite=TRUE)
+raster::shapefile(KK_subs_20, "KK_territory_subsall_20.shp",overwrite=TRUE)
+raster::shapefile(Sn_subs_20, "Sn_territory_subsall_20.shp",overwrite=TRUE)
 
 ### Process presence in atlas mapping data 
 
@@ -188,14 +188,14 @@ GrW_atl_abs_b_sp_union <- unionSpatialPolygons(GrW_atl_abs_b_sp,rep(1, length(Gr
 
 raster::shapefile(GrW_atl_abs_b_sp_union, "GrW_atl_abs_lg8_b1km_union.shp",overwrite=TRUE)
 
-GrW_genabs=spsample(GrW_atl_abs_b_sp_union,n=2500,"random")
+GrW_genabs=spsample(GrW_atl_abs_b_sp_union,n=5000,"random")
 GrW_genabs.df=as.data.frame(GrW_genabs)
 
 GrW_genabs.df$species <- 'Grote Karekiet'
 GrW_genabs.df$occurrence <- 0
 
 GrW_genabs.df_shp=CreateShape(GrW_genabs.df)
-raster::shapefile(GrW_genabs.df_shp, "GrW_genabs.shp",overwrite=TRUE)
+raster::shapefile(GrW_genabs.df_shp, "GrW_genabs_5000.shp",overwrite=TRUE)
 
 # KK
 factor(KK_atl_abs$landcover_lgn8)
@@ -208,14 +208,14 @@ KK_atl_abs_b_sp_union <- unionSpatialPolygons(KK_atl_abs_b_sp,rep(1, length(KK_a
 
 raster::shapefile(KK_atl_abs_b_sp_union, "KK_atl_abs_lg8_b1km_union.shp",overwrite=TRUE)
 
-KK_genabs=spsample(KK_atl_abs_b_sp_union,n=2500,"random")
+KK_genabs=spsample(KK_atl_abs_b_sp_union,n=5000,"random")
 KK_genabs.df=as.data.frame(KK_genabs)
 
 KK_genabs.df$species <- 'Kleine Karekiet'
 KK_genabs.df$occurrence <- 0
 
 KK_genabs.df_shp=CreateShape(KK_genabs.df)
-raster::shapefile(KK_genabs.df_shp, "KK_genabs.shp",overwrite=TRUE)
+raster::shapefile(KK_genabs.df_shp, "KK_genabs_5000.shp",overwrite=TRUE)
 
 # Sn
 factor(Sn_atl_abs$landcover_lgn8)
@@ -228,12 +228,12 @@ Sn_atl_abs_b_sp_union <- unionSpatialPolygons(Sn_atl_abs_b_sp,rep(1, length(Sn_a
 
 raster::shapefile(Sn_atl_abs_b_sp_union, "Sn_atl_abs_lg8_b1km_union.shp",overwrite=TRUE)
 
-Sn_genabs=spsample(Sn_atl_abs_b_sp_union,n=2500,"random")
+Sn_genabs=spsample(Sn_atl_abs_b_sp_union,n=5000,"random")
 Sn_genabs.df=as.data.frame(Sn_genabs)
 
 Sn_genabs.df$species <- 'Snor'
 Sn_genabs.df$occurrence <- 0
 
 Sn_genabs.df_shp=CreateShape(Sn_genabs.df)
-raster::shapefile(Sn_genabs.df_shp, "Sn_genabs.shp",overwrite=TRUE)
+raster::shapefile(Sn_genabs.df_shp, "Sn_genabs_5000.shp",overwrite=TRUE)
 
