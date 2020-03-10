@@ -6,7 +6,7 @@ library(corrplot)
 library(dplyr)
 library(stringr)
 
-workingdirectory="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/all_10m/onlywetland/"
+workingdirectory="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v2/"
 setwd(workingdirectory)
 
 GrW=read.csv("GrW_territory_intersected.csv")
@@ -23,115 +23,8 @@ data_merged=subset(data_merged,select=c(4,5,6,7,8,10,13,16,18,19,20,21))
 names(data_merged) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height95","dsm_sd",
                         "lowveg_sd", "lowveg_prop","veg_cover","veg_var","species","occurrence")
 
-data_merged=data_merged[data_merged$veg_height95<30,]
+data_merged=data_merged[data_merged$veg_height95<20,]
 
-#### PCA anal
-
-# All together
-
-par(mfrow=c(1,1))
-
-pca.env<-dudi.pca(data_merged[,1:10],scannf=FALSE,center=TRUE,nf=3)
-
-fviz_pca_var(pca.env, col.var = "contrib",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel = TRUE
-)
-
-fviz_pca_var(pca.env, axes = c(1, 3), col.var = "contrib",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")
-)
-
-fviz_pca_var(pca.env, axes = c(2, 3), col.var = "contrib",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")
-)
-
-# Absence as seperate species class
-
-data_merged_mod=data_merged
-levels(data_merged_mod$species) = c("Grote Karekiet","Kleine Karekiet","Snor", "None")
-data_merged_mod[data_merged_mod$occurrence==0,11] <- "None"
-
-
-pca.env2<-dudi.pca(data_merged_mod[,1:10],scannf=FALSE,center=TRUE,nf=3)
-
-fviz_pca_var(pca.env2, col.var = "contrib",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel = TRUE
-)
-
-fviz_pca_biplot(pca.env2, axes=c(1,2), 
-                # Individuals
-                geom.ind = "point",
-                fill.ind = as.factor(data_merged_mod$species), col.ind = "black",
-                pointshape = 21, pointsize = 1,
-                palette=c("blue","green","purple","red","black"),
-                addEllipses = FALSE,
-                # Variables
-                col.var = "contrib",
-                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                legend.title = list(fill = "Species", color = "Contribution"))
-
-fviz_pca_biplot(pca.env2, axes=c(1,3), 
-                # Individuals
-                geom.ind = "point",
-                fill.ind = as.factor(data_merged_mod$species), col.ind = "black",
-                pointshape = 21, pointsize = 1,
-                palette=c("blue","green","purple","red","black"),
-                addEllipses = FALSE,
-                # Variables
-                col.var = "contrib",
-                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                legend.title = list(fill = "Species", color = "Contribution"))
-
-var <- get_pca_var(pca.env2)
-factor_loadings=var$cor
-
-corrplot(as.matrix(var$cor), is.corr=FALSE,method="number",col=colorRampPalette(c("dodgerblue4","white","firebrick"))(200))
-
-# Per species
-
-grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
-kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine Karekiet"))
-snor=dplyr::filter(data_merged,str_detect(data_merged$species,"Snor"))
-
-pca.sp1<-dudi.pca(grotekarakiet[,1:10],scannf=FALSE,center=TRUE,nf=3)
-pca.sp2<-dudi.pca(kleinekarakiet[,1:10],scannf=FALSE,center=TRUE,nf=3)
-pca.sp3<-dudi.pca(snor[,1:10],scannf=FALSE,center=TRUE,nf=3)
-
-fviz_pca_biplot(pca.sp1, 
-                # Individuals
-                geom.ind = "point",
-                fill.ind = as.factor(grotekarakiet$occ), col.ind = "black",
-                pointshape = 21, pointsize = 1,
-                palette = c("blue","red"),
-                addEllipses = TRUE, ellipse.level = 0.9,
-                # Variables
-                col.var = "contrib",
-                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                legend.title = list(fill = "Species", color = "Contrib"))
-
-fviz_pca_biplot(pca.sp2, 
-                # Individuals
-                geom.ind = "point",
-                fill.ind = as.factor(kleinekarakiet$occ), col.ind = "black",
-                pointshape = 21, pointsize = 1,
-                palette = c("blue","red"),
-                addEllipses = TRUE, ellipse.level = 0.9,
-                # Variables
-                col.var = "contrib",
-                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                legend.title = list(fill = "Species", color = "Contrib"))
-
-fviz_pca_biplot(pca.sp3, 
-                # Individuals
-                geom.ind = "point",
-                fill.ind = as.factor(snor$occ), col.ind = "black",
-                pointshape = 21, pointsize = 1,
-                palette = c("blue","red"),
-                addEllipses = TRUE, ellipse.level = 0.9,
-                # Variables
-                col.var = "contrib",
-                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                legend.title = list(fill = "Species", color = "Contrib"))
 
 #### Ecospat
 
@@ -173,7 +66,63 @@ ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.snor, quant=0,
                        interest=1, title= "GrW vs Sn")
 ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, quant=0,
                        interest=1, title= "GrW vs RW")
+ecospat.plot.niche.dyn(grid.clim.snor, grid.clim.kleinekarakiet, quant=0,
+                       interest=1, title= "Sn vs RW")
 
+
+# Tests PCA 1 vs PCA 2
+
+# Grote Karakiet
+
+ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, cor=TRUE)
+ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.snor, cor=TRUE)
+
+eq.test_gr_k<-ecospat.niche.equivalency.test(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, rep=100, alternative = "greater")
+sim.test_gr_k<-ecospat.niche.similarity.test(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, rep=100, alternative = "greater", rand.type = 2)
+
+ecospat.plot.overlap.test(eq.test_gr_k, "D", "Equivalency")
+ecospat.plot.overlap.test(sim.test_gr_k, "D", "Similarity")
+
+
+eq.test_gr_s<-ecospat.niche.equivalency.test(grid.clim.grotekarakiet, grid.clim.snor, rep=100, alternative = "greater")
+sim.test_gr_s<-ecospat.niche.similarity.test(grid.clim.grotekarakiet, grid.clim.snor, rep=100, alternative = "greater", rand.type = 2)
+
+ecospat.plot.overlap.test(eq.test_gr_s, "D", "Equivalency")
+ecospat.plot.overlap.test(sim.test_gr_s, "D", "Similarity")
+
+# Kleine Karakiet
+ecospat.niche.overlap(grid.clim.kleinekarakiet, grid.clim.grotekarakiet, cor=TRUE)
+ecospat.niche.overlap(grid.clim.kleinekarakiet, grid.clim.snor, cor=TRUE)
+
+eq.test_k_gr<-ecospat.niche.equivalency.test(grid.clim.kleinekarakiet, grid.clim.grotekarakiet, rep=100, alternative = "greater")
+sim.test_k_gr<-ecospat.niche.similarity.test(grid.clim.kleinekarakiet, grid.clim.grotekarakiet, rep=100, alternative = "greater", rand.type = 2)
+
+ecospat.plot.overlap.test(eq.test_k_gr, "D", "Equivalency")
+ecospat.plot.overlap.test(sim.test_k_gr, "D", "Similarity")
+
+eq.test_k_s<-ecospat.niche.equivalency.test(grid.clim.kleinekarakiet, grid.clim.snor, rep=100, alternative = "greater")
+sim.test_k_s<-ecospat.niche.similarity.test(grid.clim.kleinekarakiet, grid.clim.snor, rep=100, alternative = "greater", rand.type = 2)
+
+ecospat.plot.overlap.test(eq.test_k_s, "D", "Equivalency")
+ecospat.plot.overlap.test(sim.test_k_s, "D", "Similarity")
+
+# Snor
+ecospat.niche.overlap(grid.clim.snor, grid.clim.grotekarakiet, cor=TRUE)
+ecospat.niche.overlap(grid.clim.snor, grid.clim.kleinekarakiet, cor=TRUE)
+
+eq.test_s_gr<-ecospat.niche.equivalency.test(grid.clim.snor, grid.clim.grotekarakiet, rep=100, alternative = "greater")
+sim.test_s_gr<-ecospat.niche.similarity.test(grid.clim.snor, grid.clim.grotekarakiet, rep=100, alternative = "greater", rand.type = 2)
+
+ecospat.plot.overlap.test(eq.test_s_gr, "D", "Equivalency")
+ecospat.plot.overlap.test(sim.test_s_gr, "D", "Similarity")
+
+eq.test_s_k<-ecospat.niche.equivalency.test(grid.clim.snor, grid.clim.kleinekarakiet, rep=100, alternative = "lower")
+sim.test_s_k<-ecospat.niche.similarity.test(grid.clim.snor, grid.clim.kleinekarakiet, rep=100, alternative = "greater", rand.type = 2)
+
+ecospat.plot.overlap.test(eq.test_s_k, "D", "Equivalency")
+ecospat.plot.overlap.test(sim.test_s_k, "D", "Similarity")
+
+# Extra visualization
 sp_GrW=data.frame(grid.clim.grotekarakiet[["sp"]])
 sp_Sn=data.frame(grid.clim.snor[["sp"]])
 sp_RW=data.frame(grid.clim.kleinekarakiet[["sp"]])
