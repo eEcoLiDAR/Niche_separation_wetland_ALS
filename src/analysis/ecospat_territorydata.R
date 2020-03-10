@@ -91,8 +91,7 @@ sim.test_gr_k<-ecospat.niche.similarity.test(grid.clim.grotekarakiet, grid.clim.
 ecospat.plot.overlap.test(eq.test_gr_k, "D", "Equivalency")
 ecospat.plot.overlap.test(sim.test_gr_k, "D", "Similarity")
 
-
-eq.test_gr_s<-ecospat.niche.equivalency.test(grid.clim.grotekarakiet, grid.clim.snor, rep=100, alternative = "greater")
+eq.test_gr_s<-ecospat.niche.equivalency.test(grid.clim.grotekarakiet, grid.clim.snor, rep=100, alternative = "lower")
 sim.test_gr_s<-ecospat.niche.similarity.test(grid.clim.grotekarakiet, grid.clim.snor, rep=100, alternative = "greater", rand.type = 2)
 
 ecospat.plot.overlap.test(eq.test_gr_s, "D", "Equivalency")
@@ -130,19 +129,3 @@ sim.test_s_k<-ecospat.niche.similarity.test(grid.clim.snor, grid.clim.kleinekara
 ecospat.plot.overlap.test(eq.test_s_k, "D", "Equivalency")
 ecospat.plot.overlap.test(sim.test_s_k, "D", "Similarity")
 
-# Extra visualization
-sp_GrW=data.frame(grid.clim.grotekarakiet[["sp"]])
-sp_Sn=data.frame(grid.clim.snor[["sp"]])
-sp_RW=data.frame(grid.clim.kleinekarakiet[["sp"]])
-
-sp_GrW$species <- "GrW"
-sp_Sn$species <- "Sn"
-sp_RW$species <- "RW"
-
-sp_pca=rbind(sp_GrW,sp_Sn,sp_RW)
-
-ggplot(sp_pca, aes(x=species, y=Axis1, color=species)) +
-  geom_boxplot()
-
-ggplot(sp_pca, aes(x=species, y=Axis2, color=species)) +
-  geom_boxplot()
