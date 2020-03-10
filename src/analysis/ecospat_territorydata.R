@@ -9,9 +9,9 @@ library(stringr)
 workingdirectory="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/all_10m/onlywetland/"
 setwd(workingdirectory)
 
-GrW=read.csv("GrW_territory_intersected_20.csv")
-KK=read.csv("KK_territory_intersected_20.csv")
-Sn=read.csv("Sn_territory_intersected_20.csv")
+GrW=read.csv("GrW_territory_intersected.csv")
+KK=read.csv("KK_territory_intersected.csv")
+Sn=read.csv("Sn_territory_intersected.csv")
 
 data_merged=rbind(GrW,KK,Sn)
 
