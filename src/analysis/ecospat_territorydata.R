@@ -47,9 +47,9 @@ scores.clim.snor<-suprow(pca.env,snor[,1:10])$li
 
 # PCA 1 vs PCA 2
 
-grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.grotekarakiet[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
-grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.kleinekarakiet[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
-grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.snor[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.grotekarakiet[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.kleinekarakiet[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.snor[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
 
 par(mfrow=c(2,2))
 ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
@@ -107,7 +107,7 @@ sim.test_k_gr<-ecospat.niche.similarity.test(grid.clim.kleinekarakiet, grid.clim
 ecospat.plot.overlap.test(eq.test_k_gr, "D", "Equivalency")
 ecospat.plot.overlap.test(sim.test_k_gr, "D", "Similarity")
 
-eq.test_k_s<-ecospat.niche.equivalency.test(grid.clim.kleinekarakiet, grid.clim.snor, rep=100, alternative = "greater")
+eq.test_k_s<-ecospat.niche.equivalency.test(grid.clim.kleinekarakiet, grid.clim.snor, rep=100, alternative = "lower")
 sim.test_k_s<-ecospat.niche.similarity.test(grid.clim.kleinekarakiet, grid.clim.snor, rep=100, alternative = "greater", rand.type = 2)
 
 ecospat.plot.overlap.test(eq.test_k_s, "D", "Equivalency")
@@ -117,7 +117,7 @@ ecospat.plot.overlap.test(sim.test_k_s, "D", "Similarity")
 ecospat.niche.overlap(grid.clim.snor, grid.clim.grotekarakiet, cor=TRUE)
 ecospat.niche.overlap(grid.clim.snor, grid.clim.kleinekarakiet, cor=TRUE)
 
-eq.test_s_gr<-ecospat.niche.equivalency.test(grid.clim.snor, grid.clim.grotekarakiet, rep=100, alternative = "greater")
+eq.test_s_gr<-ecospat.niche.equivalency.test(grid.clim.snor, grid.clim.grotekarakiet, rep=100, alternative = "lower")
 sim.test_s_gr<-ecospat.niche.similarity.test(grid.clim.snor, grid.clim.grotekarakiet, rep=100, alternative = "greater", rand.type = 2)
 
 ecospat.plot.overlap.test(eq.test_s_gr, "D", "Equivalency")
