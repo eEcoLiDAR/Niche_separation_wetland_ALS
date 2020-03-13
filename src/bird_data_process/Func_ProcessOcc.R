@@ -35,6 +35,31 @@ ConvertPolytoDf = function(kmsquares_poly) {
   return(kmsquares_poly.df)
 }
 
+Gen_absence = function(GrW_atl_abs,spname,outname,nofsamp) {
+  
+  GrW_atl_abs_lgn8 <- subset(GrW_atl_abs, landcover_lgn8 %in% c(16,17,30,322,323,332,333,41,42,43,45,46,47))
+  
+  GrW_atl_abs_lgn8=GrW_atl_abs_lgn8[is.na(GrW_atl_abs_lgn8$lidar),]
+  GrW_atl_abs_lgn8=GrW_atl_abs_lgn8[GrW_atl_abs_lgn8$Jaar!=2019,]
+  
+  GrW_atl_abs_b=st_buffer(st_as_sf(GrW_atl_abs_lgn8), 1000)
+  GrW_atl_abs_b_sp <- sf:::as_Spatial(GrW_atl_abs_b)
+  
+  GrW_atl_abs_b_sp_union <- unionSpatialPolygons(GrW_atl_abs_b_sp,rep(1, length(GrW_atl_abs_b_sp)))
+  
+  GrW_genabs=spsample(GrW_atl_abs_b_sp_union,n=nofsamp,"random")
+  GrW_genabs.df=as.data.frame(GrW_genabs)
+  
+  GrW_genabs.df$species <- spname
+  GrW_genabs.df$occurrence <- 0
+  
+  GrW_genabs.df_shp=CreateShape(GrW_genabs.df)
+  raster::shapefile(GrW_genabs.df_shp, paste(outname,".shp",sep=""),overwrite=TRUE)
+  
+  GrW_genabs_20 <- spatialEco:::subsample.distance(GrW_genabs.df_shp,size=nofsamp/2,d=20,replacement=FALSE) 
+  raster::shapefile(GrW_genabs_20, paste(outname,"_20.shp",sep=""),overwrite=TRUE)
+}
+
 thin.max <- function(x, cols, npoints){
   #Create empty vector for output
   inds <- vector(mode="numeric")
