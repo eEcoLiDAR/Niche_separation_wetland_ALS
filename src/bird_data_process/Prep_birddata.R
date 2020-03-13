@@ -102,42 +102,6 @@ raster::shapefile(GrW_subs_20, "GrW_territory_20.shp",overwrite=TRUE)
 raster::shapefile(KK_subs_20, "KK_territory_20.shp",overwrite=TRUE)
 raster::shapefile(Sn_subs_20, "Sn_territory_20.shp",overwrite=TRUE)
 
-### Process presence in atlas mapping data 
-
-presatl_birds=read.csv(atl_pres,sep=";")
-
-names(presatl_birds)[14]<-"x"
-names(presatl_birds)[15]<-"y"
-names(presatl_birds)[17]<-"occurrence"
-
-# Drop data if it was measured before 2013
-
-presatl_birds<-presatl_birds[!(presatl_birds$species=="Roerdomp"),]
-
-birds_wfilt_presatl=presatl_birds[presatl_birds$year>"2013",]
-
-birds_wfilt_presatl_shp=CreateShape(birds_wfilt_presatl)
-
-# Add lgn8 attribute
-
-birds_wfilt_presatl_shp_lgn8=raster::extract(landcover,birds_wfilt_presatl_shp)
-birds_wfilt_presatl_shp$landcover_lgn8=birds_wfilt_presatl_shp_lgn8[,1]
-
-#Export
-
-raster::shapefile(birds_wfilt_presatl_shp, "birds_presatl.shp",overwrite=TRUE)
-
-# Export per species
-GrW_atl <- subset(birds_wfilt_presatl_shp, species %in% c('Grote Karekiet'))
-KK_atl <- subset(birds_wfilt_presatl_shp, species %in% c('Kleine Karekiet'))
-Sn_atl <- subset(birds_wfilt_presatl_shp, species %in% c('Snor'))
-Se_atl <- subset(birds_wfilt_presatl_shp, species %in% c('Rietzanger'))
-
-raster::shapefile(GrW_atl, "GrW_presatl_wextra.shp",overwrite=TRUE)
-raster::shapefile(KK_atl, "KK_presatl_wextra.shp",overwrite=TRUE)
-raster::shapefile(Sn_atl, "Sn_presatl_wextra.shp",overwrite=TRUE)
-raster::shapefile(Se_atl, "Se_presatl_wextra.shp",overwrite=TRUE)
-
 ### Process absence atlas data
 kmsquares_poly.df=read.csv(file=kmsquaresfile,header=TRUE,sep=",")
 colnames(kmsquares_poly.df)[colnames(kmsquares_poly.df)=="sum"] <- "nofkmsquare"
@@ -184,7 +148,43 @@ Se_atl_abs <- subset(birds_abs_shp_wlidar, species %in% c('Rietzanger'))
 
 ### Create absences based on atlas data (for territory mapping data)
 
-Gen_absence(GrW_atl_abs,spname='Grote Karekiet',outname="GrW_genabs",nofsamp=2*157)
-Gen_absence(KK_atl_abs,spname='Kleine Karekiet',outname="KK_genabs",nofsamp=2*14297)
-Gen_absence(Sn_atl_abs,spname='Snor',outname="Sn_genabs",nofsamp=2*1161)
+Gen_absence(GrW_atl_abs,spname='Grote Karekiet',outname="GrW_genabs",nofsamp=length(GrW))
+Gen_absence(KK_atl_abs,spname='Kleine Karekiet',outname="KK_genabs",nofsamp=length(KK))
+Gen_absence(Sn_atl_abs,spname='Snor',outname="Sn_genabs",nofsamp=length(Sn))
+
+### Process presence in atlas mapping data 
+
+presatl_birds=read.csv(atl_pres,sep=";")
+
+names(presatl_birds)[14]<-"x"
+names(presatl_birds)[15]<-"y"
+names(presatl_birds)[17]<-"occurrence"
+
+# Drop data if it was measured before 2013
+
+presatl_birds<-presatl_birds[!(presatl_birds$species=="Roerdomp"),]
+
+birds_wfilt_presatl=presatl_birds[presatl_birds$year>"2013",]
+
+birds_wfilt_presatl_shp=CreateShape(birds_wfilt_presatl)
+
+# Add lgn8 attribute
+
+birds_wfilt_presatl_shp_lgn8=raster::extract(landcover,birds_wfilt_presatl_shp)
+birds_wfilt_presatl_shp$landcover_lgn8=birds_wfilt_presatl_shp_lgn8[,1]
+
+#Export
+
+raster::shapefile(birds_wfilt_presatl_shp, "birds_presatl.shp",overwrite=TRUE)
+
+# Export per species
+GrW_atl <- subset(birds_wfilt_presatl_shp, species %in% c('Grote Karekiet'))
+KK_atl <- subset(birds_wfilt_presatl_shp, species %in% c('Kleine Karekiet'))
+Sn_atl <- subset(birds_wfilt_presatl_shp, species %in% c('Snor'))
+Se_atl <- subset(birds_wfilt_presatl_shp, species %in% c('Rietzanger'))
+
+raster::shapefile(GrW_atl, "GrW_presatl_wextra.shp",overwrite=TRUE)
+raster::shapefile(KK_atl, "KK_presatl_wextra.shp",overwrite=TRUE)
+raster::shapefile(Sn_atl, "Sn_presatl_wextra.shp",overwrite=TRUE)
+raster::shapefile(Se_atl, "Se_presatl_wextra.shp",overwrite=TRUE)
 

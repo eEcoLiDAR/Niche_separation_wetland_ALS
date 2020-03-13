@@ -55,7 +55,7 @@ Gen_absence = function(GrW_atl_abs,spname,outname,nofsamp) {
   GrW_genabs.df_shp=CreateShape(GrW_genabs.df)
   raster::shapefile(GrW_genabs.df_shp, paste(outname,".shp",sep=""),overwrite=TRUE)
   
-  GrW_genabs_20 <- spatialEco:::subsample.distance(GrW_genabs.df_shp,size=nofsamp/2,d=20,replacement=FALSE) 
+  GrW_genabs_20 <- spatialEco:::subsample.distance(GrW_genabs.df_shp,size=nofsamp-1,d=20,replacement=FALSE) 
   raster::shapefile(GrW_genabs_20, paste(outname,"_20.shp",sep=""),overwrite=TRUE)
 }
 
