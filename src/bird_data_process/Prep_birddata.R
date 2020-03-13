@@ -47,9 +47,6 @@ ahn3_actime = readOGR(dsn=ahn3_actimefile)
 landcover=stack(landcoverfile)
 proj4string(landcover) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
 
-lidar=stack(lidarfile)
-proj4string(lidar) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
-
 ### Process territory mapping data (pres-only)
 
 birds=read.csv(birdfile,sep=";")
@@ -79,7 +76,7 @@ bird_ahn3ac$lidar=bird_ahn3ac_lidar[,1]
 
 bird_ahn3ac_filt <- subset(bird_ahn3ac, landcover_lgn8 %in% c(16,17,30,322,323,332,333,41,42,43,45,46,47))
 
-bird_ahn3ac_filt=bird_ahn3ac_filt[is.na(bird_ahn3ac_filt$lidar),]
+#bird_ahn3ac_filt=bird_ahn3ac_filt[is.na(bird_ahn3ac_filt$lidar),]
 bird_ahn3ac_filt=bird_ahn3ac_filt[bird_ahn3ac_filt$Jaar!=2019,]
 
 #Export
