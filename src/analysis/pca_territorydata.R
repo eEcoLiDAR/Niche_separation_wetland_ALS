@@ -6,7 +6,7 @@ library(corrplot)
 library(dplyr)
 library(stringr)
 
-workingdirectory="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v2/"
+workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
 setwd(workingdirectory)
 
 GrW=read.csv("GrW_territory_intersected.csv")
