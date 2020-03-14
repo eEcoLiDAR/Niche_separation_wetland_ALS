@@ -18,7 +18,7 @@ setwd(workingdir)
 filelist=list.files(pattern = "*95_normalized_height_masked.tif")
 radii=21
 
-for (i in filelist[1]) {
+for (i in filelist) {
   print(i)
   
   dsm=raster(i)

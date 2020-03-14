@@ -51,7 +51,7 @@ proj4string(landcover) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38
 
 # organize filenames
 
-id=str_sub(filelist,1,31)
+id=str_sub(filelist,1,26)
 id=unique(id)
 id=str_remove(id, "\\_$")
 
