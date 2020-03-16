@@ -13,6 +13,8 @@ library(usdm)
 library(agricolae)
 library(corrplot)
 
+library(sdm)
+
 # Global
 workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
 setwd(workingdirectory)
@@ -99,8 +101,19 @@ corrplot(cor_env_all, method="color", col=col(200),
 )
 
 # sdm fea importance
+GrW_lgn8
+GrW_selforsdm=subset(GrW_lgn8,select=c(6,7,9,12,13,14,15,19))
 
+d_GrW <- sdmData(occurrence~.,train=GrW_selforsdm)
 
+model_GrW <- sdm(occurrence~.,data=d_GrW ,methods=c('rf'),replication='boot',test.percent=30,n=10)
+model_GrW 
+
+vi <- getVarImp(model_GrW, method='rf')
+vi
+plot(vi)
+
+rcurve(model_GrW , id=1:100)
 
 # Turkey test
 
