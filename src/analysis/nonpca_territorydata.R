@@ -16,7 +16,8 @@ library(corrplot)
 library(sdm)
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
+#workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
+workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
 setwd(workingdirectory)
 
 # Import data
@@ -101,19 +102,53 @@ corrplot(cor_env_all, method="color", col=col(200),
 )
 
 # sdm fea importance
-GrW_lgn8
+# GrW
+
 GrW_selforsdm=subset(GrW_lgn8,select=c(6,7,9,12,13,14,15,19))
+names(GrW_selforsdm) <- c("veg_dens_1_2","veg_dens_2_3","FHD","dsm_sd_100m",
+                        "lowveg_sd_100m", "lowveg_prop_100m","veg_cover","occurrence")
 
 d_GrW <- sdmData(occurrence~.,train=GrW_selforsdm)
 
-model_GrW <- sdm(occurrence~.,data=d_GrW ,methods=c('rf'),replication='boot',test.percent=30,n=10)
+model_GrW <- sdm(occurrence~.,data=d_GrW ,methods=c('rf'),replication='boot',test.percent=30,n=100)
 model_GrW 
 
 vi <- getVarImp(model_GrW, method='rf')
-vi
 plot(vi)
 
 rcurve(model_GrW , id=1:100)
+
+#Sn
+
+Sn_selforsdm=subset(Sn_lgn8,select=c(6,7,9,12,13,14,15,19))
+names(Sn_selforsdm) <- c("veg_dens_1_2","veg_dens_2_3","FHD","dsm_sd_100m",
+                          "lowveg_sd_100m", "lowveg_prop_100m","veg_cover","occurrence")
+
+d_Sn <- sdmData(occurrence~.,train=Sn_selforsdm)
+
+model_Sn <- sdm(occurrence~.,data=d_Sn ,methods=c('rf'),replication='boot',test.percent=30,n=100)
+model_Sn
+
+vi <- getVarImp(model_Sn, method='rf')
+plot(vi)
+
+rcurve(model_Sn , id=1:100)
+
+#KK
+
+KK_selforsdm=subset(KK_lgn8,select=c(6,7,9,12,13,14,15,19))
+names(KK_selforsdm) <- c("veg_dens_1_2","veg_dens_2_3","FHD","dsm_sd_100m",
+                         "lowveg_sd_100m", "lowveg_prop_100m","veg_cover","occurrence")
+
+d_KK <- sdmData(occurrence~.,train=KK_selforsdm)
+
+model_KK <- sdm(occurrence~.,data=d_KK ,methods=c('rf'),replication='boot',test.percent=30,n=100)
+model_KK
+
+vi <- getVarImp(model_KK, method='rf')
+plot(vi)
+
+rcurve(model_KK , id=1:100)
 
 # Turkey test
 
