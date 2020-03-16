@@ -111,13 +111,13 @@ names(GrW_selforsdm) <- c("veg_dens_1_2","veg_dens_2_3","FHD","dsm_sd_100m",
 
 d_GrW <- sdmData(occurrence~.,train=GrW_selforsdm)
 
-model_GrW <- sdm(occurrence~.,data=d_GrW ,methods=c('rf'),replication='boot',test.percent=30,n=10)
+model_GrW <- sdm(occurrence~.,data=d_GrW ,methods=c('rf'),replication='boot',test.percent=30,n=100)
 model_GrW 
 
 vi <- getVarImp(model_GrW, method='rf')
 plot(vi)
 
-rcurve(model_GrW , id=1:10)
+rcurve(model_GrW , id=1:100)
 
 #Sn
 
@@ -127,13 +127,13 @@ names(Sn_selforsdm) <- c("veg_dens_1_2","veg_dens_2_3","FHD","dsm_sd_100m",
 
 d_Sn <- sdmData(occurrence~.,train=Sn_selforsdm)
 
-model_Sn <- sdm(occurrence~.,data=d_Sn ,methods=c('rf'),replication='boot',test.percent=30,n=10)
+model_Sn <- sdm(occurrence~.,data=d_Sn ,methods=c('rf'),replication='boot',test.percent=30,n=100)
 model_Sn
 
 vi <- getVarImp(model_Sn, method='rf')
 plot(vi)
 
-rcurve(model_Sn , id=1:10)
+rcurve(model_Sn , id=1:100)
 
 #KK
 
@@ -141,15 +141,24 @@ KK_selforsdm=subset(KK_lgn8,select=c(6,7,9,12,13,14,15,19))
 names(KK_selforsdm) <- c("veg_dens_1_2","veg_dens_2_3","FHD","dsm_sd_100m",
                          "lowveg_sd_100m", "lowveg_prop_100m","veg_cover","occurrence")
 
+# subsample -- too many observation - modelling takes forever ...
+#KK_selforsdm_abs=KK_selforsdm[KK_selforsdm$occurrence==0,]
+#KK_selforsdm_pres=KK_selforsdm[KK_selforsdm$occurrence==1,]
+
+#KK_selforsdm_abs_sampled=KK_selforsdm_abs[sample(nrow(KK_selforsdm_abs), 500), ]
+#KK_selforsdm_pres_sampled=KK_selforsdm_pres[sample(nrow(KK_selforsdm_pres), 500), ]
+
+#KK_selforsdm_sampled=rbind(KK_selforsdm_abs_sampled,KK_selforsdm_pres_sampled)
+
 d_KK <- sdmData(occurrence~.,train=KK_selforsdm)
 
-model_KK <- sdm(occurrence~.,data=d_KK ,methods=c('rf'),replication='boot',test.percent=30,n=10)
+model_KK <- sdm(occurrence~.,data=d_KK ,methods=c('rf'),replication='boot',test.percent=30,n=25)
 model_KK
 
 vi <- getVarImp(model_KK, method='rf')
 plot(vi)
 
-rcurve(model_KK , id=1:10)
+rcurve(model_KK , id=1:25)
 
 # Turkey test
 
