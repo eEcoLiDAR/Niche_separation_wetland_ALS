@@ -14,10 +14,11 @@ library(agricolae)
 library(corrplot)
 
 library(sdm)
+library(ecospat)
 
 # Global
-#workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
+#workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
 setwd(workingdirectory)
 
 # Import data
@@ -165,3 +166,60 @@ data.test <- TukeyHSD(data.av)
 data.test
 
 plot(data.test)
+
+# Ecospat
+grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
+kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine Karekiet"))
+snor=dplyr::filter(data_merged,str_detect(data_merged$species,"Snor"))
+
+# FHD vs. lowveg_prop
+
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=data_merged[,c(4,8)], glob1=grotekarakiet[grotekarakiet$occurrence==0,c(4,8)], sp=grotekarakiet[grotekarakiet$occurrence==1,c(4,8)], R=500, th.sp=0.1,th.env=0.1)
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=data_merged[,c(4,8)], glob1=kleinekarakiet[kleinekarakiet$occurrence==0,c(4,8)], sp=kleinekarakiet[kleinekarakiet$occurrence==1,c(4,8)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=data_merged[,c(4,8)], glob1=snor[snor$occurrence==0,c(4,8)], sp=snor[snor$occurrence==1,c(4,8)], R=500, th.sp=0.1,th.env=0.1) 
+
+par(mfrow=c(2,2))
+ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
+ecospat.plot.niche(grid.clim.kleinekarakiet,title="Reed Warbler")
+ecospat.plot.niche(grid.clim.snor,title="Savi's Warbler")
+
+# overlap
+
+ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.snor, quant=0,
+                       interest=1, title= "GrW vs Sn")
+ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, quant=0,
+                       interest=1, title= "GrW vs RW")
+ecospat.plot.niche.dyn(grid.clim.snor, grid.clim.kleinekarakiet, quant=0,
+                       interest=1, title= "Sn vs RW")
+
+
+ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.snor, cor=FALSE)
+ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, cor=FALSE)
+ecospat.niche.overlap(grid.clim.snor, grid.clim.kleinekarakiet, cor=FALSE)
+
+# FHD vs. veg dens
+
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=data_merged[,c(4,1)], glob1=grotekarakiet[grotekarakiet$occurrence==0,c(4,1)], sp=grotekarakiet[grotekarakiet$occurrence==1,c(4,1)], R=500, th.sp=0.1,th.env=0.1)
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=data_merged[,c(4,1)], glob1=kleinekarakiet[kleinekarakiet$occurrence==0,c(4,1)], sp=kleinekarakiet[kleinekarakiet$occurrence==1,c(4,1)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=data_merged[,c(4,1)], glob1=snor[snor$occurrence==0,c(4,1)], sp=snor[snor$occurrence==1,c(4,1)], R=500, th.sp=0.1,th.env=0.1) 
+
+par(mfrow=c(2,2))
+ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
+ecospat.plot.niche(grid.clim.kleinekarakiet,title="Reed Warbler")
+ecospat.plot.niche(grid.clim.snor,title="Savi's Warbler")
+
+# overlap
+
+ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.snor, quant=0,
+                       interest=1, title= "GrW vs Sn")
+ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, quant=0,
+                       interest=1, title= "GrW vs RW")
+ecospat.plot.niche.dyn(grid.clim.snor, grid.clim.kleinekarakiet, quant=0,
+                       interest=1, title= "Sn vs RW")
+
+
+ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.snor, cor=FALSE)
+ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, cor=FALSE)
+ecospat.niche.overlap(grid.clim.snor, grid.clim.kleinekarakiet, cor=FALSE)
+
+
