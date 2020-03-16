@@ -6,7 +6,7 @@ library(corrplot)
 library(dplyr)
 library(stringr)
 
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
 setwd(workingdirectory)
 
 GrW=read.csv("GrW_territory_intersected.csv")
@@ -19,44 +19,27 @@ data_presabs_stat <- data_merged %>%
   group_by(species,occurrence) %>%
   summarise(nofobs = length(occurrence))
 
-data_merged_100m=subset(data_merged,select=c(4,5,6,7,8,10,13,16,18,19,20,21))
-names(data_merged_100m) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height95","dsm_sd_100m",
+data_merged=subset(data_merged,select=c(4,5,6,7,9,10,11,12,13,14,16,17))
+names(data_merged) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height95","dsm_sd_100m",
                         "lowveg_sd_100m", "lowveg_prop_100m","veg_cover","veg_var","species","occurrence")
 
-data_merged_50m=subset(data_merged,select=c(4,5,6,7,8,9,12,15,18,19,20,21))
-names(data_merged_50m) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height95","dsm_sd_50m",
-                        "lowveg_sd_50m", "lowveg_prop_50m","veg_cover","veg_var","species","occurrence")
-
-data_merged_250m=subset(data_merged,select=c(4,5,6,7,8,11,14,17,18,19,20,21))
-names(data_merged_250m) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height95","dsm_sd_250m",
-                        "lowveg_sd_250m", "lowveg_prop_250m","veg_cover","veg_var","species","occurrence")
+data_merged=subset(data_merged,select=c(4,5,7,10,11,12,14,16,17))
+names(data_merged) <- c("veg_dens_1_2","veg_dens_2_3","FHD","dsm_sd_100m",
+                        "lowveg_sd_100m", "lowveg_prop_100m","veg_var","species","occurrence")
+noffea=7
 
 # Loading vs. scale of lidar metrics
 
-pca.env_100m<-dudi.pca(data_merged_100m[,1:10],scannf=FALSE,center=TRUE,nf=3)
-pca.env_50m<-dudi.pca(data_merged_50m[,1:10],scannf=FALSE,center=TRUE,nf=3)
-pca.env_250m<-dudi.pca(data_merged_250m[,1:10],scannf=FALSE,center=TRUE,nf=3)
+pca.env<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
 
-var <- get_pca_var(pca.env_100m)
-corrplot(as.matrix(var$cor), is.corr=FALSE,method="number",col=colorRampPalette(c("dodgerblue4","white","firebrick"))(200))
-
-var <- get_pca_var(pca.env_50m)
-corrplot(as.matrix(var$cor), is.corr=FALSE,method="number",col=colorRampPalette(c("dodgerblue4","white","firebrick"))(200))
-
-var <- get_pca_var(pca.env_250m)
+var <- get_pca_var(pca.env)
 corrplot(as.matrix(var$cor), is.corr=FALSE,method="number",col=colorRampPalette(c("dodgerblue4","white","firebrick"))(200))
 
 #### PCA anal
 
-data_merged=subset(data_merged,select=c(4,5,6,7,8,10,13,16,18,19,20,21))
-names(data_merged) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height95","dsm_sd_100m",
-                             "lowveg_sd_100m", "lowveg_prop_100m","veg_cover","veg_var","species","occurrence")
-
 # All together
 
 par(mfrow=c(1,1))
-
-pca.env<-dudi.pca(data_merged[,1:10],scannf=FALSE,center=TRUE,nf=3)
 
 fviz_pca_var(pca.env, col.var = "contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel = TRUE
@@ -87,6 +70,41 @@ fviz_pca_biplot(pca.env2, axes=c(1,2),
                 # Individuals
                 geom.ind = "point",
                 fill.ind = as.factor(data_merged_mod$species), col.ind = "black",
+                pointshape = 21, pointsize = 0.1,
+                palette=c("red","green","purple","black"),
+                addEllipses = TRUE, ellipse.level = 0.8,
+                # Variables
+                col.var = "contrib",
+                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                legend.title = list(fill = "Species", color = "Contribution"))
+
+fviz_pca_biplot(pca.env2, axes=c(1,3), 
+                # Individuals
+                geom.ind = "point",
+                fill.ind = as.factor(data_merged_mod$species), col.ind = "black",
+                pointshape = 21, pointsize = 0.1,
+                palette=c("red","green","purple","black"),
+                addEllipses = TRUE, ellipse.level = 0.8,
+                # Variables
+                col.var = "contrib",
+                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                legend.title = list(fill = "Species", color = "Contribution"))
+
+# Only presence
+data_merged_mod_onlypres=data_merged
+data_merged_mod_onlypres=data_merged_mod_onlypres[data_merged_mod_onlypres$occurrence>0,]
+data_merged_mod_onlypres=data_merged_mod_onlypres[data_merged_mod_onlypres$veg_height95<20,]
+
+pca.env3<-dudi.pca(data_merged_mod_onlypres[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
+
+fviz_pca_var(pca.env3, col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel = TRUE
+)
+
+fviz_pca_biplot(pca.env3, axes=c(1,2), 
+                # Individuals
+                geom.ind = "point",
+                fill.ind = as.factor(data_merged_mod_onlypres$species), col.ind = "black",
                 pointshape = 21, pointsize = 0.1,
                 palette=c("red","green","purple","black"),
                 addEllipses = TRUE, ellipse.level = 0.8,
@@ -155,7 +173,7 @@ fviz_pca_biplot(pca.sp3,
 
 # Niche visualization
 
-#### Ecospat
+#### Ecospat PCA 1 vs PCA 2 all together
 pca.env<-dudi.pca(data_merged[,1:10],scannf=FALSE,center=TRUE,nf=3)
 pca.env_vis<-dudi.pca(data_merged[,1:10],scannf=FALSE,center=TRUE,nf=2)
 
@@ -174,24 +192,56 @@ scores.clim.kleinekarakiet<-suprow(pca.env,kleinekarakiet[,1:10])$li
 scores.sp.snor<-suprow(pca.env,snor[which(snor[,12]==1),1:10])$li
 scores.clim.snor<-suprow(pca.env,snor[,1:10])$li
 
-# PCA 1 vs PCA 2
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.grotekarakiet[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.kleinekarakiet[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.snor[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
 
-grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.grotekarakiet[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
-grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.kleinekarakiet[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
-grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.snor[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500, th.sp=0.2,th.env=0.1) 
+par(mfrow=c(2,2))
+ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
+ecospat.plot.niche(grid.clim.kleinekarakiet,title="Reed Warbler")
+ecospat.plot.niche(grid.clim.snor,title="Savi's Warbler")
+ecospat.plot.contrib(contrib=pca.env_vis$co, eigen=pca.env_vis$eig)
 
-sp_GrW=data.frame(grid.clim.grotekarakiet[["sp"]])
-sp_Sn=data.frame(grid.clim.snor[["sp"]])
-sp_RW=data.frame(grid.clim.kleinekarakiet[["sp"]])
+#### Ecospat PCA 1 vs PCA 2 just species
+pca.env<-dudi.pca(data_merged_mod_onlypres[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
+pca.env_vis<-dudi.pca(data_merged_mod_onlypres[,1:noffea],scannf=FALSE,center=TRUE,nf=2)
 
-sp_GrW$species <- "GrW"
-sp_Sn$species <- "Sn"
-sp_RW$species <- "RW"
+grotekarakiet=dplyr::filter(data_merged_mod_onlypres,str_detect(data_merged_mod_onlypres$species,"Grote Karekiet"))
+kleinekarakiet=dplyr::filter(data_merged_mod_onlypres,str_detect(data_merged_mod_onlypres$species,"Kleine Karekiet"))
+snor=dplyr::filter(data_merged_mod_onlypres,str_detect(data_merged_mod_onlypres$species,"Snor"))
 
-sp_pca=rbind(sp_GrW,sp_Sn,sp_RW)
+scores.globclim<-pca.env$li
 
-ggplot(sp_pca, aes(x=species, y=Axis1, color=species)) +
-  geom_boxplot()+theme_minimal()
+scores.sp.grotekarakiet<-suprow(pca.env,grotekarakiet[which(grotekarakiet[,noffea+2]==1),1:noffea])$li
+scores.clim.grotekarakiet<-suprow(pca.env,grotekarakiet[,1:noffea])$li
 
-ggplot(sp_pca, aes(x=species, y=Axis2, color=species)) +
-  geom_boxplot()+theme_minimal() 
+scores.sp.kleinekarakiet<-suprow(pca.env,kleinekarakiet[which(kleinekarakiet[,noffea+2]==1),1:noffea])$li
+scores.clim.kleinekarakiet<-suprow(pca.env,kleinekarakiet[,1:noffea])$li
+
+scores.sp.snor<-suprow(pca.env,snor[which(snor[,noffea+2]==1),1:noffea])$li
+scores.clim.snor<-suprow(pca.env,snor[,1:noffea])$li
+
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.grotekarakiet[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.kleinekarakiet[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.snor[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
+
+par(mfrow=c(2,2))
+ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
+ecospat.plot.niche(grid.clim.kleinekarakiet,title="Reed Warbler")
+ecospat.plot.niche(grid.clim.snor,title="Savi's Warbler")
+ecospat.plot.contrib(contrib=pca.env_vis$co, eigen=pca.env_vis$eig)
+
+# overlap
+
+ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.snor, quant=0,
+                       interest=1, title= "GrW vs Sn")
+ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, quant=0,
+                       interest=1, title= "GrW vs RW")
+ecospat.plot.niche.dyn(grid.clim.snor, grid.clim.kleinekarakiet, quant=0,
+                       interest=1, title= "Sn vs RW")
+ecospat.plot.contrib(contrib=pca.env_vis$co, eigen=pca.env_vis$eig)
+
+ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.snor, cor=TRUE)
+ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, cor=TRUE)
+ecospat.niche.overlap(grid.clim.snor, grid.clim.kleinekarakiet, cor=TRUE)
+
