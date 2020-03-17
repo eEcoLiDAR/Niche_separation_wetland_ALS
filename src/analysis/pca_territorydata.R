@@ -104,18 +104,20 @@ fviz_pca_biplot(pca.env2, axes=c(1,2),
                 # Individuals
                 geom.ind = "point",
                 fill.ind = as.factor(data_merged_mod$lgn8), col.ind = "black",
-                pointshape = 21, pointsize = 0.1,
-                palette=c("deepskyblue","deepskyblue4","darkorchid","moccasin","orange","limegreen","green","olivedrab"),
-                addEllipses = TRUE, ellipse.level = 0.8,
+                pointshape = 21, pointsize = 0.001,
+                palette=c("dodgerblue4","deepskyblue4","darkorchid","gold4","darkorange","deeppink","olivedrab","forestgreen"),
+                addEllipses = TRUE, ellipse.level = 0.9,
                 # Variables
                 col.var = "contrib",
                 gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                legend.title = list(fill = "Species", color = "Contribution"))
+                legend.title = list(fill = "Land cover type", color = "Contribution"))
 
 # Only presence
 data_merged_mod_onlypres=data_merged
 data_merged_mod_onlypres=data_merged_mod_onlypres[data_merged_mod_onlypres$occurrence>0,]
 data_merged_mod_onlypres=data_merged_mod_onlypres[data_merged_mod_onlypres$veg_height95<20,]
+
+data_merged_mod_onlypres <- subset(data_merged_mod_onlypres, lgn8 %in% c(16,17,30,322,332,41,42))
 
 pca.env3<-dudi.pca(data_merged_mod_onlypres[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
 
@@ -135,17 +137,17 @@ fviz_pca_biplot(pca.env3, axes=c(1,2),
                 gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
                 legend.title = list(fill = "Species", color = "Contribution"))
 
-fviz_pca_biplot(pca.env2, axes=c(1,3), 
+fviz_pca_biplot(pca.env3, axes=c(1,2), 
                 # Individuals
                 geom.ind = "point",
-                fill.ind = as.factor(data_merged_mod$species), col.ind = "black",
-                pointshape = 21, pointsize = 0.1,
-                palette=c("red","green","purple","black"),
-                addEllipses = TRUE, ellipse.level = 0.8,
+                fill.ind = as.factor(data_merged_mod_onlypres$lgn8), col.ind = "black",
+                pointshape = 21, pointsize = 0.001,
+                palette=c("dodgerblue4","deepskyblue4","darkorchid","gold4","darkorange","deeppink","olivedrab","forestgreen"),
+                addEllipses = TRUE, ellipse.level = 0.9,
                 # Variables
                 col.var = "contrib",
                 gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                legend.title = list(fill = "Species", color = "Contribution"))
+                legend.title = list(fill = "Land cover type", color = "Contribution"))
 
 # Per species
 
