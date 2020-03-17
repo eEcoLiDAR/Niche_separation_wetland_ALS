@@ -67,6 +67,16 @@ data_sel %>%
   ggtitle("Boxplots") +
   theme_bw()
 
+data_sel2=subset(data_merged_mod,select=c(1:noffea,13,11))
+
+data_sel2 %>%
+  gather(c(-lgn8,-species),key = "var", value = "value") %>%
+  ggplot(aes(x = as.factor(lgn8), y = value, fill=species)) +
+  geom_boxplot() +
+  facet_wrap(~ var, scales = "free") +
+  ggtitle("Boxplots") +
+  theme_bw()
+
 # VIF
 vif=vifcor(data_merged_mod[1:noffea], th=0.6) # method='spearman'
 vif_sel=vifcor(data_merged_mod[c(1,2,3,4,6,7,8,9)], th=0.6)
