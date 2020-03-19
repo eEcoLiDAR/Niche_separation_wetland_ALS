@@ -37,7 +37,7 @@ ConvertPolytoDf = function(kmsquares_poly) {
 
 Gen_absence = function(GrW_atl_abs,spname,outname,nofsamp) {
   
-  GrW_atl_abs_lgn8 <- subset(GrW_atl_abs, landcover_lgn8 %in% c(16,17,30,322,323,332,333,41,42,43,45,46,47))
+  GrW_atl_abs_lgn8 <- subset(GrW_atl_abs, landcover_lgn8 %in% c(16,17,30,322,332,41,42))
   
   GrW_atl_abs_lgn8=GrW_atl_abs_lgn8[GrW_atl_abs_lgn8$Jaar!=2019,]
   

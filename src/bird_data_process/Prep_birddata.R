@@ -74,7 +74,7 @@ bird_ahn3ac$lidar=bird_ahn3ac_lidar[,1]
 
 #Apply filters
 
-bird_ahn3ac_filt <- subset(bird_ahn3ac, landcover_lgn8 %in% c(16,17,30,322,323,332,333,41,42,43,45,46,47))
+bird_ahn3ac_filt <- subset(bird_ahn3ac, landcover_lgn8 %in% c(16,17,30,322,332,41,42))
 
 #bird_ahn3ac_filt=bird_ahn3ac_filt[is.na(bird_ahn3ac_filt$lidar),]
 bird_ahn3ac_filt=bird_ahn3ac_filt[bird_ahn3ac_filt$Jaar!=2019,]
@@ -126,9 +126,6 @@ birds_abs_shp=CreateShape(birds_abs_kmcoord)
 birds_abs_shp_lgn8=raster::extract(landcover,birds_abs_shp)
 birds_abs_shp$landcover_lgn8=birds_abs_shp_lgn8[,1]
 
-birds_abs_shp_lidar=raster::extract(lidar,birds_abs_shp)
-birds_abs_shp$lidar=birds_abs_shp_lidar[,1]
-
 birds_abs_shp_wlidar=raster::intersect(birds_abs_shp,ahn3_actime)
 
 #Export
@@ -148,9 +145,9 @@ Se_atl_abs <- subset(birds_abs_shp_wlidar, species %in% c('Rietzanger'))
 
 ### Create absences based on atlas data (for territory mapping data)
 
-Gen_absence(GrW_atl_abs,spname='Grote Karekiet',outname="GrW_genabs",nofsamp=length(GrW))
-Gen_absence(KK_atl_abs,spname='Kleine Karekiet',outname="KK_genabs",nofsamp=length(KK))
-Gen_absence(Sn_atl_abs,spname='Snor',outname="Sn_genabs",nofsamp=length(Sn))
+Gen_absence(GrW_atl_abs,spname='Grote Karekiet',outname="GrW_genabs",nofsamp=3*length(GrW))
+Gen_absence(KK_atl_abs,spname='Kleine Karekiet',outname="KK_genabs",nofsamp=2*length(KK))
+Gen_absence(Sn_atl_abs,spname='Snor',outname="Sn_genabs",nofsamp=3*length(Sn))
 
 ### Process presence in atlas mapping data 
 
