@@ -26,7 +26,7 @@ source("D:/Koma/GitHub/PhDPaper2_wetlandniche/src/bird_data_process/Func_Process
 ### Set global parameters
 
 # Set working dirctory
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v2/"
+workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v3/"
 setwd(workingdirectory)
 
 birdfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/bird_data/Input/avimap_observations_reedland_birds.csv" # using the one which contains more observation also outside of NL
@@ -145,9 +145,9 @@ Se_atl_abs <- subset(birds_abs_shp_wlidar, species %in% c('Rietzanger'))
 
 ### Create absences based on atlas data (for territory mapping data)
 
-Gen_absence(GrW_atl_abs,spname='Grote Karekiet',outname="GrW_genabs",nofsamp=3*length(GrW))
-Gen_absence(KK_atl_abs,spname='Kleine Karekiet',outname="KK_genabs",nofsamp=2*length(KK))
-Gen_absence(Sn_atl_abs,spname='Snor',outname="Sn_genabs",nofsamp=3*length(Sn))
+Gen_absence(GrW_atl_abs,spname='Grote Karekiet',outname="GrW_genabs",nofsamp=5*length(GrW))
+Gen_absence(KK_atl_abs,spname='Kleine Karekiet',outname="KK_genabs",nofsamp=5*length(KK))
+Gen_absence(Sn_atl_abs,spname='Snor',outname="Sn_genabs",nofsamp=5*length(Sn))
 
 ### Process presence in atlas mapping data 
 
