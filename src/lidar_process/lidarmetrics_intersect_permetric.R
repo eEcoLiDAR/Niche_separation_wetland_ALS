@@ -80,3 +80,15 @@ KK_pres=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_D
 data_KK=IntersectForAnal(KK_pres,KK_abs,landcover,lidar,name='KK')
 
 write.csv(data_KK,"KK_territory_intersected.csv")
+
+## check number of pres-abs
+
+GrW_lgn8 <- subset(data_GrW, lgn8 %in% c(16,17,30,322,332,41,42))
+KK_lgn8 <- subset(data_KK, lgn8 %in% c(16,17,30,322,332,41,42))
+Sn_lgn8 <- subset(data_Sn, lgn8 %in% c(16,17,30,322,332,41,42))
+
+data_merged=rbind(GrW_lgn8,KK_lgn8,Sn_lgn8)
+
+data_presabs_stat <- data_merged %>%
+  group_by(species,occurrence) %>%
+  summarise(nofobs = length(occurrence))
