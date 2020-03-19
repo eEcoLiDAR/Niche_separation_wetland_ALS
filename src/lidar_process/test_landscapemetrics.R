@@ -8,29 +8,56 @@ library(fasterize)
 library(spatialEco)
 library(landscapemetrics)
 
+library(reshape)
+
 ##
 
-workingdir="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/masked/"
-#workingdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/masked/"
+workingdir="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Trial/masked/"
 setwd(workingdir)
 
-lidarfile="ahn3cj_feat_veg_10m_1m_0_perc_95_normalized_height_masked.tif"
-landcoverfile="D:/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/landcover/UvA_LGN2018/LGN2018.tif"
-#landcoverfile="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/landcover/UvA_LGN2018/LGN2018.tif"
+lidarfile="ahn3cj_feat_veg_10m_1m_8_perc_95_normalized_height_masked.tif"
+landcoverfile="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/landcover/UvA_LGN2018/LGN2018.tif"
   
 lidar=stack(lidarfile)
 proj4string(lidar) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
 
 landcover=stack(landcoverfile)
 proj4string(landcover) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
+KK_pres=readOGR(dsn="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v2/KK_territory_20.shp")
 
 # set up input files
 height_class=reclassify(lidar, c(-Inf,5,0, 5,Inf,1))
 
-ext=extent(56000,58000,360000,362000)
-dsm_sel=crop(lidar,ext)
-height_class_sel=crop(height_class,ext)
+ext=extent(lidar)
 landcover_sel=crop(landcover,ext)
+
+KK_pres_sel=crop(KK_pres,ext)
+
+# landscape only for area of interest
+my_metric_np = sample_lsm(height_class, KK_pres_sel,size=100,level = "class", metric = "np",plot_id=KK_pres_sel@data$id,return_raster=TRUE)
+plot(my_metric_np$raster_sample_plots[[8]])
+
+ext2=extent(my_metric_np$raster_sample_plots[[14]])
+lidar_sel=crop(lidar,ext2)
+
+# with other classes
+height_class=reclassify(lidar, c(-Inf,1,1,1,5,2,5,Inf,3))
+
+my_metric_np = sample_lsm(height_class, KK_pres_sel,size=100,level = "class", metric = "np",plot_id=KK_pres_sel@data$id,return_raster=TRUE,count_boundary = FALSE,directions = 8)
+my_metric_te = sample_lsm(height_class, KK_pres_sel,size=100,level = "class", metric = "te",plot_id=KK_pres_sel@data$id,return_raster=TRUE,count_boundary = FALSE,directions = 8)
+
+df=cast(my_metric_np,plot_id~class)
+names(df)<-c("plot_id","lowveg_np","medveg_np","highveg_np","nan_np")
+df=df[,1:4]
+
+#link back to data
+KK_birddata=KK_pres_sel@data
+
+KK_birddata_merged=merge(KK_birddata,df, by.x=c('id'), by.y=c('plot_id'))
+
+# only patch
+my_metric_parea =spatialize_lsm(height_class, what = "lsm_p_area")
+plot(my_metric_parea[[1]][["lsm_p_area"]])
 
 # landscape in moving windows - landscape level between height classes
 landsc_m_mv_np <- focal.lmetrics(height_class_sel, w=11, land.value = 0, metric = "n.patches")
