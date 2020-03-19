@@ -50,6 +50,9 @@ df=cast(my_metric_np,plot_id~class)
 names(df)<-c("plot_id","lowveg_np","medveg_np","highveg_np","nan_np")
 df=df[,1:4]
 
+my_metric_npte = sample_lsm(height_class, KK_pres_sel,size=100,level = "class", metric = c("np","te"),plot_id=KK_pres_sel@data$id,return_raster=TRUE,count_boundary = FALSE,directions = 8)
+df=cast(my_metric_npte ,plot_id~metric+class)
+
 #link back to data
 KK_birddata=KK_pres_sel@data
 
