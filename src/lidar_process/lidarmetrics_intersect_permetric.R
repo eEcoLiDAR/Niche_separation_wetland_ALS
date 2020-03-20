@@ -56,8 +56,8 @@ proj4string(landcover) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38
 
 ## GrW
 
-GrW_abs=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v2/GrW_genabs_20.shp")
-GrW_pres=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v2/GrW_territory_20.shp")
+GrW_abs=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v3/GrW_genabs_20.shp")
+GrW_pres=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v3/GrW_territory_20.shp")
 
 data_GrW=IntersectForAnal(GrW_pres,GrW_abs,landcover,lidar,name='GrW')
 
@@ -65,8 +65,8 @@ write.csv(data_GrW,"GrW_territory_intersected.csv")
 
 ## Sn
 
-Sn_abs=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v2/Sn_genabs_20.shp")
-Sn_pres=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v2/Sn_territory_20.shp")
+Sn_abs=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v3/Sn_genabs_20.shp")
+Sn_pres=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v3/Sn_territory_20.shp")
 
 data_Sn=IntersectForAnal(Sn_pres,Sn_abs,landcover,lidar,name='Sn')
 
@@ -74,8 +74,8 @@ write.csv(data_Sn,"Sn_territory_intersected.csv")
 
 ## KK
 
-KK_abs=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v2/KK_genabs_20.shp")
-KK_pres=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v2/KK_territory_20.shp")
+KK_abs=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v3/KK_genabs_20.shp")
+KK_pres=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v3/KK_territory_20.shp")
 
 data_KK=IntersectForAnal(KK_pres,KK_abs,landcover,lidar,name='KK')
 
