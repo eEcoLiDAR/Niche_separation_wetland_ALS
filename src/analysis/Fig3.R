@@ -16,9 +16,9 @@ workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataproce
 #workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
 setwd(workingdirectory)
 
-grw_pca12 <- readRDS("grw_kdens.rds")
-kk_pca12 <- readRDS("kk_kdens.rds")
-sn_pca12 <- readRDS("sn_kdens.rds")
+grw_pca12 <- readRDS("grw_kdens3.rds")
+kk_pca12 <- readRDS("kk_kdens3.rds")
+sn_pca12 <- readRDS("sn_kdens3.rds")
 
 grw_pca12_df <- as.data.frame(grw_pca12[["z.uncor"]], xy = TRUE)
 kk_pca12_df <- as.data.frame(kk_pca12[["z.uncor"]], xy = TRUE)
@@ -34,33 +34,33 @@ pca12_kk_sn=rbind(kk_pca12_df,sn_pca12_df)
 
 ######
 p1=ggplot(data=pca12_gr_kk)+stat_contour(aes(x=x, y=y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
-  theme_bw()+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("goldenrod4","green3"))
+  theme_bw()+xlab("PCA 2")+ylab("PCA 3")+scale_fill_manual(values=c("goldenrod4","green3"))
 
 pTop1 <- ggplot(pca12_gr_kk[pca12_gr_kk$layer>0,], aes(x = x,fill=species)) +
-  geom_density(alpha=.3,show.legend = FALSE)+scale_fill_manual(values=c("goldenrod4","green3"))+theme_bw()+xlab("PCA 1")
+  geom_density(alpha=.3,show.legend = FALSE)+scale_fill_manual(values=c("goldenrod4","green3"))+theme_bw()+xlab("PCA 2")
 
 pRight1 <- ggplot(pca12_gr_kk[pca12_gr_kk$layer>0,], aes(x = y,fill=species)) +
-  geom_density(alpha=.3,show.legend = FALSE) + coord_flip()+scale_fill_manual(values=c("goldenrod4","green3"))+theme_bw()+xlab("PCA 2")
+  geom_density(alpha=.3,show.legend = FALSE) + coord_flip()+scale_fill_manual(values=c("goldenrod4","green3"))+theme_bw()+xlab("PCA 3")
 
 forlegp1=ggplot(data=pca12_gr_kk)+stat_contour(aes(x=x, y=y, z=layer,fill=species),geom="polygon", bins=4, alpha=.3,show.legend = TRUE)+
-  theme_bw()+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("goldenrod4","green3"))
+  theme_bw()+xlab("PCA 1")+ylab("PCA 3")+scale_fill_manual(values=c("goldenrod4","green3"))
 legend_p1 <- get_legend(forlegp1)
 
 fig3a=grid.arrange(pTop1, legend_p1, p1, pRight1,
              ncol = 2, nrow = 2, widths = c(3, 1), heights = c(1, 3))
 
-ggsave("Fig3_a.png",plot = fig3a,width = 15, height = 12)
+ggsave("Fig3_a_pc23.png",plot = fig3a,width = 15, height = 12)
 
 ######
 
 p2=ggplot(data=pca12_gr_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
-  theme_bw()+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("goldenrod4","deeppink"))
+  theme_bw()+xlab("PCA 2")+ylab("PCA 3")+scale_fill_manual(values=c("goldenrod4","deeppink"))
 
 pTop2 <- ggplot(pca12_gr_sn[pca12_gr_sn$layer>0,], aes(x = x,fill=species)) +
-  geom_density(alpha=.3,show.legend = FALSE)+scale_fill_manual(values=c("goldenrod4","deeppink"))+theme_bw()+xlab("PCA 1")
+  geom_density(alpha=.3,show.legend = FALSE)+scale_fill_manual(values=c("goldenrod4","deeppink"))+theme_bw()+xlab("PCA 2")
 
 pRight2 <- ggplot(pca12_gr_sn[pca12_gr_sn$layer>0,], aes(x = y,fill=species)) +
-  geom_density(alpha=.3,show.legend = FALSE) + coord_flip()+scale_fill_manual(values=c("goldenrod4","deeppink"))+theme_bw()+xlab("PCA 2")
+  geom_density(alpha=.3,show.legend = FALSE) + coord_flip()+scale_fill_manual(values=c("goldenrod4","deeppink"))+theme_bw()+xlab("PCA 3")
 
 forlegp2=ggplot(data=pca12_gr_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species),geom="polygon", bins=4, alpha=.3,show.legend = TRUE)+
   theme_bw()+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("goldenrod4","deeppink"))
@@ -69,28 +69,18 @@ legend_p2 <- get_legend(forlegp2)
 fig3b=grid.arrange(pTop2, legend_p2, p2, pRight2,
              ncol = 2, nrow = 2, widths = c(3, 1), heights = c(1, 3))
 
-ggsave("Fig3_b.png",plot = fig3b,width = 15, height = 12)
+ggsave("Fig3_b_pc23.png",plot = fig3b,width = 15, height = 12)
 
 ######
 
-pTop3 <- ggplot(pca12_kk_sn[pca12_kk_sn$layer>0,], aes(x = x,fill=species)) +
-  geom_density(alpha=.3,show.legend = FALSE)+scale_fill_manual(values=c("green3","deeppink"))+theme_bw()+xlab("PCA 1")
-
-pRight3 <- ggplot(pca12_kk_sn[pca12_kk_sn$layer>0,], aes(x = y,fill=species)) +
-  geom_density(alpha=.3,show.legend = FALSE) + coord_flip()+scale_fill_manual(values=c("green3","deeppink"))+theme_bw()+xlab("PCA 2")
-
-forlegp3=ggplot(data=pca12_kk_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species),geom="polygon", bins=4, alpha=.3,show.legend = TRUE)+
-  theme_bw()+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("green3","deeppink"))
-legend_p3 <- get_legend(forlegp3)
-
 p3=ggplot(data=pca12_kk_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species),geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
-  theme_bw()+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("green3","deeppink"))
+  theme_bw()+xlab("PCA 2")+ylab("PCA 3")+scale_fill_manual(values=c("green3","deeppink"))
 
 pTop3 <- ggplot(pca12_kk_sn[pca12_kk_sn$layer>0,], aes(x = x,fill=species)) +
-  geom_density(alpha=.3,show.legend = FALSE)+scale_fill_manual(values=c("green3","deeppink"))+theme_bw()+xlab("PCA 1")
+  geom_density(alpha=.3,show.legend = FALSE)+scale_fill_manual(values=c("green3","deeppink"))+theme_bw()+xlab("PCA 2")
 
 pRight3 <- ggplot(pca12_kk_sn[pca12_kk_sn$layer>0,], aes(x = y,fill=species)) +
-  geom_density(alpha=.3,show.legend = FALSE) + coord_flip()+scale_fill_manual(values=c("green3","deeppink"))+theme_bw()+xlab("PCA 2")
+  geom_density(alpha=.3,show.legend = FALSE) + coord_flip()+scale_fill_manual(values=c("green3","deeppink"))+theme_bw()+xlab("PCA 3")
 
 forlegp3=ggplot(data=pca12_kk_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species),geom="polygon", bins=4, alpha=.3,show.legend = TRUE)+
   theme_bw()+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("green3","deeppink"))
@@ -98,7 +88,8 @@ legend_p3 <- get_legend(forlegp3)
 
 fig3c=grid.arrange(pTop3, legend_p3, p3, pRight3,
              ncol = 2, nrow = 2, widths = c(3, 1), heights = c(1, 3))
-ggsave("Fig3_c.png",plot = fig3c,width = 15, height = 12)
+
+ggsave("Fig3_c_pc23.png",plot = fig3c,width = 15, height = 12)
 
 ###### tests vis.
 
