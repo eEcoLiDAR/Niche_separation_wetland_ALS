@@ -16,9 +16,9 @@ workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataproce
 #workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
 setwd(workingdirectory)
 
-grw_pca12 <- readRDS("grw_kdens3.rds")
-kk_pca12 <- readRDS("kk_kdens3.rds")
-sn_pca12 <- readRDS("sn_kdens3.rds")
+grw_pca12 <- readRDS("grw_kdens.rds")
+kk_pca12 <- readRDS("kk_kdens.rds")
+sn_pca12 <- readRDS("sn_kdens.rds")
 
 grw_pca12_df <- as.data.frame(grw_pca12[["z.uncor"]], xy = TRUE)
 kk_pca12_df <- as.data.frame(kk_pca12[["z.uncor"]], xy = TRUE)

@@ -73,7 +73,7 @@ data_sel2$var <- factor(data_sel2$var, levels = c("VV_p95","VV_FHD","VD_0_1","VD
 
 p0=ggplot(data=data_sel2,aes(x = species, y = value, fill=species)) + geom_boxplot() + facet_wrap(~var, scales = "free") + 
   scale_fill_manual(values=c("goldenrod4","green3","deeppink","black"),name="Species",labels=c("Great reed warbler (Grw)","Reed warbler (Rw)","Savi's warbler (Sw)","Absence (Abs)"))+ 
-  ylab("LiDAR metrics")+ theme_bw(base_size = 20)
+  ylab("LiDAR metrics")+theme_bw(base_size=30)
 
 ggsave("Fig1_boxplot.png",plot = p0,width = 35, height = 20)
 
