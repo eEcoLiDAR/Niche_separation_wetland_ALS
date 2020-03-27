@@ -33,6 +33,10 @@ grw_pca12_df$species <- "Great reed warbler"
 kk_pca12_df$species <- "Reed warbler"
 sn_pca12_df$species <- "Savi's warbler"
 
+grw_pca12_backg_df$species <- "Absence"
+kk_pca12_backg_df$species <- "Absence"
+sn_pca12_backg_df$species <- "Absence"
+
 pca12_gr_kk=rbind(grw_pca12_df,kk_pca12_df)
 pca12_gr_sn=rbind(grw_pca12_df,sn_pca12_df)
 pca12_kk_sn=rbind(kk_pca12_df,sn_pca12_df)
@@ -123,3 +127,12 @@ fig3=grid.arrange(
 )
 
 ggsave("Fig3_a_pc12.png",plot = fig3,width = 15, height = 15)
+
+#################### add background contour?
+ggplot()+
+  stat_contour(data=pca12_gr_kk,aes(x=x, y=y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
+  geom_contour(data=grw_pca12_backg_df,aes(x=x, y=y, z=layer), breaks=c(0,round(mean(grw_pca12_backg_df$layer),3),round(max(grw_pca12_backg_df$layer),3)), show.legend = FALSE,colour="black")+
+  geom_contour(data=kk_pca12_backg_df,aes(x=x, y=y, z=layer), breaks=c(0,round(mean(kk_pca12_backg_df$layer),3),round(max(kk_pca12_backg_df$layer),3)), show.legend = FALSE,colour="black")+
+  theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("goldenrod4","green3","grey64"),name="Species")+
+  ggtitle("a)")
+
