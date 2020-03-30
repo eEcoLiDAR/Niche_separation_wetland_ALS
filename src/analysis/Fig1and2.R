@@ -38,20 +38,17 @@ data_presabs_stat <- data_merged %>%
   group_by(species,occurrence) %>%
   summarise(nofobs = length(occurrence))
 
-#data_merged=subset(data_merged,select=c(7,8,9,10,12,13,14,15,18,20,24,27,21,22,6))
-#names(data_merged) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height95","dsm_sd_100m",
-                        #"lowveg_sd_100m", "lowveg_prop_100m","veg_cover","veg_var","medveg_patchiness",
-                        #"medveg_edgedens","species","occurrence","lgn8")
-
-data_merged=subset(data_merged,select=c(12,10,9,7,8,13,14,15,24,27,21,22,6))
+data_merged=subset(data_merged,select=c(12,10,9,7,8,13,14,15,24,27,21,22,6,4,5,3))
 names(data_merged) <- c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
                         "HH_sd","HH_lowveg_sd", "HH_lowveg_prop","HH_medveg_patch","HH_medveg_edge",
-                        "species","occurrence","lgn8")
+                        "species","occurrence","lgn8","x","y","id")
 
 noffea=10
 
 data_merged=data_merged[(data_merged$VV_p95<30 & data_merged$VV_p95>0.1),]
 data_merged[is.na(data_merged)==TRUE] <- 0
+
+write.csv(data_merged,"data_merged.csv")
 
 # boxplot per species  Fig.1.
 
