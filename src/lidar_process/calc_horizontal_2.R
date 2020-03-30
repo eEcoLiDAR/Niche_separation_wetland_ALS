@@ -57,19 +57,28 @@ for (i in filelist) {
   
   #create height classes
   
-  height_class_b1=reclassify(dsm, c(c(-Inf,1,1,1,5,0,5,Inf,0)))
-  prop_lowveg=focal(height_class_b1,w=matrix(1,radii,radii), fun=sum, pad=TRUE,na.rm = TRUE)
+  height_class_b1=reclassify(dsm, c(c(-Inf,1,1,1,3,0,3,5,0,5,Inf,0)))
+  prop_helophyteveg=focal(height_class_b1,w=matrix(1,radii,radii), fun=sum, pad=TRUE,na.rm = TRUE)
   
-  height_class_med=reclassify(dsm, c(c(-Inf,1,0,1,5,1,5,Inf,0)))
-  prop_medveg=focal(height_class_med,w=matrix(1,radii,radii), fun=sum, pad=TRUE,na.rm = TRUE)
+  height_class_reed=reclassify(dsm, c(c(-Inf,1,0,1,3,1,3,5,0,5,Inf,0)))
+  prop_reedveg=focal(height_class_reed,w=matrix(1,radii,radii), fun=sum, pad=TRUE,na.rm = TRUE)
+  
+  height_class_bush=reclassify(dsm, c(c(-Inf,1,0,1,3,0,3,5,1,5,Inf,0)))
+  prop_bushveg=focal(height_class_bush,w=matrix(1,radii,radii), fun=sum, pad=TRUE,na.rm = TRUE)
+  
+  height_class_trees=reclassify(dsm, c(c(-Inf,1,0,1,3,0,3,5,0,5,Inf,1)))
+  prop_treesveg=focal(height_class_trees,w=matrix(1,radii,radii), fun=sum, pad=TRUE,na.rm = TRUE)
 
   
-  writeRaster(prop_lowveg,paste(name,"_prop_lowvegb1_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
-  writeRaster(prop_medveg,paste(name,"_prop_medveg_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
+  writeRaster(prop_helophyteveg,paste(name,"_prop_helophyteveg_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
+  writeRaster(prop_medveg,paste(name,"_prop_reedveg_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
+  writeRaster(prop_bushveg,paste(name,"_prop_bushveg_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
+  writeRaster(prop_treesveg,paste(name,"_prop_treesveg_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
   
 }
 
-feaname=c("_perc_95_normalized_height_masked_prop_lowvegb1_21p_masked","_perc_95_normalized_height_masked_prop_medveg_21p_masked")
+feaname=c("_perc_95_normalized_height_masked_prop_helophyteveg_21p_masked","_perc_95_normalized_height_masked_prop_reedveg_21p_masked",
+          "_perc_95_normalized_height_masked_prop_bushveg_21p_masked","_perc_95_normalized_height_masked_prop_treesveg_21p_masked")
 
 for (i in feaname) {
   print(i)
