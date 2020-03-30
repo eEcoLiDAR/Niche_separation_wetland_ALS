@@ -40,7 +40,7 @@ IntersectForAnal = function(GrW_pres,GrW_abs,landcover,lidar,name='GrW') {
 
 rasterOptions(maxmemory = 100000000000)
 
-workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
+workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v4/"
 setwd(workingdir)
 
 # Work with the masked files

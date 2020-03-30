@@ -71,7 +71,7 @@ for (i in filelist) {
 
   
   writeRaster(prop_helophyteveg,paste(name,"_prop_helophyteveg_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
-  writeRaster(prop_medveg,paste(name,"_prop_reedveg_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
+  writeRaster(prop_reedveg,paste(name,"_prop_reedveg_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
   writeRaster(prop_bushveg,paste(name,"_prop_bushveg_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
   writeRaster(prop_treesveg,paste(name,"_prop_treesveg_",radii,"p_masked.tif",sep=""),overwrite=TRUE)
   
