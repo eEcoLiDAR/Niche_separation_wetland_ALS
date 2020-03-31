@@ -78,7 +78,7 @@ ggsave("Fig1_boxplot.png",plot = p0,width = 35, height = 20)
 
 pca.env<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
 
-p1=fviz_pca_var(pca.env_rot,axes = c(1, 2), col.var = "contrib",repel = TRUE)+scale_color_gradient2(low="white", mid="blue",high="red", midpoint=7.5)
+p1=fviz_pca_var(pca.env,axes = c(1, 2), col.var = "contrib",repel = TRUE)+scale_color_gradient2(low="white", mid="blue",high="red", midpoint=7.5)
 
 p2=fviz_pca_biplot(pca.env, axes=c(1,2), 
                 # Individuals
@@ -121,9 +121,9 @@ p4=fviz_pca_biplot(pca.env, axes=c(1,2),
 
 fig2=grid.arrange(
   p1+labs(title ="a) PCA variable contribution", x = "PC1 (37.7%)", y = "PC2 (21.6%)")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
-  p2+labs(title ="b) Great reed warbler", x = "PC1 (37.7%)", y = "PC2 (21.6%)")+xlim(-15,6)+ylim(-5,6)+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
-  p3+labs(title ="c) Reed warbler", x = "PC1 (37.7%)", y = "PC2 (21.6%)")+xlim(-15,6)+ylim(-5,6)+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
-  p4+labs(title ="d) Savi's warbler", x = "PC1 (37.7%)", y = "PC2 (21.6%)")+xlim(-15,6)+ylim(-5,6)+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
+  p2+labs(title ="b) Great reed warbler", x = "PC1 (37.7%)", y = "PC2 (21.6%)")+xlim(-8,5)+ylim(-5,5)+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
+  p3+labs(title ="c) Reed warbler", x = "PC1 (37.7%)", y = "PC2 (21.6%)")+xlim(-8,5)+ylim(-5,5)+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
+  p4+labs(title ="d) Savi's warbler", x = "PC1 (37.7%)", y = "PC2 (21.6%)")+xlim(-8,5)+ylim(-5,5)+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
   ncol=2,
   nrow=2
 )
