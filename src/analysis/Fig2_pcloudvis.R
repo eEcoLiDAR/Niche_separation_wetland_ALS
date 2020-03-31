@@ -43,6 +43,15 @@ clipped_4=readLAS("grw_2.laz")
 clipped_5=readLAS("sn_2.laz")
 clipped_6=readLAS("kk_2.laz")
 
+clipped_4@data$NormZ=clipped_4@data$Z
+write.csv(clipped_4@data,"grw_forvis.csv")
+
+clipped_5@data$NormZ=clipped_5@data$Z
+write.csv(clipped_5@data,"sw_forvis.csv")
+
+clipped_3@data$NormZ=clipped_3@data$Z
+write.csv(clipped_3@data,"rw_forvis.csv")
+
 #rasterplot
 
 rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
