@@ -47,7 +47,7 @@ data_presabs_stat <- data_merged %>%
 
 data_merged=subset(data_merged,select=c(12,10,9,7,8,13,14,15,24,27,21,22,6,4,5,3))
 names(data_merged) <- c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
-                        "HH_sd","HH_lowveg_sd", "HH_lowveg_prop","HH_medveg_patch","HH_medveg_edge",
+                        "HV_sd","HV_lowveg_sd", "HV_lowveg_prop","HV_medveg_patch","HV_medveg_edge",
                         "species","occurrence","lgn8","x","y","id")
 
 noffea=10
@@ -70,18 +70,22 @@ data_sel=subset(data_merged_mod,select=c(1:noffea,noffea+1))
 data_sel2=data_sel %>% gather(-species,key = "var", value = "value")
 as.factor(data_sel2$var)
 data_sel2$var <- factor(data_sel2$var, levels = c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
-                                                  "HH_sd","HH_lowveg_sd", "HH_lowveg_prop","HH_medveg_patch","HH_medveg_edge"))
+                                                  "HV_sd","HV_lowveg_sd", "HV_lowveg_prop","HV_medveg_patch","HV_medveg_edge"))
 
-p <- ggplot(data=data_sel2, aes(x=species , y=value, fill=species)) +  
-  geom_boxplot(outlier.shape=NA) +
+p0 <- ggplot(data=data_sel2, aes(x=species , y=value, fill=species),show.legend = TRUE) +  
+  geom_boxplot() +
   facet_wrap(~var,scales = "free") +
-  scale_fill_brewer(palette="Greens") +
+  scale_fill_manual(values=c("goldenrod4","green3","deeppink","black"),name="Species",labels=c("Great reed warbler (Grw)","Reed warbler (Rw)","Savi's warbler (Sw)","Absence (Abs)")) +
   theme_minimal() +
-  theme(legend.position="none") +
+  ylab("LiDAR metrics") +
   theme(axis.text.x=element_text(angle=45, hjust=1)) 
 
-for (facetk in as.character(unique(data_sel2$var))) {   
+df_total = data.frame()
+
+for (facetk in unique(data_sel2$var)) { 
+  print(facetk)
   subdf <- subset(data_sel2, var==facetk)
+
   model=lm(value ~ species, data=subdf)
   ANOVA=aov(model)
   TUKEY <- TukeyHSD(ANOVA)
@@ -92,13 +96,22 @@ for (facetk in as.character(unique(data_sel2$var))) {
   final <- merge(labels, yvalue)
   final$var <-  facetk
   
-  p <- p + geom_text(data = final,  aes(x=species, y=value, label=Letters), 
-                     vjust=-.5, hjust=-.5)
+  df_total <- rbind(df_total,final)
+  
+  #p <- p + geom_text(data = final,  aes(x=species, y=value, label=Letters), 
+                     #vjust=-.5, hjust=-.5)
 }
-p
 
-#### simple boxplot
+df_total$var <- factor(df_total$var, levels = c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
+                                                  "HV_sd","HV_lowveg_sd", "HV_lowveg_prop","HV_medveg_patch","HV_medveg_edge"))
 
-p0=ggplot(data=data_sel2,aes(x = species, y = value, fill=species)) + geom_boxplot() + facet_wrap(~var, scales = "free") + 
-  scale_fill_manual(values=c("goldenrod4","green3","deeppink","black"),name="Species",labels=c("Great reed warbler (Grw)","Reed warbler (Rw)","Savi's warbler (Sw)","Absence (Abs)"))+ 
-  ylab("LiDAR metrics")+theme_bw(base_size=30)
+p=ggplot(data=data_sel2, aes(x=species , y=value, fill=species),show.legend = TRUE) +  
+  geom_boxplot() +
+  facet_wrap(~var,scales = "free") +
+  scale_fill_manual(values=c("goldenrod4","green3","deeppink","black"),name="Species",labels=c("Great reed warbler (Grw)","Reed warbler (Rw)","Savi's warbler (Sw)","Absence (Abs)")) +
+  theme_minimal(base_size = 50) +
+  ylab("LiDAR metrics") +
+  theme(axis.text.x=element_text(angle=45, hjust=1))+
+  geom_text(data = df_total,  aes(x=species, y=value, label=Letters),vjust=-.2, hjust=-.2,size=15)
+
+ggsave("Fig_boxplot.png",plot = p,width = 35, height = 20)
