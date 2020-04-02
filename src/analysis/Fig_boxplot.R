@@ -93,7 +93,7 @@ for (facetk in as.character(unique(data_sel2$var))) {
   final$var <-  facetk
   
   p <- p + geom_text(data = final,  aes(x=species, y=value, label=Letters), 
-                     vjust=-1.5, hjust=-.5)
+                     vjust=-.5, hjust=-.5)
 }
 p
 
