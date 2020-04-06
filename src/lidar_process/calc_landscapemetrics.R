@@ -12,7 +12,7 @@ source("D:/Koma/GitHub/PhDPaper2_wetlandniche/src/bird_data_process/Func_Process
 
 ##
 
-workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v4/"
+workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v5/"
 setwd(workingdir)
 
 lidarfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/lidar/wh_waterfilt/lidar_metric_perc_95_normalized_height_masked_all.tif"
@@ -29,6 +29,9 @@ KK_shp=CreateShape(KK)
 Sn=read.csv("Sn_territory_intersected.csv")
 Sn_shp=CreateShape(Sn)
 
+Bgr=read.csv("Bgr_territory_intersected.csv")
+Bgr_shp=CreateShape(Bgr)
+
 # Reclassify
 height_class=reclassify(lidar, c(-Inf,1,1,1,3,2,3,5,3,5,Inf,4))
 writeRaster(height_class,"height_classified.tif",overwrite=TRUE)
@@ -44,6 +47,9 @@ df_KK=cast(my_metric_npte_KK ,plot_id~metric+class)
 my_metric_npte_Sn = sample_lsm(height_class, Sn_shp,size=100,level = "class", metric = c("np","te"),plot_id=Sn_shp@data$rID,return_raster=TRUE,count_boundary = FALSE,directions = 8)
 df_Sn=cast(my_metric_npte_Sn ,plot_id~metric+class)
 
+my_metric_npte_Bgr = sample_lsm(height_class, Bgr_shp,size=100,level = "class", metric = c("np","te"),plot_id=Bgr_shp@data$rID,return_raster=TRUE,count_boundary = FALSE,directions = 8)
+df_Bgr=cast(my_metric_npte_Bgr ,plot_id~metric+class)
+
 # add to the intersected data
 GrW_wlandsc=merge(GrW,df_GrW, by.x=c('rID'), by.y=c('plot_id'))
 write.csv(GrW_wlandsc,"GrW_wlandsc.csv")
@@ -53,3 +59,6 @@ write.csv(KK_wlandsc,"KK_wlandsc.csv")
 
 Sn_wlandsc=merge(Sn,df_Sn, by.x=c('rID'), by.y=c('plot_id'))
 write.csv(Sn_wlandsc,"Sn_wlandsc.csv")
+
+Bgr_wlandsc=merge(Bgr,df_Bgr, by.x=c('rID'), by.y=c('plot_id'))
+write.csv(Bgr_wlandsc,"Bgr_wlandsc.csv")
