@@ -31,24 +31,10 @@ workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Data
 setwd(workingdirectory)
 
 lgn8_wetland_mask=stack("D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/merged_mask_onlywetland_genrand.tif")
+proj4string(lgn8_wetland_mask) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
 
-# Bird (pres.-only)
-
-birdfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/bird_data/Input/avimap_observations_reedland_birds.csv"
-birds=read.csv(birdfile,sep=";")
-
-birds$occurrence<-1
-bird=birds[birds$year>"2013",]
-bird=bird[bird$species!="Roerdomp",]
-bird=bird[bird$species!="Baardman",]
-
-bird_shp=CreateShape(bird)
-
-Presonly_b=st_buffer(st_as_sf(bird_shp), 25)
-Presonly_b_sp <- sf:::as_Spatial(Presonly_b)
-
-Presonly_b_sp_union <- unionSpatialPolygons(Presonly_b_sp,rep(1, length(Presonly_b_sp)))
-Presonly_b_sp_union$terrytory <- 1
+ahn3_actimefile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/lidar_acquision/ahn3_measuretime.shp"
+ahn3_actime = readOGR(dsn=ahn3_actimefile)
 
 # km squares
 kmsquaresfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/bird_data/Input/kmsquare_aslist.csv"
@@ -59,14 +45,31 @@ names(kmsquares_poly.df) <- c("kmsquare","x","y","nofkmsquare")
 
 kmsquares_shp=CreateShape(kmsquares_poly.df)
 
-# apply that only within lidar and relevant landcover
+# Bird (pres.-only)
+
+#birdfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/bird_data/Input/avimap_observations_reedland_birds.csv"
+#birds=read.csv(birdfile,sep=";")
+
+#birds$occurrence<-1
+#bird=birds[birds$year>"2013",]
+#bird=bird[bird$species!="Roerdomp",]
+#bird=bird[bird$species!="Baardman",]
+
+#write.csv(bird,"bird.csv") # create  araster in cloud compare
+
+birds_pres=stack("D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v4/raster.tif")
+proj4string(birds_pres) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
+
+# Filters (landcover and presence points loc with 500m radius)
+
 birds_abs_shp_lgn8=raster::extract(lgn8_wetland_mask,kmsquares_shp)
 kmsquares_shp$mask=birds_abs_shp_lgn8[,1]
+kmsquares_shp2=kmsquares_shp[which(kmsquares_shp$mask==1),]
 
-kmsquares_shp_filt <- subset(kmsquares_shp, mask %in% c(1))
-
-kmsquares_shp_filt_presonly=raster::intersect(kmsquares_shp_filt,Presonly_b_sp_union) # only reamin where we have presence???
+pres=raster::extract(birds_pres,kmsquares_shp2)
+kmsquares_shp2$mask_pres=pres[,1]
+kmsquares_shp_filt=kmsquares_shp2[which(is.na(kmsquares_shp2$mask_pres)),]
 
 # Generate random points
 
-Gen_absence2(kmsquares_shp_filt_presonly,spname='Background',outname="Bgr",nofsamp=15000)
+Gen_absence2(kmsquares_shp_filt,spname='Background',outname="Bgr",nofsamp=15000)
