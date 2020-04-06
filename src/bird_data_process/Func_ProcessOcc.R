@@ -91,3 +91,23 @@ thin.max <- function(x, cols, npoints){
   
   return(x[inds,])
 }
+
+Gen_absence2 = function(GrW_atl_abs,spname,outname,nofsamp) {
+  
+  GrW_atl_abs_b=st_buffer(st_as_sf(GrW_atl_abs), 1000)
+  GrW_atl_abs_b_sp <- sf:::as_Spatial(GrW_atl_abs_b)
+  
+  GrW_atl_abs_b_sp_union <- unionSpatialPolygons(GrW_atl_abs_b_sp,rep(1, length(GrW_atl_abs_b_sp)))
+  
+  GrW_genabs=spsample(GrW_atl_abs_b_sp_union,n=nofsamp,"random")
+  GrW_genabs.df=as.data.frame(GrW_genabs)
+  
+  GrW_genabs.df$species <- spname
+  GrW_genabs.df$occurrence <- 0
+  
+  GrW_genabs.df_shp=CreateShape(GrW_genabs.df)
+  raster::shapefile(GrW_genabs.df_shp, paste(outname,".shp",sep=""),overwrite=TRUE)
+  
+  GrW_genabs_20 <- spatialEco:::subsample.distance(GrW_genabs.df_shp,size=nofsamp-1,d=20,replacement=FALSE) 
+  raster::shapefile(GrW_genabs_20, paste(outname,"_20.shp",sep=""),overwrite=TRUE)
+}
