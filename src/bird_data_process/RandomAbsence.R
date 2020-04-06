@@ -44,6 +44,9 @@ proj4string(landcover) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38
 
 birdfile="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/bird_data/Input/avimap_observations_reedland_birds.csv"
 
+lidar=stack(lidarfile)
+proj4string(lidar) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
+
 # Pres-only
 birds=read.csv(birdfile,sep=";")
 
@@ -64,7 +67,7 @@ lgn8_wetland_mask[landcover==16 | landcover==17 | landcover==30 | landcover==322
 
 # Generate random background ((#randomsample_lidar=sampleRandom(lidar, size=100,xy=TRUE)))
 
-d <- sdmData(occurrence~layer,train=bird_shp,predictors=landcover,bg=list(n=600,method='gRandom',remove=TRUE))
+d <- sdmData(occurrence~layer,train=bird_shp,predictors=lgn8_wetland_mask,bg=list(n=600,method='gRandom',remove=TRUE))
 data=d@features
 
 background=subset(data, rID %in% d@species[["occurrence"]]@background)
