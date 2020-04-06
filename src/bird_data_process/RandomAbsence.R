@@ -32,10 +32,6 @@ setwd(workingdirectory)
 
 # Import
 
-#landcoverfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/landcover/UvA_LGN2018/LGN2018.tif"
-#landcover=stack(landcoverfile)
-#proj4string(landcover) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
-
 birdfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/bird_data/Input/avimap_observations_reedland_birds.csv"
 
 # Pres-only
@@ -47,12 +43,6 @@ bird=bird[bird$species!="Roerdomp",]
 bird=bird[bird$species!="Baardman",]
 
 bird_shp=CreateShape(bird)
-
-# Gen. only needed landcover + remove Groningen
-
-#lgn8_wetland_mask <- setValues(raster(landcover), NA)
-#lgn8_wetland_mask[landcover==16 | landcover==17 | landcover==30 | landcover==322 | landcover==323 | landcover==332 | landcover==333 | landcover==41 | landcover==42 | landcover==43 
-                #| landcover==45 | landcover==46 | landcover==47] <- 1
 
 lgn8_wetland_mask=stack("D:/Koma/_PhD/Offline/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/onlywetland_mask/merged_mask_onlywetland.tif")
 

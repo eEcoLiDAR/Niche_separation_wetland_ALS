@@ -40,12 +40,12 @@ mosaicList <- function(rasList){
 
 # Initialize
 
-workingdirectory="D:/Koma/_PhD/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/"
+workingdirectory="D:/Koma/_PhD/Offline/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/"
 setwd(workingdirectory)
 
 dir.create("onlywetland")
 
-landcoverfile="D:/Koma/_PhD/Chapter3/Data_Preprocess/input_formask/LGN2018.tif"
+landcoverfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/landcover/UvA_LGN2018/LGN2018.tif"
 
 #Import
 
@@ -67,8 +67,7 @@ for (i in filelist) {
   landcover_sel=crop(landcover,extent(lidar))
   
   lgn8_water_mask <- setValues(raster(landcover_sel), NA)
-  lgn8_water_mask[landcover_sel==16 | landcover_sel==17 | landcover_sel==30 | landcover_sel==322 | landcover_sel==323 | landcover_sel==332 | landcover_sel==333 | landcover_sel==41 | landcover_sel==42 | landcover_sel==43 
-                  | landcover_sel==45 | landcover_sel==46 | landcover_sel==47] <- 1
+  lgn8_water_mask[landcover_sel==30 | landcover_sel==322 | landcover_sel==332 | landcover_sel==41 | landcover_sel==42 | landcover_sel==43] <- 1
   
   lgn8_water_mask_resampled=resample(lgn8_water_mask,lidar)
   
@@ -87,5 +86,5 @@ mask_tifs <- list.files(pattern = "*_onlywetland_mask.tif")
 # Merge wetland mask
 
 mask_merged=mosaicList(mask_tifs)
-writeRaster(mask_merged,"merged_mask_onlywetland.tif",overwrite=TRUE)
+writeRaster(mask_merged,"merged_mask_onlywetland_genrand.tif",overwrite=TRUE)
   
