@@ -94,7 +94,7 @@ thin.max <- function(x, cols, npoints){
 
 Gen_absence2 = function(GrW_atl_abs,spname,outname,nofsamp) {
   
-  GrW_atl_abs_b=st_buffer(st_as_sf(GrW_atl_abs), 1000)
+  GrW_atl_abs_b=st_buffer(st_as_sf(GrW_atl_abs), 500)
   GrW_atl_abs_b_sp <- sf:::as_Spatial(GrW_atl_abs_b)
   
   GrW_atl_abs_b_sp_union <- unionSpatialPolygons(GrW_atl_abs_b_sp,rep(1, length(GrW_atl_abs_b_sp)))

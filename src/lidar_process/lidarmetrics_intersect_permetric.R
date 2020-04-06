@@ -109,7 +109,7 @@ data_KK=IntersectForAnal_single(KK_pres,landcover,lidar,name='KK')
 write.csv(data_KK,"KK_territory_intersected.csv")
 
 ## Background
-Bgr=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v4/Background_genabs.shp")
+Bgr=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v4/Bgr_20.shp")
 names(Bgr)<- c("coords.x1","coords.x2","species","occrrnc")
 
 data_Bgr=IntersectForAnal_single(Bgr,landcover,lidar,name='Background')
