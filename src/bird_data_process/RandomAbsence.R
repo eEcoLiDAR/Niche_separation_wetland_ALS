@@ -44,11 +44,11 @@ bird=bird[bird$species!="Baardman",]
 
 bird_shp=CreateShape(bird)
 
-lgn8_wetland_mask=stack("D:/Koma/_PhD/Offline/Chapter3/Data_Preprocess/escience_lidar_data_v2/selected_layers_for_chapter3/masked/onlywetland_mask/merged_mask_onlywetland.tif")
+lgn8_wetland_mask=stack("D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/merged_mask_onlywetland_genrand.tif")
 
 # Generate random background ((#randomsample_lidar=sampleRandom(lidar, size=100,xy=TRUE)))
 
-d <- sdmData(occurrence~layer,train=bird_shp,predictors=lgn8_wetland_mask,bg=list(n=20000,method='gRandom',remove=TRUE))
+d <- sdmData(occurrence~layer,train=bird_shp,predictors=lgn8_wetland_mask,bg=list(n=1000000,method='gRandom',remove=TRUE))
 data=d@features
 
 background=subset(data, rID %in% d@species[["occurrence"]]@background)
