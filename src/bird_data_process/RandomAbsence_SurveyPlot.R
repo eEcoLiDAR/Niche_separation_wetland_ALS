@@ -94,7 +94,7 @@ proj4string(survey_union) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5
 survey_union=unionSpatialPolygons(survey_union,rep(1, length(survey_union)))
 
 # place points randomly
-survey_union_genabs=spsample(survey_union,n=500,"random",iter=10)
+survey_union_genabs=spsample(survey_union,n=25000,"random",iter=10)
 survey_union_genabs.df=as.data.frame(survey_union_genabs)
 
 survey_union_genabs.df$species <- "Background"
