@@ -55,6 +55,7 @@ birds=read.csv(birdfile,sep=";")
 birds$occurrence<-1
 bird=birds[birds$year>"2013",]
 bird=bird[bird$species!="Roerdomp",]
+bird=bird[bird$species!="Baardman",]
 
 # Create shp
 bird_shp=CreateShape(bird)
