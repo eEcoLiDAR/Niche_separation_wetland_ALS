@@ -35,6 +35,12 @@ plot1file="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/bird_dat
 plot2file="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/bird_data/BMP_plots_reedland_birds/BMPplots_12510.shp"
 plot3file="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/bird_data/BMP_plots_reedland_birds/BMPplots_12530.shp"
 
+lgn8_wetland_mask=stack("C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/filters/merged_mask_onlywetland_genrand.tif")
+proj4string(lgn8_wetland_mask) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
+
+birds_pres=stack("C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v4/raster.tif")
+proj4string(birds_pres) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
+
 # Import
 
 territoryid=read.csv(territoryidfile,sep=";")
@@ -83,3 +89,27 @@ plot(surveyplot3_Sn)
 #Union
 
 survey_union <- bind(surveyplot1_GrW, surveyplot2_KK,surveyplot3_Sn)
+proj4string(survey_union) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
+
+survey_union=unionSpatialPolygons(survey_union,rep(1, length(survey_union)))
+
+# place points randomly
+survey_union_genabs=spsample(survey_union,n=500,"random",iter=10)
+survey_union_genabs.df=as.data.frame(survey_union_genabs)
+
+survey_union_genabs.df$species <- "Background"
+survey_union_genabs.df$occurrence <- 0
+
+survey_union_genabs_shp=CreateShape(survey_union_genabs.df)
+
+#delete the ones which are too close to presence
+
+birds_abs_shp=raster::extract(birds_pres,survey_union_genabs_shp)
+survey_union_genabs_shp$mask=birds_abs_shp[,1]
+
+birds_abs_shp2=survey_union_genabs_shp[which(is.na(survey_union_genabs_shp$mask)),]
+
+birds_abs_shp2_lgn8=raster::extract(lgn8_wetland_mask,birds_abs_shp2)
+birds_abs_shp2$lgn8=birds_abs_shp2_lgn8[,1]
+
+raster::shapefile(birds_abs_shp2, "Bgr.shp",overwrite=TRUE)
