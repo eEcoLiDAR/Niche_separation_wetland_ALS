@@ -100,10 +100,10 @@ for (i in filelist) {
   
 }
 
-feaname=c("_perc_95_normalized_height_masked_dsm_sd_21p_masked","_perc_95_normalized_height_masked_reedveg_sd_21p_masked",
-          "_perc_95_normalized_height_masked_bushveg_sd_21p_masked","_perc_95_normalized_height_masked_prop_helophyteveg_21p_masked",
-          "_perc_95_normalized_height_masked_prop_reedveg_21p_masked","_perc_95_normalized_height_masked_prop_bushveg_21p_masked",
-          "_perc_95_normalized_height_masked_prop_treesveg_21p_masked")
+feaname=c("_perc_95_normalized_height_masked_dsm_sd_41p_masked","_perc_95_normalized_height_masked_reedveg_sd_41p_masked",
+          "_perc_95_normalized_height_masked_bushveg_sd_41p_masked","_perc_95_normalized_height_masked_prop_helophyteveg_41p_masked",
+          "_perc_95_normalized_height_masked_prop_reedveg_41p_masked","_perc_95_normalized_height_masked_prop_bushveg_41p_masked",
+          "_perc_95_normalized_height_masked_prop_treesveg_41p_masked")
 
 for (i in feaname) {
   print(i)

@@ -80,5 +80,3 @@ names(Bgr)<- c("coords.x1","coords.x2","species","occrrnc")
 data_Bgr=IntersectForAnal_single(Bgr,landcover,lidar,name='Background')
 
 write.csv(data_Bgr,"Bgr_territory_intersected.csv")
-
-Bgr_lgn8 <- subset(data_Bgr, lgn8 %in% c(16,17,30,322,332,41,42,43))
