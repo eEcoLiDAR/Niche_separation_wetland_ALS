@@ -12,7 +12,7 @@ source("D:/Koma/GitHub/PhDPaper2_wetlandniche/src/bird_data_process/Func_Process
 
 ##
 
-workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v5/"
+workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v6/"
 setwd(workingdir)
 
 lidarfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/lidar/wh_waterfilt/lidar_metric_perc_95_normalized_height_masked_all.tif"
