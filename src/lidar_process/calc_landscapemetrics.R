@@ -50,15 +50,32 @@ df_Sn=cast(my_metric_npte_Sn ,plot_id~metric+class)
 my_metric_npte_Bgr = sample_lsm(height_class, Bgr_shp,size=100,level = "class", metric = c("np","te"),plot_id=Bgr_shp@data$rID,return_raster=TRUE,count_boundary = FALSE,directions = 8)
 df_Bgr=cast(my_metric_npte_Bgr ,plot_id~metric+class)
 
+#200m
+my_metric_npte_GrW2 = sample_lsm(height_class, GrW_shp,size=200,level = "class", metric = c("np","te"),plot_id=GrW_shp@data$rID,return_raster=TRUE,count_boundary = FALSE,directions = 8)
+df_GrW2=cast(my_metric_npte_GrW2 ,plot_id~metric+class)
+
+my_metric_npte_KK2 = sample_lsm(height_class, KK_shp,size=200,level = "class", metric = c("np","te"),plot_id=KK_shp@data$rID,return_raster=TRUE,count_boundary = FALSE,directions = 8)
+df_KK2=cast(my_metric_npte_KK2 ,plot_id~metric+class)
+
+my_metric_npte_Sn2 = sample_lsm(height_class, Sn_shp,size=200,level = "class", metric = c("np","te"),plot_id=Sn_shp@data$rID,return_raster=TRUE,count_boundary = FALSE,directions = 8)
+df_Sn2=cast(my_metric_npte_Sn2 ,plot_id~metric+class)
+
+my_metric_npte_Bgr2 = sample_lsm(height_class, Bgr_shp,size=200,level = "class", metric = c("np","te"),plot_id=Bgr_shp@data$rID,return_raster=TRUE,count_boundary = FALSE,directions = 8)
+df_Bgr2=cast(my_metric_npte_Bgr2 ,plot_id~metric+class)
+
 # add to the intersected data
 GrW_wlandsc=merge(GrW,df_GrW, by.x=c('rID'), by.y=c('plot_id'))
-write.csv(GrW_wlandsc,"GrW_wlandsc.csv")
+GrW_wlandsc2=merge(GrW_wlandsc,df_GrW2, by.x=c('rID'), by.y=c('plot_id'))
+write.csv(GrW_wlandsc2,"GrW_wlandsc.csv")
 
 KK_wlandsc=merge(KK,df_KK, by.x=c('rID'), by.y=c('plot_id'))
-write.csv(KK_wlandsc,"KK_wlandsc.csv")
+KK_wlandsc2=merge(KK_wlandsc,df_KK2, by.x=c('rID'), by.y=c('plot_id'))
+write.csv(KK_wlandsc2,"KK_wlandsc.csv")
 
 Sn_wlandsc=merge(Sn,df_Sn, by.x=c('rID'), by.y=c('plot_id'))
-write.csv(Sn_wlandsc,"Sn_wlandsc.csv")
+Sn_wlandsc2=merge(Sn_wlandsc,df_Sn2, by.x=c('rID'), by.y=c('plot_id'))
+write.csv(Sn_wlandsc2,"Sn_wlandsc.csv")
 
 Bgr_wlandsc=merge(Bgr,df_Bgr, by.x=c('rID'), by.y=c('plot_id'))
-write.csv(Bgr_wlandsc,"Bgr_wlandsc.csv")
+Bgr_wlandsc2=merge(Bgr_wlandsc,df_Bgr2, by.x=c('rID'), by.y=c('plot_id'))
+write.csv(Bgr_wlandsc2,"Bgr_wlandsc.csv")
