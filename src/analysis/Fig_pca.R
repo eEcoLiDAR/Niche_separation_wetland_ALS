@@ -14,8 +14,7 @@ library(GGally)
 library(egg)
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v5/"
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v4/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v6/"
 setwd(workingdirectory)
 
 # Import data
@@ -36,15 +35,15 @@ Bgr_lgn8 <- subset(Bgr, lgn8 %in% c(16,17,30,322,332,41,42,43))
 
 #data_merged=rbind(GrW,KK,Sn)
 data_merged=rbind(GrW_lgn8,KK_lgn8,Sn_lgn8,Bgr_lgn8)
-data_merged=rbind(GrW_lgn8,KK_lgn8,Sn_lgn8)
+data_merged=rbind(GrW,KK,Sn,Bgr)
 
 data_presabs_stat <- data_merged %>%
   group_by(species,occurrence) %>%
   summarise(nofobs = length(occurrence))
 
-data_merged=subset(data_merged,select=c(11,10,9,7,8,12,13,16,24,28,20,21,6,4,5,3))
+data_merged=subset(data_merged,select=c(11,10,9,7,8,13,16,15,20,24,17,18,6,4,5,3))
 names(data_merged) <- c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
-                        "HH_sd","HH_lowveg_sd", "HH_reedveg_prop","HH_reedveg_patch","HH_reedveg_edge",
+                        "HV_sd","HV_reedveg_sd", "HV_reedveg_prop","HH_reedveg_patch","HH_reedveg_edge",
                         "species","occurrence","lgn8","x","y","id")
 
 noffea=10
@@ -52,7 +51,7 @@ noffea=10
 data_merged=data_merged[(data_merged$VV_p95<30),]
 data_merged[is.na(data_merged)==TRUE] <- 0
 
-levels(data_merged$species) = c("Grote Karekiet","Kleine Karekiet","Background")
+levels(data_merged$species) = c("Grote Karekiet","Kleine Karekiet","Snor","Background")
 data_merged[data_merged$occurrence==0,noffea+1] <- "Background"
 
 # PCA -- Fig.2. a PCA 1,2
