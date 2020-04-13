@@ -107,7 +107,7 @@ survey_union_genabs_shp=CreateShape(survey_union_genabs.df)
 birds_abs_shp=raster::extract(birds_pres,survey_union_genabs_shp)
 survey_union_genabs_shp$mask=birds_abs_shp[,1]
 
-raster::shapefile(birds_abs_shp, "Bgr_prefilt.shp",overwrite=TRUE)
+raster::shapefile(survey_union_genabs_shp, "Bgr_prefilt.shp",overwrite=TRUE)
 
 birds_abs_shp2=survey_union_genabs_shp[which(is.na(survey_union_genabs_shp$mask)),]
 
