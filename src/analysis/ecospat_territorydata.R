@@ -7,43 +7,34 @@ library(dplyr)
 library(stringr)
 
 # Global
-#workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v3/"
+workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v7/"
 setwd(workingdirectory)
 
 # Import data
 GrW=read.csv("GrW_wlandsc.csv")
-#GrW_lgn8 <- subset(GrW, lgn8 %in% c(16,17,30,322,323,332,333,41,42,43,45,46,47))
-GrW_lgn8 <- subset(GrW, lgn8 %in% c(16,17,30,322,332,41,42))
+GrW_lgn8 <- subset(GrW, lgn8 %in% c(16,17,30,322,332,41,42,43))
 
 KK=read.csv("KK_wlandsc.csv")
-#KK_lgn8 <- subset(KK, lgn8 %in% c(16,17,30,322,323,332,333,41,42,43,45,46,47))
-KK_lgn8 <- subset(KK, lgn8 %in% c(16,17,30,322,332,41,42))
+KK_lgn8 <- subset(KK, lgn8 %in% c(16,17,30,322,332,41,42,43))
 
 Sn=read.csv("Sn_wlandsc.csv")
-#Sn_lgn8 <- subset(Sn, lgn8 %in% c(16,17,30,322,323,332,333,41,42,43,45,46,47))
-Sn_lgn8 <- subset(Sn, lgn8 %in% c(16,17,30,322,332,41,42))
+Sn_lgn8 <- subset(Sn, lgn8 %in% c(16,17,30,322,332,41,42,43))
 
-#data_merged=rbind(GrW,KK,Sn)
-data_merged=rbind(GrW_lgn8,KK_lgn8,Sn_lgn8)
+Bgr=read.csv("Bgr_wlandsc.csv")
+Bgr_lgn8 <- subset(Bgr, lgn8 %in% c(16,17,30,322,332,41,42,43))
 
-data_presabs_stat <- data_merged %>%
-  group_by(species,occurrence) %>%
-  summarise(nofobs = length(occurrence))
+#data_merged=rbind(GrW_lgn8,KK_lgn8,Sn_lgn8,Bgr_lgn8)
+data_merged=rbind(GrW,KK,Sn,Bgr)
 
-#data_merged=subset(data_merged,select=c(7,8,9,10,12,13,14,15,18,20,24,27,21,22,6))
-#names(data_merged) <- c("veg_dens_1_2","veg_dens_2_3","veg_dens_0_1","FHD","veg_height95","dsm_sd_100m",
-#"lowveg_sd_100m", "lowveg_prop_100m","veg_cover","veg_var","medveg_patchiness",
-#"medveg_edgedens","species","occurrence","lgn8")
+noffea=10
 
-data_merged=subset(data_merged,select=c(12,20,10,7,8,9,18,13,14,15,24,27,21,22,6))
-names(data_merged) <- c("VV_p95","VV_var","VV_FHD","VD_1_2","VD_2_3","VD_0_1","VD_cov",
-                        "HH_sd","HH_lowveg_sd", "HH_lowveg_prop","HH_medveg_patch","HH_medveg_edge",
-                        "species","occurrence","lgn8")
+# 200 m only reed
+data_merged=subset(data_merged,select=c(11,10,9,7,8,15,21,19,33,37,22,23,6,4,5,3))
+names(data_merged) <- c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
+                        "HV_sd","HV_reedveg_sd", "HV_reedveg_prop","HV_reedveg_patch","HV_reedveg_edge",
+                        "species","occurrence","lgn8","x","y","id")
 
-noffea=12
-
-data_merged=data_merged[(data_merged$VV_p95<30 & data_merged$VV_p95>0.1),]
+data_merged=data_merged[(data_merged$VV_p95<30),]
 data_merged[is.na(data_merged)==TRUE] <- 0
 
 
@@ -54,23 +45,20 @@ pca.env_vis<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=2)
 grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
 kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine Karekiet"))
 snor=dplyr::filter(data_merged,str_detect(data_merged$species,"Snor"))
+bgr=dplyr::filter(data_merged,str_detect(data_merged$species,"Background"))
 
 scores.globclim<-pca.env$li
 
-scores.sp.grotekarakiet<-suprow(pca.env,grotekarakiet[which(grotekarakiet[,noffea+2]==1),1:noffea])$li
-scores.clim.grotekarakiet<-suprow(pca.env,grotekarakiet[,1:noffea])$li
-
-scores.sp.kleinekarakiet<-suprow(pca.env,kleinekarakiet[which(kleinekarakiet[,noffea+2]==1),1:noffea])$li
-scores.clim.kleinekarakiet<-suprow(pca.env,kleinekarakiet[,1:noffea])$li
-
-scores.sp.snor<-suprow(pca.env,snor[which(snor[,noffea+2]==1),1:noffea])$li
-scores.clim.snor<-suprow(pca.env,snor[,1:noffea])$li
+scores.sp.grotekarakiet<-suprow(pca.env,grotekarakiet[,1:noffea])$li
+scores.sp.kleinekarakiet<-suprow(pca.env,kleinekarakiet[,1:noffea])$li
+scores.sp.snor<-suprow(pca.env,snor[,1:noffea])$li
+scores.clim.background<-suprow(pca.env,bgr[,1:noffea])$li
 
 # PCA 1 vs PCA 2
 
-grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.grotekarakiet[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
-grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.kleinekarakiet[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
-grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.snor[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500) 
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500) 
 
 saveRDS(grid.clim.grotekarakiet, "grw_kdens.rds")
 saveRDS(grid.clim.kleinekarakiet, "kk_kdens.rds")
@@ -84,9 +72,9 @@ ecospat.plot.contrib(contrib=pca.env_vis$co, eigen=pca.env_vis$eig)
 
 # PCA 1 vs PCA 3
 
-grid.clim.grotekarakiet2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.grotekarakiet[,c(1,3)], sp=scores.sp.grotekarakiet[,c(1,3)], R=500, th.sp=0.1,th.env=0.1) 
-grid.clim.kleinekarakiet2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.kleinekarakiet[,c(1,3)], sp=scores.sp.kleinekarakiet[,c(1,3)], R=500, th.sp=0.1,th.env=0.1) 
-grid.clim.snor2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.snor[,c(1,3)], sp=scores.sp.snor[,c(1,3)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.grotekarakiet2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.background[,c(1,3)], sp=scores.sp.grotekarakiet[,c(1,3)], R=500) 
+grid.clim.kleinekarakiet2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.background[,c(1,3)], sp=scores.sp.kleinekarakiet[,c(1,3)], R=500) 
+grid.clim.snor2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.background[,c(1,3)], sp=scores.sp.snor[,c(1,3)], R=500) 
 
 saveRDS(grid.clim.grotekarakiet2, "grw_kdens2.rds")
 saveRDS(grid.clim.kleinekarakiet2, "kk_kdens2.rds")
@@ -98,19 +86,19 @@ ecospat.plot.niche(grid.clim.kleinekarakiet2,title="Reed Warbler")
 ecospat.plot.niche(grid.clim.snor2,title="Savi's Warbler")
 
 # Visualize overlap
-ecospat.plot.niche.dyn(grid.clim.grotekarakiet2, grid.clim.snor2, quant=0,
+ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.snor, quant=0,
                        interest=1, title= "GrW vs Sn")
-ecospat.plot.niche.dyn(grid.clim.grotekarakiet2, grid.clim.kleinekarakiet2, quant=0,
+ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, quant=0,
                        interest=1, title= "GrW vs RW")
-ecospat.plot.niche.dyn(grid.clim.snor2, grid.clim.kleinekarakiet2, quant=0,
+ecospat.plot.niche.dyn(grid.clim.snor, grid.clim.kleinekarakiet, quant=0,
                        interest=1, title= "Sn vs RW")
 ecospat.plot.contrib(contrib=pca.env_vis$co, eigen=pca.env_vis$eig)
 
 # PCA 2 vs PCA 3
 
-grid.clim.grotekarakiet3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.grotekarakiet[,c(2,3)], sp=scores.sp.grotekarakiet[,c(2,3)], R=500, th.sp=0.1,th.env=0.1) 
-grid.clim.kleinekarakiet3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.kleinekarakiet[,c(2,3)], sp=scores.sp.kleinekarakiet[,c(2,3)], R=500, th.sp=0.1,th.env=0.1) 
-grid.clim.snor3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.snor[,c(2,3)], sp=scores.sp.snor[,c(2,3)], R=500, th.sp=0.1,th.env=0.1) 
+grid.clim.grotekarakiet3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.background[,c(2,3)], sp=scores.sp.grotekarakiet[,c(2,3)], R=500) 
+grid.clim.kleinekarakiet3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.background[,c(2,3)], sp=scores.sp.kleinekarakiet[,c(2,3)], R=500) 
+grid.clim.snor3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.background[,c(2,3)], sp=scores.sp.snor[,c(2,3)], R=500) 
 
 saveRDS(grid.clim.grotekarakiet3, "grw_kdens3.rds")
 saveRDS(grid.clim.kleinekarakiet3, "kk_kdens3.rds")
