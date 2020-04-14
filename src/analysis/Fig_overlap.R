@@ -51,6 +51,7 @@ p1=ggplot(data=pca12_gr_kk)+stat_contour(aes(x=x, y=y, z=layer,fill=species), ge
 
 eq_grw_kk_df=as.data.frame(eq_grw_kk[["sim"]][["D"]])
 names(eq_grw_kk_df)<- "SimD"
+#eq_grw_kk[["p.D"]]=0.0099
 
 p2=ggplot(data=eq_grw_kk_df,aes(x = SimD))+geom_density(fill = "lightblue")+
   geom_vline(aes(xintercept = eq_grw_kk[["obs"]][["D"]]), linetype = "solid",color="red",size=2)+theme_bw(base_size = 15)+
