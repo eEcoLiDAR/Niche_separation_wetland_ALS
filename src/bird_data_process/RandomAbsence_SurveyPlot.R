@@ -63,6 +63,7 @@ surveyplot1 = readOGR(dsn=plot3file)
 
 surveyplot1_GrW=subset(surveyplot1, plotid %in% unique(GrW$plotid))
 #plot(surveyplot1_GrW)
+raster::shapefile(surveyplot1_GrW, "surveyplot1_GrW.shp",overwrite=TRUE)
 
 # KK
 KK=territoryid[territoryid$naam=="Kleine Karekiet",]
