@@ -35,7 +35,7 @@ IntersectForAnal_single = function(GrW_pres,landcover,lidar,name='GrW') {
 
 rasterOptions(maxmemory = 100000000000)
 
-workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v8/"
+workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v9/"
 setwd(workingdir)
 
 # Work with the masked files
@@ -74,8 +74,8 @@ data_KK=IntersectForAnal_single(KK_pres,landcover,lidar,name='KK')
 write.csv(data_KK,"KK_territory_intersected.csv")
 
 ## Background
-Bgr=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v6/Background_whpres_wsurvey.shp")
-Bgr <- Bgr@data[, -(3:5)]
+Bgr=readOGR(dsn="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v6/Background_whpres.shp")
+Bgr <- Bgr@data[, -(3:4)]
 names(Bgr)<- c("coords.x1","coords.x2","species","occrrnc")
 
 data_Bgr=IntersectForAnal_single(Bgr,landcover,lidar,name='Background')
