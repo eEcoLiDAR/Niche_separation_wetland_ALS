@@ -27,7 +27,7 @@ source("D:/Koma/GitHub/PhDPaper2_wetlandniche/src/bird_data_process/Func_Process
 ### Set global parameters
 
 # Set working dirctory
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v5/"
+workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Process_birddata_v6/"
 setwd(workingdirectory)
 
 territoryidfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/bird_data/BMP_plots_reedland_birds/BMP_number_of_territories_per_plot_per_year.csv"
@@ -93,6 +93,8 @@ survey_union <- bind(surveyplot1_GrW, surveyplot2_KK,surveyplot3_Sn)
 proj4string(survey_union) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs")
 
 survey_union=unionSpatialPolygons(survey_union,rep(1, length(survey_union)))
+
+raster::shapefile(survey_union, "survey_union.shp",overwrite=TRUE)
 
 # place points randomly
 survey_union_genabs=spsample(survey_union,n=150000,"random",iter=10)
