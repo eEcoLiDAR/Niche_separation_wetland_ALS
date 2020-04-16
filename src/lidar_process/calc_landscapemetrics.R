@@ -12,7 +12,7 @@ source("D:/Koma/GitHub/PhDPaper2_wetlandniche/src/bird_data_process/Func_Process
 
 ##
 
-workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v8/"
+workingdir="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v9/"
 setwd(workingdir)
 
 lidarfile="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/2_Dataset/lidar/wh_waterfilt/lidar_metric_perc_95_normalized_height_masked_all.tif"
@@ -34,7 +34,7 @@ Bgr_shp=CreateShape(Bgr)
 
 # Reclassify
 height_class=reclassify(lidar, c(-Inf,1,1,1,3,2,3,5,3,5,Inf,4))
-writeRaster(height_class,"height_classified.tif",overwrite=TRUE)
+#writeRaster(height_class,"height_classified.tif",overwrite=TRUE)
 
 # calculate landscape metrics
 
