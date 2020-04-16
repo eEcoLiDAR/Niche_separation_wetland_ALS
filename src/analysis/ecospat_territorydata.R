@@ -7,7 +7,7 @@ library(dplyr)
 library(stringr)
 
 # Global
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v7/"
+workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v8/"
 setwd(workingdirectory)
 
 # Import data
@@ -29,10 +29,10 @@ data_merged=rbind(GrW,KK,Sn,Bgr)
 noffea=10
 
 # 200 m only reed
-data_merged=subset(data_merged,select=c(11,10,9,7,8,15,21,19,33,37,22,23,6,4,5,3))
+data_merged=subset(data_merged,select=c(11,10,9,7,8,12,14,13,18,22,15,16,4,5,2))
 names(data_merged) <- c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
                         "HV_sd","HV_reedveg_sd", "HV_reedveg_prop","HV_reedveg_patch","HV_reedveg_edge",
-                        "species","occurrence","lgn8","x","y","id")
+                        "species","occurrence","x","y","id")
 
 data_merged=data_merged[(data_merged$VV_p95<30),]
 data_merged[is.na(data_merged)==TRUE] <- 0
