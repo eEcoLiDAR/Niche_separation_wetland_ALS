@@ -43,16 +43,19 @@ proj4string(surveyunion) <- CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.
 background=sampleRandom(lgn8_wetland_mask, size=1000000, cells=FALSE,xy=TRUE,sp=TRUE,na.rm=TRUE)
 
 raster::shapefile(background, "Background_whfilt.shp",overwrite=TRUE)
+background = readOGR(dsn="Background_whfilt.shp")
 
 # Apply filters
 background_wpres=raster::extract(birds_pres,background)
 background$pres=background_wpres[,1]
 
 background_whpres=background[is.na(background$pres),]
+background_whpres@data$species <- "Background"
+background_whpres@data$occurrence <- 0
+
+raster::shapefile(background_whpres, "Background_whpres.shp",overwrite=TRUE)
 
 background_whpres_wsurvey=raster::intersect(background_whpres,surveyunion)
-background_whpres_wsurvey@data$species <- "Background"
-background_whpres_wsurvey@data$occurrence <- 0
 
 raster::shapefile(background_whpres_wsurvey, "Background_whpres_wsurvey.shp",overwrite=TRUE)
 
