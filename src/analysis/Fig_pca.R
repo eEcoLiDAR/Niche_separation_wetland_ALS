@@ -16,7 +16,7 @@ library(egg)
 library(ecospat)
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v8/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v9/"
 setwd(workingdirectory)
 
 # Import data
@@ -28,6 +28,7 @@ Bgr=read.csv("Bgr_wlandsc.csv")
 GrW_lgn8 <- subset(GrW, lgn8 %in% c(16,17,30,322,332,41,42,43))
 KK_lgn8 <- subset(KK, lgn8 %in% c(16,17,30,322,332,41,42,43))
 Sn_lgn8 <- subset(Sn, lgn8 %in% c(16,17,30,322,332,41,42,43))
+Bgr_lgn8 <- subset(Bgr, lgn8 %in% c(16,17,30,322,332,41,42,43))
 
 data_merged=rbind(GrW,KK,Sn,Bgr)
 
@@ -95,9 +96,9 @@ p4=fviz_pca_biplot(pca.env, axes=c(1,2),
 
 fig2=grid.arrange(
   p1+labs(title ="a) PCA variable contribution")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
-  p2+labs(title ="b) Great reed warbler")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14))+xlim(-7.5,5)+ylim(-6,5),
-  p3+labs(title ="c) Reed warbler")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14))+xlim(-7.5,5)+ylim(-6,5),
-  p4+labs(title ="d) Savi's warbler")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14))+xlim(-7.5,5)+ylim(-6,5),
+  p2+labs(title ="b) Great reed warbler")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
+  p3+labs(title ="c) Reed warbler")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
+  p4+labs(title ="d) Savi's warbler")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14)),
   ncol=2,
   nrow=2
 )
