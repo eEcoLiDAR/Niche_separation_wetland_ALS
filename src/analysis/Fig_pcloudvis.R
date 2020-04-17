@@ -53,6 +53,13 @@ clipped_3@data$NormZ=clipped_3@data$Z
 write.csv(clipped_3@data,"rw_forvis.csv")
 
 #rasterplot
+addalpha <- function(colors, alpha=1.0) {
+  r <- col2rgb(colors, alpha=T)
+  # Apply alpha
+  r[4,] <- alpha*255
+  r <- r/255.0
+  return(rgb(r[1,], r[2,], r[3,], r[4,]))
+}
 
 rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
   
@@ -61,8 +68,6 @@ rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
   dtm = grid_terrain(clipped_4_nonveg, res = 1, algorithm = knnidw(k = 25L))
   lasnormalize(clipped_4, dtm)
   
-  clipped_4_nonwater=lasfilter(clipped_4, Classification != 9)
-  
   hperc09all = grid_metrics(clipped_4, quantile(Z, 0.90), res=1)
   crs(hperc09all) <- "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"
   
@@ -70,10 +75,19 @@ rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
   aspect <- terrain(hperc09all, opt='aspect')
   dsm_shd <- hillShade(slope, aspect, 40, 270)
   
-  hperc09 = grid_metrics(clipped_4_nonwater, quantile(Z, 0.90), res=1)
+  clipped_4_onlyveg=lasfilter(clipped_4, Classification == 1)
+  
+  hperc09 = grid_metrics(clipped_4_onlyveg, quantile(Z, 0.90), res=1)
   plot(hperc09)
   crs(hperc09) <- "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"
   height_class=reclassify(hperc09, c(-Inf,1,1,1,3,2,3,5,3,5,Inf,4))
+  
+  clipped_4_onlywater=lasfilter(clipped_4, Classification == 9)
+  
+  water = grid_metrics(clipped_4_onlywater, quantile(Z, 0.90), res=1)
+  plot(hperc09)
+  crs(water) <- "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"
+  water_class=reclassify(water, c(-Inf,Inf,0))
   
   coords = matrix(c(x, y), 
                   ncol = 2, byrow = TRUE)
@@ -97,12 +111,16 @@ rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
   P12 = Polygon(coords2)
   line_cr2 = SpatialPolygons(list(Polygons(list(P12), ID = "a")), proj4string=CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"))
   
+  defcolpal=palette(c("chartreuse","gold","darkorange4","chartreuse4"))
+  defcolpal=addalpha(defcolpal, 0.45)
+  
   par(mfrow=c(1,1)) 
   plot(dsm_shd, col=grey(0:100/100), legend=FALSE, main=bird)
-  plot(height_class, col=terrain.colors(4,alpha=0.35),breaks=c(0,1,2,3,4), add=TRUE,
+  plot(height_class, col=defcolpal,breaks=c(0,1,2,3,4), add=TRUE,
        lab.breaks = c("0","1","3","5","20"),
        legend.args=list(text='Height [m]', side=4, font=2, line=2.5, cex=1.5))
-  plot(birdpoint,pch=1,cex=3,lwd = 3,add=TRUE)
+  plot(water_class, col="blue", legend=FALSE, add=TRUE)
+  plot(birdpoint,pch=1,cex=3,lwd = 3,col="black",add=TRUE)
   plot(line_cr, lwd=3,add=TRUE)
   plot(line_cr2, lwd=3,add=TRUE)
   
@@ -119,12 +137,12 @@ crossplot<-function(clipped_4,x=184877,y=511157){
   las_cross_ver@data$cross=(las_cross_ver@data$Y-y+100)-40
   
   plot(x = las_cross_ver@data$cross, 
-       y = las_cross_ver@data$Z, col = c("forestgreen", "green", "grey","grey","grey","grey","grey","grey","grey","grey")[las_cross_ver@data$Classification],
+       y = las_cross_ver@data$Z, col = c("forestgreen", "grey", "blue","blue","blue","blue","blue","blue","blue","blue")[las_cross_ver@data$Classification],
        frame = FALSE, 
        xlab = "Distance[m]", ylab = "Height[m]",pch=19,ylim=c(0,20),
        main="Observation point")
   abline(v=60,lty=3)
-  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("green", "forestgreen","grey"))
+  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"))
   
 }
 
