@@ -12,7 +12,7 @@ get_legend<-function(myggplot){
 }
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v7/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v9/"
 setwd(workingdirectory)
 
 grw_pca12 <- readRDS("grw_kdens.rds")
