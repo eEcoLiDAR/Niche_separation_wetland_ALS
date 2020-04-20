@@ -94,6 +94,8 @@ p22=grid.arrange(
 fig3b=grid.arrange(p1,p22,ncol = 2, nrow = 1,widths = c(2, 1))
 
 ######
+levels(pca12_kk_sn$species) = c("Savi's warbler", "Reed warbler")
+
 p1=ggplot(data=pca12_kk_sn)+stat_contour(aes(x=-1*x, y=-1*y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
   theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("green3","deeppink"),name="Species")+
   ggtitle("c)")
@@ -108,7 +110,7 @@ p2=ggplot(data=eq_grw_kk_df,aes(x = SimD))+geom_density(fill = "lightblue")+
 #geom_label(aes(x=eq_k_s[["obs"]][["D"]]+0.008, label="Observed D", y=40), colour="red", angle=0)
 
 forlegp1=ggplot(data=pca12_kk_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species),geom="polygon", bins=4, alpha=.3,show.legend = TRUE)+
-  theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 3")+scale_fill_manual(values=c("green3","deeppink"),name="Species")+theme(legend.position = "left")
+  theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 3")+scale_fill_manual(values=c("deeppink","green3"),name="Species",labels=c("Savi's warbler", "Reed warbler"))+theme(legend.position = "left")
 legend_p1 <- get_legend(forlegp1)
 
 p22=grid.arrange(
@@ -121,8 +123,8 @@ fig3c=grid.arrange(p1,p22,ncol = 2, nrow = 1,widths = c(2, 1))
 
 fig3=grid.arrange(
   fig3a,
-  fig3b,
   fig3c,
+  fig3b,
   ncol = 1, nrow = 3
 )
 
