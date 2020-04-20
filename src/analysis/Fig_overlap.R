@@ -12,7 +12,7 @@ get_legend<-function(myggplot){
 }
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v9/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v8/"
 setwd(workingdirectory)
 
 grw_pca12 <- readRDS("grw_kdens.rds")
@@ -45,7 +45,7 @@ eq_grw_s <- readRDS("eq.test_gr_s.rds")
 eq_k_s <- readRDS("eq.test_k_s.rds")
 
 ######
-p1=ggplot(data=pca12_gr_kk)+stat_contour(aes(x=x, y=y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
+p1=ggplot(data=pca12_gr_kk)+stat_contour(aes(x=-1*x, y=-1*y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
   theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("goldenrod4","green3"),name="Species")+
   ggtitle("a)")
 
@@ -55,7 +55,7 @@ names(eq_grw_kk_df)<- "SimD"
 
 p2=ggplot(data=eq_grw_kk_df,aes(x = SimD))+geom_density(fill = "lightblue")+
   geom_vline(aes(xintercept = eq_grw_kk[["obs"]][["D"]]), linetype = "solid",color="red",size=2)+theme_bw(base_size = 15)+
-  xlab(paste("D \n (p.value= ",round(eq_grw_kk[["p.D"]],4),")",sep=""))+ylab("Density")
+  xlab(paste("D \n mean sim.D=",round(mean(eq_grw_kk[["sim"]][["D"]]),2),"\n sd sim.D=",round(sd(eq_grw_kk[["sim"]][["D"]]),2),"\n obs.D=",round(eq_grw_kk[["obs"]][["D"]],2),"\n p.value= ",round(eq_grw_kk[["p.D"]],4),sep=""))+ylab("Density")
 
 forlegp1=ggplot(data=pca12_gr_kk)+stat_contour(aes(x=x, y=y, z=layer,fill=species),geom="polygon", bins=4, alpha=.3,show.legend = TRUE)+
   theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 3")+scale_fill_manual(values=c("goldenrod4","green3"),name="Species")+theme(legend.position = "left")
@@ -70,7 +70,7 @@ p22=grid.arrange(
 fig3a=grid.arrange(p1,p22,ncol = 2, nrow = 1,widths = c(2, 1))
 
 ######
-p1=ggplot(data=pca12_gr_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
+p1=ggplot(data=pca12_gr_sn)+stat_contour(aes(x=-1*x, y=-1*y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
   theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("goldenrod4","deeppink"),name="Species")+
   ggtitle("b)")
 
@@ -79,7 +79,7 @@ names(eq_grw_kk_df)<- "SimD"
 
 p2=ggplot(data=eq_grw_kk_df,aes(x = SimD))+geom_density(fill = "lightblue")+
   geom_vline(aes(xintercept = eq_grw_s[["obs"]][["D"]]), linetype = "solid",color="red",size=2)+theme_bw(base_size = 15)+
-  xlab(paste("D \n (p.value= ",round(eq_grw_s[["p.D"]],4),")",sep=""))+ylab("Density")
+  xlab(paste("D \n mean sim.D=",round(mean(eq_grw_s[["sim"]][["D"]]),2),"\n sd sim.D=",round(sd(eq_grw_s[["sim"]][["D"]]),2),"\n obs.D=",round(eq_grw_s[["obs"]][["D"]],2),"\n p.value= ",round(eq_grw_s[["p.D"]],4),sep=""))+ylab("Density")
 
 forlegp1=ggplot(data=pca12_gr_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species),geom="polygon", bins=4, alpha=.3,show.legend = TRUE)+
   theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 3")+scale_fill_manual(values=c("goldenrod4","deeppink"),name="Species")+theme(legend.position = "left")
@@ -94,7 +94,7 @@ p22=grid.arrange(
 fig3b=grid.arrange(p1,p22,ncol = 2, nrow = 1,widths = c(2, 1))
 
 ######
-p1=ggplot(data=pca12_kk_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
+p1=ggplot(data=pca12_kk_sn)+stat_contour(aes(x=-1*x, y=-1*y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
   theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("green3","deeppink"),name="Species")+
   ggtitle("c)")
 
@@ -103,7 +103,7 @@ names(eq_grw_kk_df)<- "SimD"
 
 p2=ggplot(data=eq_grw_kk_df,aes(x = SimD))+geom_density(fill = "lightblue")+
   geom_vline(aes(xintercept = eq_k_s[["obs"]][["D"]]), linetype = "solid",color="red",size=2)+theme_bw(base_size = 15)+
-  xlab(paste("D \n (p.value= ",round(eq_k_s[["p.D"]],4),")",sep=""))+ylab("Density")
+  xlab(paste("D \n mean sim.D=",round(mean(eq_k_s[["sim"]][["D"]]),2),"\n sd sim.D=",round(sd(eq_k_s[["sim"]][["D"]]),2),"\n obs.D=",round(eq_k_s[["obs"]][["D"]],2),"\n p.value= ",round(eq_k_s[["p.D"]],4),sep=""))+ylab("Density")
 
 #geom_label(aes(x=eq_k_s[["obs"]][["D"]]+0.008, label="Observed D", y=40), colour="red", angle=0)
 
@@ -127,12 +127,4 @@ fig3=grid.arrange(
 )
 
 ggsave("Fig3_a_pc12.png",plot = fig3,width = 15, height = 15)
-
-#################### add background contour?
-ggplot()+
-  stat_contour(data=pca12_gr_kk,aes(x=x, y=y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
-  geom_contour(data=grw_pca12_backg_df,aes(x=x, y=y, z=layer), breaks=c(0,round(mean(grw_pca12_backg_df$layer),3),round(max(grw_pca12_backg_df$layer),3)), show.legend = FALSE,colour="black")+
-  geom_contour(data=kk_pca12_backg_df,aes(x=x, y=y, z=layer), breaks=c(0,round(mean(kk_pca12_backg_df$layer),3),round(max(kk_pca12_backg_df$layer),3)), show.legend = FALSE,colour="black")+
-  theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("goldenrod4","green3","grey64"),name="Species")+
-  ggtitle("a)")
 
