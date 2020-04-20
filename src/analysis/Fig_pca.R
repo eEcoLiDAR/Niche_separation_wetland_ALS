@@ -14,6 +14,7 @@ library(GGally)
 
 library(egg)
 library(ecospat)
+library(raster)
 
 # Global
 workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v8/"
@@ -25,6 +26,11 @@ KK=read.csv("KK_wlandsc.csv")
 Sn=read.csv("Sn_wlandsc.csv")
 Bgr=read.csv("Bgr_wlandsc.csv")
 
+grw_pca12 <- readRDS("grw_kdens_r.rds")
+kk_pca12 <- readRDS("kk_kdens_r.rds")
+sn_pca12 <- readRDS("sn_kdens_r.rds")
+
+# PCA plot
 data_merged=rbind(GrW,KK,Sn,Bgr)
 
 noffea=10
@@ -45,7 +51,78 @@ pca.env$co=pca.env$co*-1
 
 p1=fviz_pca_var(pca.env,axes = c(1, 2), col.var = "contrib",repel = TRUE)+scale_color_gradient2(low="white", mid="blue",high="red", midpoint=7.5)
 
+p1+labs(x = "PC1 (33.4%)", y = "PC2 (21.5%)")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14))
+
+# calc densities
+grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
+kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine Karekiet"))
+snor=dplyr::filter(data_merged,str_detect(data_merged$species,"Snor"))
+bgr=dplyr::filter(data_merged,str_detect(data_merged$species,"Background"))
+
+scores.globclim<--1*pca.env$li
+
+scores.sp.grotekarakiet<--1*suprow(pca.env,grotekarakiet[,1:noffea])$li
+scores.sp.kleinekarakiet<--1*suprow(pca.env,kleinekarakiet[,1:noffea])$li
+scores.sp.snor<--1*suprow(pca.env,snor[,1:noffea])$li
+scores.clim.background<--1*suprow(pca.env,bgr[,1:noffea])$li
+
+# PCA 1 vs PCA 2
+
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500) 
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500) 
+
+saveRDS(grid.clim.grotekarakiet, "grw_kdens_r.rds")
+saveRDS(grid.clim.kleinekarakiet, "kk_kdens_r.rds")
+saveRDS(grid.clim.snor, "sn_kdens_r.rds")
+
 # loadings
 
 var <- get_pca_var(pca.env)
 corrplot(as.matrix(var$cor), is.corr=FALSE,method="number",col=colorRampPalette(c("dodgerblue4","white","firebrick"))(200))
+
+# simple density plots in Rplot
+ecospat.plot.niche2 <- function(z, title = "", name.axis1 = "Axis 1", name.axis2 = "Axis 2", cor = FALSE, pal50kk) {
+  if (is.null(z$y)) {
+    R <- length(z$x)
+    x <- z$x
+    xx <- sort(rep(1:length(x), 2))
+    if (cor == FALSE)
+      y1 <- z$z.uncor/max(z$z.uncor)
+    if (cor == TRUE)
+      y1 <- z$z.cor/max(z$z.cor)
+    Y1 <- z$Z/max(z$Z)
+    yy1 <- sort(rep(1:length(y1), 2))[-c(1:2, length(y1) * 2)]
+    YY1 <- sort(rep(1:length(Y1), 2))[-c(1:2, length(Y1) * 2)]
+    plot(x, y1, type = "n", xlab = name.axis1, ylab = "density of occurrence")
+    polygon(x[xx], c(0, y1[yy1], 0, 0), col = "grey")
+    lines(x[xx], c(0, Y1[YY1], 0, 0))
+  }
+  if (!is.null(z$y)) {
+    if (cor == FALSE)
+      image(x=z$x,y=z$y,z=t(as.matrix(z$z.uncor))[,nrow(as.matrix(z$z.uncor)):1], col = pal50kk, zlim = c(1e-06, cellStats(z$z.uncor,"max")),
+            xlab = name.axis1, ylab = name.axis2)
+    if (cor == TRUE)
+      image(x=z$x,y=z$y,z=t(as.matrix(z$z.uncor))[,nrow(as.matrix(z$z.uncor)):1], col = pal50kk, zlim = c(1e-06, cellStats(z$z.cor,"max")), 
+            xlab = name.axis1, ylab = name.axis2)
+    z$Z<-t(as.matrix(z$Z))[,nrow(as.matrix(z$Z)):1]
+    contour(x=z$x,y=z$y,z$Z, add = TRUE, levels = quantile(z$Z[z$Z > 0], c(0, 0.5)), drawlabels = FALSE,
+            lty = c(1, 2))
+  }
+  title(title)
+}
+
+pal <- colorRampPalette(c("white", "goldenrod4"))
+pal50grw<- pal(50)
+
+ecospat.plot.niche2(grw_pca12,title="Great Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50grw)
+
+pal2 <- colorRampPalette(c("white", "green3"))
+pal50kk<- pal2(50)
+
+ecospat.plot.niche2(kk_pca12,title="Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50kk)
+
+pal3 <- colorRampPalette(c("white", "deeppink"))
+pal50sn<- pal3(50)
+
+ecospat.plot.niche2(sn_pca12,title="Savi's warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50sn)
