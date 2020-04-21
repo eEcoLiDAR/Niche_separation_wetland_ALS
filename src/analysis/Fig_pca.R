@@ -89,22 +89,34 @@ ecospat.plot.niche2 <- function(z, title = "", name.axis1 = "Axis 1", name.axis2
   title(title)
 }
 
-pal <- colorRampPalette(c("white", "goldenrod4"))
+pal <- colorRampPalette(c("grey95", "goldenrod4"))
 pal50grw<- pal(50)
 
 ecospat.plot.niche2(grw_pca12,title="Great Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50grw)
 
-pal2 <- colorRampPalette(c("white", "green3"))
+pal2 <- colorRampPalette(c("grey95", "green3"))
 pal50kk<- pal2(50)
 
 ecospat.plot.niche2(kk_pca12,title="Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50kk)
 
-pal3 <- colorRampPalette(c("white", "deeppink"))
+pal3 <- colorRampPalette(c("grey95", "deeppink"))
 pal50sn<- pal3(50)
 
 ecospat.plot.niche2(sn_pca12,title="Savi's warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50sn)
 
+# simple PCA plot in Rplot
+
 pca.env_vis<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=2)
+
+s.arrow(-1*pca.env_vis$co, clab = 1,boxes=FALSE)
+
+s.corcircle(-1*pca.env_vis$co[, 1:2]/max(abs(-1*pca.env_vis$co[, 1:2])),cgrid = 2,clab = 1,possub="topleft",grid = FALSE,csub = 2.5,box=FALSE)
+title(sub = paste("PCA 1 = ", round(pca.env_vis$eig[1]/sum(pca.env_vis$eig) *100, 2), "%", "PCA 2 = ", round(pca.env_vis$eig[2]/sum(pca.env_vis$eig) * 100, 2), "%"))
+
+s.corcircle(-1*pca.env_vis$co, cgrid = 2, 
+            full = TRUE, csub = 2.5, box = FALSE,grid=FALSE)
+
+# altogether
 
 par(mfrow=c(2,2))
 ecospat.plot.contrib(contrib=-1*pca.env_vis$co, eigen=pca.env_vis$eig)
