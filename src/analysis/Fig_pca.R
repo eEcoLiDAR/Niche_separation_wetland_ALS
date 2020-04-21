@@ -53,29 +53,6 @@ p1=fviz_pca_var(pca.env,axes = c(1, 2), col.var = "black",repel = TRUE,fontsize=
 
 p1+labs(x = "PCA 1 (33.4%)", y = "PCA 2 (21.5%)")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14))
 
-# calc densities
-grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
-kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine Karekiet"))
-snor=dplyr::filter(data_merged,str_detect(data_merged$species,"Snor"))
-bgr=dplyr::filter(data_merged,str_detect(data_merged$species,"Background"))
-
-scores.globclim<--1*pca.env$li
-
-scores.sp.grotekarakiet<--1*suprow(pca.env,grotekarakiet[,1:noffea])$li
-scores.sp.kleinekarakiet<--1*suprow(pca.env,kleinekarakiet[,1:noffea])$li
-scores.sp.snor<--1*suprow(pca.env,snor[,1:noffea])$li
-scores.clim.background<--1*suprow(pca.env,bgr[,1:noffea])$li
-
-# PCA 1 vs PCA 2
-
-grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500) 
-grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500) 
-grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500) 
-
-saveRDS(grid.clim.grotekarakiet, "grw_kdens_r.rds")
-saveRDS(grid.clim.kleinekarakiet, "kk_kdens_r.rds")
-saveRDS(grid.clim.snor, "sn_kdens_r.rds")
-
 # loadings
 
 var <- get_pca_var(pca.env)
