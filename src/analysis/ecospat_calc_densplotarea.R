@@ -8,9 +8,9 @@ library(gridExtra)
 workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v8/"
 setwd(workingdirectory)
 
-grw_pca12 <- readRDS("grw_kdens_r50.rds")
-kk_pca12 <- readRDS("kk_kdens_r50.rds")
-sn_pca12 <- readRDS("sn_kdens_r50.rds")
+grw_pca12 <- readRDS("grw_kdens_r90.rds")
+kk_pca12 <- readRDS("kk_kdens_r90.rds")
+sn_pca12 <- readRDS("sn_kdens_r90.rds")
 
 dens_area<- function(grw_pca12,layername) {
   
