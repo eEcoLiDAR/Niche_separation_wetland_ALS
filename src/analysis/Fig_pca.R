@@ -49,9 +49,9 @@ data_merged[is.na(data_merged)==TRUE] <- 0
 pca.env<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
 pca.env$co=pca.env$co*-1
 
-p1=fviz_pca_var(pca.env,axes = c(1, 2), col.var = "contrib",repel = TRUE)+scale_color_gradient2(low="white", mid="blue",high="red", midpoint=7.5)
+p1=fviz_pca_var(pca.env,axes = c(1, 2), col.var = "black",repel = TRUE,fontsize=14)
 
-p1+labs(x = "PC1 (33.4%)", y = "PC2 (21.5%)")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14))
+p1+labs(x = "PCA 1 (33.4%)", y = "PCA 2 (21.5%)")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14))
 
 # calc densities
 grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
@@ -125,4 +125,12 @@ ecospat.plot.niche2(kk_pca12,title="Reed Warbler",name.axis1 = "PCA 1",name.axis
 pal3 <- colorRampPalette(c("white", "deeppink"))
 pal50sn<- pal3(50)
 
+ecospat.plot.niche2(sn_pca12,title="Savi's warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50sn)
+
+pca.env_vis<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=2)
+
+par(mfrow=c(2,2))
+ecospat.plot.contrib(contrib=-1*pca.env_vis$co, eigen=pca.env_vis$eig)
+ecospat.plot.niche2(grw_pca12,title="Great Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50grw)
+ecospat.plot.niche2(kk_pca12,title="Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50kk)
 ecospat.plot.niche2(sn_pca12,title="Savi's warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50sn)
