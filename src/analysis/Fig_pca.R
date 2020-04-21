@@ -26,9 +26,9 @@ KK=read.csv("KK_wlandsc.csv")
 Sn=read.csv("Sn_wlandsc.csv")
 Bgr=read.csv("Bgr_wlandsc.csv")
 
-grw_pca12 <- readRDS("grw_kdens_r.rds")
-kk_pca12 <- readRDS("kk_kdens_r.rds")
-sn_pca12 <- readRDS("sn_kdens_r.rds")
+grw_pca12 <- readRDS("grw_kdens.rds")
+kk_pca12 <- readRDS("kk_kdens.rds")
+sn_pca12 <- readRDS("sn_kdens.rds")
 
 # PCA plot
 data_merged=rbind(GrW,KK,Sn,Bgr)
@@ -106,11 +106,11 @@ ecospat.plot.niche2(sn_pca12,title="Savi's warbler",name.axis1 = "PCA 1",name.ax
 
 # simple PCA plot in Rplot
 
-pca.env_vis<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=2)
+pca.env_vis<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
 
 s.arrow(-1*pca.env_vis$co, clab = 1,boxes=FALSE)
 
-s.corcircle(-1*pca.env_vis$co[, 1:2]/max(abs(-1*pca.env_vis$co[, 1:2])),cgrid = 2,clab = 1,possub="topleft",grid = FALSE,csub = 2.5,box=FALSE)
+s.corcircle(-1*pca.env_vis$co[, c(1,2)]/max(abs(-1*pca.env_vis$co[, c(1,2)])),cgrid = 2,clab = 1,possub="topleft",grid = FALSE,csub = 2.5,box=FALSE)
 title(sub = paste("PCA 1 = ", round(pca.env_vis$eig[1]/sum(pca.env_vis$eig) *100, 2), "%", "PCA 2 = ", round(pca.env_vis$eig[2]/sum(pca.env_vis$eig) * 100, 2), "%"))
 
 s.corcircle(-1*pca.env_vis$co, cgrid = 2, 
