@@ -26,12 +26,12 @@ Bgr_lgn8 <- subset(Bgr, lgn8 %in% c(16,17,30,322,332,41,42,43))
 #data_merged=rbind(GrW_lgn8,KK_lgn8,Sn_lgn8,Bgr_lgn8)
 data_merged=rbind(GrW,KK,Sn,Bgr)
 
-noffea=8
+noffea=9
 
 # 200 m only reed
-data_merged=subset(data_merged,select=c(11,10,9,7,8,12,14,13,15,16,4,5,2))
+data_merged=subset(data_merged,select=c(11,10,9,7,8,12,14,13,18,15,16,4,5,2))
 names(data_merged) <- c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
-                        "HV_sd","HV_reedveg_sd", "HV_reedveg_prop",
+                        "HV_sd","HV_reedveg_sd", "HV_reedveg_prop","HV_reedveg_patch",
                         "species","occurrence","x","y","id")
 
 data_merged=data_merged[(data_merged$VV_p95<30),]
@@ -40,7 +40,7 @@ data_merged[is.na(data_merged)==TRUE] <- 0
 
 #### Ecospat
 pca.env<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
-pca.env$co=pca.env$co*-1
+#pca.env$co=pca.env$co*-1
 
 fviz_pca_var(pca.env,axes = c(1, 2), col.var = "black",repel = TRUE,fontsize=14)
 
@@ -52,12 +52,12 @@ kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine 
 snor=dplyr::filter(data_merged,str_detect(data_merged$species,"Snor"))
 bgr=dplyr::filter(data_merged,str_detect(data_merged$species,"Background"))
 
-scores.globclim<--1*pca.env$li
+scores.globclim<-pca.env$li
 
-scores.sp.grotekarakiet<--1*suprow(pca.env,grotekarakiet[,1:noffea])$li
-scores.sp.kleinekarakiet<--1*suprow(pca.env,kleinekarakiet[,1:noffea])$li
-scores.sp.snor<--1*suprow(pca.env,snor[,1:noffea])$li
-scores.clim.background<--1*suprow(pca.env,bgr[,1:noffea])$li
+scores.sp.grotekarakiet<-suprow(pca.env,grotekarakiet[,1:noffea])$li
+scores.sp.kleinekarakiet<-suprow(pca.env,kleinekarakiet[,1:noffea])$li
+scores.sp.snor<-suprow(pca.env,snor[,1:noffea])$li
+scores.clim.background<-suprow(pca.env,bgr[,1:noffea])$li
 
 # PCA 1 vs PCA 2
 
