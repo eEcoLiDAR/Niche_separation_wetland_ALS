@@ -17,7 +17,7 @@ library(ecospat)
 library(raster)
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v10/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v11/"
 setwd(workingdirectory)
 
 # Import data
