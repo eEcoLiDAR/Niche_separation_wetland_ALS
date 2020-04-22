@@ -7,7 +7,7 @@ library(dplyr)
 library(stringr)
 
 # Global
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v8/"
+workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v10/"
 setwd(workingdirectory)
 
 # Import data
@@ -26,12 +26,12 @@ Bgr_lgn8 <- subset(Bgr, lgn8 %in% c(16,17,30,322,332,41,42,43))
 #data_merged=rbind(GrW_lgn8,KK_lgn8,Sn_lgn8,Bgr_lgn8)
 data_merged=rbind(GrW,KK,Sn,Bgr)
 
-noffea=10
+noffea=9
 
 # 200 m only reed
-data_merged=subset(data_merged,select=c(11,10,9,7,8,12,14,13,18,22,15,16,4,5,2))
+data_merged=subset(data_merged,select=c(11,10,9,7,8,12,14,13,18,15,16,4,5,2))
 names(data_merged) <- c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
-                        "HV_sd","HV_reedveg_sd", "HV_reedveg_prop","HV_reedveg_patch","HV_reedveg_edge",
+                        "HV_sd","HV_reedveg_sd", "HV_reedveg_prop","HV_reedveg_patch",
                         "species","occurrence","x","y","id")
 
 data_merged=data_merged[(data_merged$VV_p95<30),]
@@ -40,19 +40,18 @@ data_merged[is.na(data_merged)==TRUE] <- 0
 
 #### Ecospat
 pca.env<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
-pca.env_vis<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=2)
 
 grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
 kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine Karekiet"))
 snor=dplyr::filter(data_merged,str_detect(data_merged$species,"Snor"))
 bgr=dplyr::filter(data_merged,str_detect(data_merged$species,"Background"))
 
-scores.globclim<-pca.env$li
+scores.globclim<--1*pca.env$li
 
-scores.sp.grotekarakiet<-suprow(pca.env,grotekarakiet[,1:noffea])$li
-scores.sp.kleinekarakiet<-suprow(pca.env,kleinekarakiet[,1:noffea])$li
-scores.sp.snor<-suprow(pca.env,snor[,1:noffea])$li
-scores.clim.background<-suprow(pca.env,bgr[,1:noffea])$li
+scores.sp.grotekarakiet<--1*suprow(pca.env,grotekarakiet[,1:noffea])$li
+scores.sp.kleinekarakiet<--1*suprow(pca.env,kleinekarakiet[,1:noffea])$li
+scores.sp.snor<--1*suprow(pca.env,snor[,1:noffea])$li
+scores.clim.background<--1*suprow(pca.env,bgr[,1:noffea])$li
 
 # PCA 1 vs PCA 2
 
@@ -64,12 +63,6 @@ saveRDS(grid.clim.grotekarakiet, "grw_kdens.rds")
 saveRDS(grid.clim.kleinekarakiet, "kk_kdens.rds")
 saveRDS(grid.clim.snor, "sn_kdens.rds")
 
-par(mfrow=c(2,2))
-ecospat.plot.niche(grid.clim.grotekarakiet,title="Great Reed Warbler")
-ecospat.plot.niche(grid.clim.kleinekarakiet,title="Reed Warbler")
-ecospat.plot.niche(grid.clim.snor,title="Savi's Warbler")
-ecospat.plot.contrib(contrib=pca.env_vis$co, eigen=pca.env_vis$eig)
-
 # PCA 1 vs PCA 3
 
 grid.clim.grotekarakiet2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.background[,c(1,3)], sp=scores.sp.grotekarakiet[,c(1,3)], R=500) 
@@ -79,20 +72,6 @@ grid.clim.snor2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scor
 saveRDS(grid.clim.grotekarakiet2, "grw_kdens2.rds")
 saveRDS(grid.clim.kleinekarakiet2, "kk_kdens2.rds")
 saveRDS(grid.clim.snor2, "sn_kdens2.rds")
-
-par(mfrow=c(2,2))
-ecospat.plot.niche(grid.clim.grotekarakiet2,title="Great Reed Warbler")
-ecospat.plot.niche(grid.clim.kleinekarakiet2,title="Reed Warbler")
-ecospat.plot.niche(grid.clim.snor2,title="Savi's Warbler")
-
-# Visualize overlap
-ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.snor, quant=0,
-                       interest=1, title= "GrW vs Sn")
-ecospat.plot.niche.dyn(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, quant=0,
-                       interest=1, title= "GrW vs RW")
-ecospat.plot.niche.dyn(grid.clim.snor, grid.clim.kleinekarakiet, quant=0,
-                       interest=1, title= "Sn vs RW")
-ecospat.plot.contrib(contrib=pca.env_vis$co, eigen=pca.env_vis$eig)
 
 # PCA 2 vs PCA 3
 
@@ -104,20 +83,18 @@ saveRDS(grid.clim.grotekarakiet3, "grw_kdens3.rds")
 saveRDS(grid.clim.kleinekarakiet3, "kk_kdens3.rds")
 saveRDS(grid.clim.snor3, "sn_kdens3.rds")
 
-par(mfrow=c(2,2))
-ecospat.plot.niche(grid.clim.grotekarakiet3,title="Great Reed Warbler")
-ecospat.plot.niche(grid.clim.kleinekarakiet3,title="Reed Warbler")
-ecospat.plot.niche(grid.clim.snor3,title="Savi's Warbler")
+# Overlaps
+ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, cor=TRUE)
+ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.snor, cor=TRUE)
+ecospat.niche.overlap(grid.clim.kleinekarakiet, grid.clim.snor, cor=TRUE)
 
-# Visualize overlap
-ecospat.plot.niche.dyn(grid.clim.grotekarakiet3, grid.clim.snor3, quant=0,
-                       interest=1, title= "GrW vs Sn")
-ecospat.plot.niche.dyn(grid.clim.grotekarakiet3, grid.clim.kleinekarakiet3, quant=0,
-                       interest=1, title= "GrW vs RW")
-ecospat.plot.niche.dyn(grid.clim.snor3, grid.clim.kleinekarakiet3, quant=0,
-                       interest=1, title= "Sn vs RW")
-ecospat.plot.contrib(contrib=pca.env_vis$co, eigen=pca.env_vis$eig)
+ecospat.niche.overlap(grid.clim.grotekarakiet2, grid.clim.kleinekarakiet2, cor=TRUE)
+ecospat.niche.overlap(grid.clim.grotekarakiet2, grid.clim.snor2, cor=TRUE)
+ecospat.niche.overlap(grid.clim.kleinekarakiet2, grid.clim.snor2, cor=TRUE)
 
+ecospat.niche.overlap(grid.clim.grotekarakiet3, grid.clim.kleinekarakiet3, cor=TRUE)
+ecospat.niche.overlap(grid.clim.grotekarakiet3, grid.clim.snor3, cor=TRUE)
+ecospat.niche.overlap(grid.clim.kleinekarakiet3, grid.clim.snor3, cor=TRUE)
 
 # Tests PCA 1 vs PCA 2
 
