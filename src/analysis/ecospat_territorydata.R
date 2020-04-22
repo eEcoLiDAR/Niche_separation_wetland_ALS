@@ -7,7 +7,7 @@ library(dplyr)
 library(stringr)
 
 # Global
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v10/"
+workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v11/"
 setwd(workingdirectory)
 
 # Import data
@@ -26,12 +26,12 @@ Bgr_lgn8 <- subset(Bgr, lgn8 %in% c(16,17,30,322,332,41,42,43))
 #data_merged=rbind(GrW_lgn8,KK_lgn8,Sn_lgn8,Bgr_lgn8)
 data_merged=rbind(GrW,KK,Sn,Bgr)
 
-noffea=9
+noffea=8
 
 # 200 m only reed
-data_merged=subset(data_merged,select=c(11,10,9,7,8,12,14,13,18,15,16,4,5,2))
+data_merged=subset(data_merged,select=c(11,10,9,7,8,12,14,13,15,16,4,5,2))
 names(data_merged) <- c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
-                        "HV_sd","HV_reedveg_sd", "HV_reedveg_prop","HV_reedveg_patch",
+                        "HV_sd","HV_reedveg_sd", "HV_reedveg_prop",
                         "species","occurrence","x","y","id")
 
 data_merged=data_merged[(data_merged$VV_p95<30),]
@@ -40,6 +40,12 @@ data_merged[is.na(data_merged)==TRUE] <- 0
 
 #### Ecospat
 pca.env<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
+pca.env$co=pca.env$co*-1
+
+fviz_pca_var(pca.env,axes = c(1, 2), col.var = "black",repel = TRUE,fontsize=14)
+
+var <- get_pca_var(pca.env)
+corrplot(as.matrix(var$cor), is.corr=FALSE,method="number",col=colorRampPalette(c("dodgerblue4","white","firebrick"))(200))
 
 grotekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Grote Karekiet"))
 kleinekarakiet=dplyr::filter(data_merged,str_detect(data_merged$species,"Kleine Karekiet"))
