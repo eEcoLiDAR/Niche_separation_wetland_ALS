@@ -17,7 +17,7 @@ library(ecospat)
 library(raster)
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v8/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v10/"
 setwd(workingdirectory)
 
 # Import data
@@ -33,12 +33,12 @@ sn_pca12 <- readRDS("sn_kdens.rds")
 # PCA plot
 data_merged=rbind(GrW,KK,Sn,Bgr)
 
-noffea=10
+noffea=9
 
 # 200 m only reed
-data_merged=subset(data_merged,select=c(11,10,9,7,8,12,14,13,18,22,15,16,4,5,2))
+data_merged=subset(data_merged,select=c(11,10,9,7,8,12,14,13,18,15,16,4,5,2))
 names(data_merged) <- c("VV_p95","VV_FHD","VD_0_1","VD_1_2","VD_2_3",
-                        "HV_sd","HV_reedveg_sd", "HV_reedveg_prop","HV_reedveg_patch","HV_reedveg_edge",
+                        "HV_sd","HV_reedveg_sd", "HV_reedveg_prop","HV_reedveg_patch",
                         "species","occurrence","x","y","id")
 
 data_merged=data_merged[(data_merged$VV_p95<30),]
