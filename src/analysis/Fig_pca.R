@@ -119,7 +119,7 @@ s.corcircle(-1*pca.env_vis$co, cgrid = 2,
 # altogether
 
 par(mfrow=c(2,2))
-ecospat.plot.contrib(contrib=-1*pca.env_vis$co, eigen=pca.env_vis$eig)
+ecospat.plot.contrib(contrib=pca.env_vis$co[c(1,2)], eigen=pca.env_vis$eig[c(1,2)])
 ecospat.plot.niche2(grw_pca12,title="Great Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50grw)
 ecospat.plot.niche2(kk_pca12,title="Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50kk)
 ecospat.plot.niche2(sn_pca12,title="Savi's warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50sn)
