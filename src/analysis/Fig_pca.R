@@ -47,7 +47,7 @@ data_merged[is.na(data_merged)==TRUE] <- 0
 # PCA -- Fig.2. a PCA 1,2
 
 pca.env<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
-pca.env$co=pca.env$co*-1
+pca.env$co[2]=pca.env$co[2]*-1
 
 p1=fviz_pca_var(pca.env,axes = c(1, 2), col.var = "black",repel = TRUE,fontsize=14)
 
