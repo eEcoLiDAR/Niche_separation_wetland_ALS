@@ -26,9 +26,9 @@ KK=read.csv("KK_wlandsc.csv")
 Sn=read.csv("Sn_wlandsc.csv")
 Bgr=read.csv("Bgr_wlandsc.csv")
 
-grw_pca12 <- readRDS("grw_kdens.rds")
-kk_pca12 <- readRDS("kk_kdens.rds")
-sn_pca12 <- readRDS("sn_kdens.rds")
+grw_pca12 <- readRDS("grw_kdens_r.rds")
+kk_pca12 <- readRDS("kk_kdens_r.rds")
+sn_pca12 <- readRDS("sn_kdens_r.rds")
 
 # PCA plot
 data_merged=rbind(GrW,KK,Sn,Bgr)
