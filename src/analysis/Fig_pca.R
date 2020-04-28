@@ -60,21 +60,6 @@ corrplot(as.matrix(var$cor), is.corr=FALSE,method="number",col=colorRampPalette(
 
 # simple density plots in Rplot
 ecospat.plot.niche2 <- function(z, title = "", name.axis1 = "Axis 1", name.axis2 = "Axis 2", cor = FALSE, pal50kk,col_line) {
-  if (is.null(z$y)) {
-    R <- length(z$x)
-    x <- z$x
-    xx <- sort(rep(1:length(x), 2))
-    if (cor == FALSE)
-      y1 <- z$z.uncor/max(z$z.uncor)
-    if (cor == TRUE)
-      y1 <- z$z.cor/max(z$z.cor)
-    Y1 <- z$Z/max(z$Z)
-    yy1 <- sort(rep(1:length(y1), 2))[-c(1:2, length(y1) * 2)]
-    YY1 <- sort(rep(1:length(Y1), 2))[-c(1:2, length(Y1) * 2)]
-    plot(x, y1, type = "n", xlab = name.axis1, ylab = "density of occurrence")
-    polygon(x[xx], c(0, y1[yy1], 0, 0), col = "grey")
-    lines(x[xx], c(0, Y1[YY1], 0, 0))
-  }
   if (!is.null(z$y)) {
     if (cor == FALSE)
       image(x=z$x,y=z$y,z=t(as.matrix(z$z.uncor))[,nrow(as.matrix(z$z.uncor)):1], col = pal50kk, zlim = c(1e-06, cellStats(z$z.uncor,"max")),
@@ -89,6 +74,7 @@ ecospat.plot.niche2 <- function(z, title = "", name.axis1 = "Axis 1", name.axis2
     z$uncor.norm<-t(as.matrix(z$z.uncor))[,nrow(as.matrix(z$z.uncor)):1]
     contour(x=z$x,y=z$y,z$uncor.norm, add = TRUE, levels = quantile(z$uncor.norm[z$uncor.norm > 0], c(0, 0.5)), drawlabels = FALSE,
             lty = c(1, 2),col=col_line,lwd=2)
+    text(6, 4.5, "Occ.niche 100%=64% \n Occ.niche 50%=4.3%")
   }
   title(title)
 }
