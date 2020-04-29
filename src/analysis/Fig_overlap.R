@@ -12,12 +12,12 @@ get_legend<-function(myggplot){
 }
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v8/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v11/"
 setwd(workingdirectory)
 
-grw_pca12 <- readRDS("grw_kdens.rds")
-kk_pca12 <- readRDS("kk_kdens.rds")
-sn_pca12 <- readRDS("sn_kdens.rds")
+grw_pca12 <- readRDS("grw_kdens_r.rds")
+kk_pca12 <- readRDS("kk_kdens_r.rds")
+sn_pca12 <- readRDS("sn_kdens_r.rds")
 
 grw_pca12_df <- as.data.frame(grw_pca12[["z.uncor"]], xy = TRUE)
 grw_pca12_backg_df<- as.data.frame(grw_pca12[["Z"]], xy = TRUE)
@@ -45,7 +45,7 @@ eq_grw_s <- readRDS("eq.test_gr_s.rds")
 eq_k_s <- readRDS("eq.test_k_s.rds")
 
 ######
-p1=ggplot(data=pca12_gr_kk)+stat_contour(aes(x=-1*x, y=-1*y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
+p1=ggplot(data=pca12_gr_kk)+stat_contour(aes(x=x, y=y, z=layer,fill=species), geom="polygon", bins=5,breaks=c(0,0.25,0.5,0.75,1), alpha=.3,show.legend = FALSE)+
   theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("goldenrod4","green3"),name="Species")+
   ggtitle("a)")
 
@@ -70,7 +70,7 @@ p22=grid.arrange(
 fig3a=grid.arrange(p1,p22,ncol = 2, nrow = 1,widths = c(2, 1))
 
 ######
-p1=ggplot(data=pca12_gr_sn)+stat_contour(aes(x=-1*x, y=-1*y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
+p1=ggplot(data=pca12_gr_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species), geom="polygon", bins=5,breaks=c(0,0.25,0.5,0.75,1), alpha=.3,show.legend = FALSE)+
   theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("goldenrod4","deeppink"),name="Species")+
   ggtitle("b)")
 
@@ -96,7 +96,7 @@ fig3b=grid.arrange(p1,p22,ncol = 2, nrow = 1,widths = c(2, 1))
 ######
 levels(pca12_kk_sn$species) = c("Savi's warbler", "Reed warbler")
 
-p1=ggplot(data=pca12_kk_sn)+stat_contour(aes(x=-1*x, y=-1*y, z=layer,fill=species), geom="polygon", bins=4, alpha=.3,show.legend = FALSE)+
+p1=ggplot(data=pca12_kk_sn)+stat_contour(aes(x=x, y=y, z=layer,fill=species), geom="polygon", bins=5,breaks=c(0,0.25,0.5,0.75,1), alpha=.3,show.legend = FALSE)+
   theme_bw(base_size = 15)+xlab("PCA 1")+ylab("PCA 2")+scale_fill_manual(values=c("green3","deeppink"),name="Species")+
   ggtitle("c)")
 
