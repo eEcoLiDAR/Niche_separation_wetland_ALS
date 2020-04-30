@@ -81,7 +81,7 @@ pal <- colorRampPalette(c("grey95", "goldenrod4"))
 pal50grw<- pal(50)
 
 ecospat.plot.niche2(grw_pca12,name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50grw,"goldenrod4")
-title("a) Great reed warbler", adj = 0)
+title("b) Great reed warbler", adj = 0)
 legend("topright", legend=c("Background 100%","Background 50%","Occ.niche 100% = 64%", "Occ.niche 50% = 4.3%"),
        col=c("black","black","goldenrod4","goldenrod4"), lty=c(1,2,1,2),lwd=2,cex=0.8)
 
@@ -89,7 +89,7 @@ pal2 <- colorRampPalette(c("grey95", "green3"))
 pal50kk<- pal2(50)
 
 ecospat.plot.niche2(kk_pca12,name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50kk,"green3")
-title("b) Reed warbler", adj = 0)
+title("c) Reed warbler", adj = 0)
 legend("topright", legend=c("Background 100%","Background 50%","Occ.niche 100% = 94%", "Occ.niche 50% = 19.5%"),
        col=c("black","black","green3","green3"), lty=c(1,2,1,2),lwd=2,cex=0.8)
 
@@ -97,7 +97,7 @@ pal3 <- colorRampPalette(c("grey95", "deeppink"))
 pal50sn<- pal3(50)
 
 ecospat.plot.niche2(sn_pca12,name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50sn,"deeppink")
-title("c) Savi's warbler", adj = 0)
+title("d) Savi's warbler", adj = 0)
 legend("topright", legend=c("Background 100%","Background 50%","Occ.niche 100% = 76%", "Occ.niche 50% = 13.5%"),
        col=c("black","black","deeppink","deeppink"), lty=c(1,2,1,2),lwd=2,cex=0.8)
 
