@@ -17,7 +17,7 @@ library(ecospat)
 library(raster)
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v11/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v12/"
 setwd(workingdirectory)
 
 # Import data
@@ -26,9 +26,9 @@ KK=read.csv("KK_wlandsc.csv")
 Sn=read.csv("Sn_wlandsc.csv")
 Bgr=read.csv("Bgr_wlandsc.csv")
 
-grw_pca12 <- readRDS("grw_kdens_r.rds")
-kk_pca12 <- readRDS("kk_kdens_r.rds")
-sn_pca12 <- readRDS("sn_kdens_r.rds")
+grw_pca12 <- readRDS("grw_kdens.rds")
+kk_pca12 <- readRDS("kk_kdens.rds")
+sn_pca12 <- readRDS("sn_kdens.rds")
 
 # PCA plot
 data_merged=rbind(GrW,KK,Sn,Bgr)
@@ -51,7 +51,7 @@ pca.env$co[2]=pca.env$co[2]*-1
 
 p1=fviz_pca_var(pca.env,axes = c(1, 2), col.var = "black",repel = TRUE,fontsize=14)
 
-p1+labs(x = "PCA 1 (33.4%)", y = "PCA 2 (21.5%)")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14))
+p1+labs(x = "PCA 1 (37.2%)", y = "PCA 2 (23.9%)")+theme(axis.text=element_text(size=14),axis.title=element_text(size=14))+ggtitle("a) PCA")
 
 # loadings
 
