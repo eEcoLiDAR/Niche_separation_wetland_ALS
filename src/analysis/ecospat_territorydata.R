@@ -116,7 +116,7 @@ ecospat.niche.overlap(grid.clim.kleinekarakiet3, grid.clim.snor3, cor=TRUE)
 ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, cor=TRUE)
 ecospat.niche.overlap(grid.clim.grotekarakiet, grid.clim.snor, cor=TRUE)
 
-eq.test_gr_k<-ecospat.niche.equivalency.test(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, rep=1000, alternative = "lower")
+eq.test_gr_k<-ecospat.niche.equivalency.test(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, rep=1000, alternative = "lower",ncores=10)
 sim.test_gr_k<-ecospat.niche.similarity.test(grid.clim.grotekarakiet, grid.clim.kleinekarakiet, rep=1000, alternative = "greater", rand.type = 2)
 
 ecospat.plot.overlap.test(eq.test_gr_k, "D", "Equivalency")
