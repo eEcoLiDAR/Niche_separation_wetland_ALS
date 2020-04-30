@@ -9,14 +9,14 @@ library(scales)
 
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v11/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v12/"
 setwd(workingdirectory)
 
 # Import data
 
-grw_pca12 <- readRDS("grw_kdens_r.rds")
-kk_pca12 <- readRDS("kk_kdens_r.rds")
-sn_pca12 <- readRDS("sn_kdens_r.rds")
+grw_pca12 <- readRDS("grw_kdens.rds")
+kk_pca12 <- readRDS("kk_kdens.rds")
+sn_pca12 <- readRDS("sn_kdens.rds")
 
 eq_grw_kk <- readRDS("eq.test_gr_k.rds")
 sim.test_gr_k<- readRDS("sim.test_gr_k.rds")
@@ -26,7 +26,7 @@ eq_grw_s <- readRDS("eq.test_gr_s.rds")
 eq_k_s <- readRDS("eq.test_k_s.rds")
 
 
-# plot
+# create colorbar
 pal <- colorRampPalette(c("grey95", "goldenrod4"))
 pal50grw<- pal(50)
 
@@ -39,6 +39,7 @@ pal50sn<- pal3(50)
 paldiff <- colorRampPalette(c("blue","white","red"))
 pal50diff<- paldiff(50)
 
+# two niche overlap
 plot.2niche <- function(kk_pca12,grw_pca12,pal50kk,pal50grw,col1,col2) {
   image(x=kk_pca12$x,y=kk_pca12$y,z=t(as.matrix(kk_pca12$z.uncor))[,nrow(as.matrix(kk_pca12$z.uncor)):1], col = alpha(pal50kk,1), zlim = c(1e-06, cellStats(kk_pca12$z.cor,"max")), 
         xlab = "PCA 1", ylab = "PCA 1")
@@ -46,18 +47,21 @@ plot.2niche <- function(kk_pca12,grw_pca12,pal50kk,pal50grw,col1,col2) {
         xlab = "PCA 1", ylab = "PCA 1", add=TRUE)
   
   grw_pca12$uncor.norm<-t(as.matrix(grw_pca12$z.uncor))[,nrow(as.matrix(grw_pca12$z.uncor)):1]
-  contour(x=grw_pca12$x,y=grw_pca12$y,grw_pca12$uncor.norm, levels = quantile(grw_pca12$uncor.norm[grw_pca12$uncor.norm > 0], c(0, 0.5)), drawlabels = FALSE,
-          lty = c(1, 2),col=col1,lwd=2,add=TRUE)
+  contour(x=grw_pca12$x,y=grw_pca12$y,grw_pca12$uncor.norm, levels = quantile(grw_pca12$uncor.norm[grw_pca12$uncor.norm > 0], c(0, 0.5,0.75)), drawlabels = FALSE,
+          lty = c(1, 2,2),col=col1,lwd=2,add=TRUE)
   kk_pca12$uncor.norm<-t(as.matrix(kk_pca12$z.uncor))[,nrow(as.matrix(kk_pca12$z.uncor)):1]
-  contour(x=kk_pca12$x,y=kk_pca12$y,kk_pca12$uncor.norm, add = TRUE, levels = quantile(kk_pca12$uncor.norm[kk_pca12$uncor.norm > 0], c(0, 0.5)), drawlabels = FALSE,
-          lty = c(1, 2),col=col2,lwd=2)
+  contour(x=kk_pca12$x,y=kk_pca12$y,kk_pca12$uncor.norm, add = TRUE, levels = quantile(kk_pca12$uncor.norm[kk_pca12$uncor.norm > 0], c(0, 0.5,0.75)), drawlabels = FALSE,
+          lty = c(1, 2,2),col=col2,lwd=2)
+  kk_pca12$Z<-t(as.matrix(kk_pca12$Z))[,nrow(as.matrix(kk_pca12$Z)):1]
+  contour(x=kk_pca12$x,y=kk_pca12$y,kk_pca12$Z, add = TRUE, levels = quantile(kk_pca12$Z[kk_pca12$Z > 0], c(0)), drawlabels = FALSE,
+          lty = c(1),lwd=2)
   
 }
 
 plot.2niche(kk_pca12,grw_pca12,pal50kk,pal50grw,"goldenrod4","green3")
-title("a) Niche comparison", adj = 0)
-legend("topright", legend=c("RW 100%","RW 50%","GrW 100%", "GrW 50%"),
-       col=c("green3","green3","goldenrod4","goldenrod4"), lty=c(1,2,1,2),lwd=2,cex=0.8)
+title("a) overlap of habitat niches", adj = 0)
+legend("topright", legend=c("RW","GrW", "Background"),
+       col=c("green3","goldenrod4","black"), lty=c(1,1,1),lwd=2,cex=0.8)
 
 plot.2niche(kk_pca12,sn_pca12,pal50kk,pal50sn,"deeppink","green3")
 plot.2niche(sn_pca12,grw_pca12,pal50sn,pal50grw,"goldenrod4","deeppink")
@@ -75,13 +79,16 @@ plot.2niche_diff <- function(kk_pca12,grw_pca12,pal50kk,pal50grw,col1,col2) {
   kk_pca12$uncor.norm<-t(as.matrix(kk_pca12$z.uncor))[,nrow(as.matrix(kk_pca12$z.uncor)):1]
   contour(x=kk_pca12$x,y=kk_pca12$y,kk_pca12$uncor.norm, add = TRUE, levels = quantile(kk_pca12$uncor.norm[kk_pca12$uncor.norm > 0], c(0, 0.5)), drawlabels = FALSE,
           lty = c(1, 2),col=col2,lwd=2)
+  kk_pca12$Z<-t(as.matrix(kk_pca12$Z))[,nrow(as.matrix(kk_pca12$Z)):1]
+  contour(x=kk_pca12$x,y=kk_pca12$y,kk_pca12$Z, add = TRUE, levels = quantile(kk_pca12$Z[kk_pca12$Z > 0], c(0)), drawlabels = FALSE,
+          lty = c(1),lwd=2)
   
 }
 
 plot.2niche_diff(kk_pca12,grw_pca12,pal50kk,pal50grw,"goldenrod4","green3")
-title("Niche difference", adj = 0)
-legend("topright", legend=c("RW 100%","RW 50%","GrW 100%", "GrW 50%"),
-       col=c("green3","green3","goldenrod4","goldenrod4"), lty=c(1,2,1,2),lwd=2,cex=0.8)
+title("b) niche difference", adj = 0)
+legend("topright", legend=c("RW 100%","RW 50%","GrW 100%", "GrW 50%","Background 100%"),
+       col=c("green3","green3","goldenrod4","goldenrod4","black"), lty=c(1,2,1,2,1),lwd=2,cex=0.8)
 
 # plot color bar
 color.bar <- function(lut, min, max, nticks=11, ticks=seq(min, max, len=nticks), title='') {
