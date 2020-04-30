@@ -59,7 +59,7 @@ var <- get_pca_var(pca.env)
 corrplot(as.matrix(var$cor), is.corr=FALSE,method="number",col=colorRampPalette(c("dodgerblue4","white","firebrick"))(200))
 
 # simple density plots in Rplot
-ecospat.plot.niche2 <- function(z, title = "", name.axis1 = "Axis 1", name.axis2 = "Axis 2", cor = FALSE, pal50kk,col_line) {
+ecospat.plot.niche2 <- function(z, name.axis1 = "Axis 1", name.axis2 = "Axis 2", cor = FALSE, pal50kk,col_line) {
   if (!is.null(z$y)) {
     if (cor == FALSE)
       image(x=z$x,y=z$y,z=t(as.matrix(z$z.uncor))[,nrow(as.matrix(z$z.uncor)):1], col = pal50kk, zlim = c(1e-06, cellStats(z$z.uncor,"max")),
@@ -68,48 +68,37 @@ ecospat.plot.niche2 <- function(z, title = "", name.axis1 = "Axis 1", name.axis2
       image(x=z$x,y=z$y,z=t(as.matrix(z$z.uncor))[,nrow(as.matrix(z$z.uncor)):1], col = pal50kk, zlim = c(1e-06, cellStats(z$z.cor,"max")), 
             xlab = name.axis1, ylab = name.axis2)
     z$Z<-t(as.matrix(z$Z))[,nrow(as.matrix(z$Z)):1]
-    contour(x=z$x,y=z$y,z$Z, add = TRUE, levels = quantile(z$Z[z$Z > 0], c(0)), drawlabels = FALSE,
-            lty = c(1),lwd=2)
+    contour(x=z$x,y=z$y,z$Z, add = TRUE, levels = quantile(z$Z[z$Z > 0], c(0,0.5)), drawlabels = FALSE,
+            lty = c(1,2),lwd=2)
     
     z$uncor.norm<-t(as.matrix(z$z.uncor))[,nrow(as.matrix(z$z.uncor)):1]
     contour(x=z$x,y=z$y,z$uncor.norm, add = TRUE, levels = quantile(z$uncor.norm[z$uncor.norm > 0], c(0, 0.5)), drawlabels = FALSE,
             lty = c(1, 2),col=col_line,lwd=2)
-    text(6, 4.5, "Occ.niche 100%=64% \n Occ.niche 50%=4.3%")
   }
-  title(title)
 }
 
 pal <- colorRampPalette(c("grey95", "goldenrod4"))
 pal50grw<- pal(50)
 
-ecospat.plot.niche2(grw_pca12,title="Great Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50grw,"goldenrod4")
+ecospat.plot.niche2(grw_pca12,name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50grw,"goldenrod4")
+title("a) Great reed warbler", adj = 0)
+legend("topright", legend=c("Background 100%","Background 50%","Occ.niche 100% = 64%", "Occ.niche 50% = 4.3%"),
+       col=c("black","black","goldenrod4","goldenrod4"), lty=c(1,2,1,2),lwd=2,cex=0.8)
 
 pal2 <- colorRampPalette(c("grey95", "green3"))
 pal50kk<- pal2(50)
 
-ecospat.plot.niche2(kk_pca12,title="Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50kk,"green3")
+ecospat.plot.niche2(kk_pca12,name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50kk,"green3")
+title("b) Reed warbler", adj = 0)
+legend("topright", legend=c("Background 100%","Background 50%","Occ.niche 100% = 94%", "Occ.niche 50% = 19.5%"),
+       col=c("black","black","green3","green3"), lty=c(1,2,1,2),lwd=2,cex=0.8)
 
 pal3 <- colorRampPalette(c("grey95", "deeppink"))
 pal50sn<- pal3(50)
 
-ecospat.plot.niche2(sn_pca12,title="Savi's warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50sn,"deeppink")
+ecospat.plot.niche2(sn_pca12,name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50sn,"deeppink")
+title("c) Savi's warbler", adj = 0)
+legend("topright", legend=c("Background 100%","Background 50%","Occ.niche 100% = 76%", "Occ.niche 50% = 13.5%"),
+       col=c("black","black","deeppink","deeppink"), lty=c(1,2,1,2),lwd=2,cex=0.8)
 
-# simple PCA plot in Rplot
 
-pca.env_vis<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
-
-s.arrow(-1*pca.env_vis$co, clab = 1,boxes=FALSE)
-
-s.corcircle(-1*pca.env_vis$co[, c(1,2)]/max(abs(-1*pca.env_vis$co[, c(1,2)])),cgrid = 2,clab = 1,possub="topleft",grid = FALSE,csub = 2.5,box=FALSE)
-title(sub = paste("PCA 1 = ", round(pca.env_vis$eig[1]/sum(pca.env_vis$eig) *100, 2), "%", "PCA 2 = ", round(pca.env_vis$eig[2]/sum(pca.env_vis$eig) * 100, 2), "%"))
-
-s.corcircle(-1*pca.env_vis$co, cgrid = 2, 
-            full = TRUE, csub = 2.5, box = FALSE,grid=FALSE)
-
-# altogether
-
-par(mfrow=c(2,2))
-ecospat.plot.contrib(contrib=pca.env_vis$co[c(1,2)], eigen=pca.env_vis$eig[c(1,2)])
-ecospat.plot.niche2(grw_pca12,title="Great Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50grw)
-ecospat.plot.niche2(kk_pca12,title="Reed Warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50kk)
-ecospat.plot.niche2(sn_pca12,title="Savi's warbler",name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50sn)
