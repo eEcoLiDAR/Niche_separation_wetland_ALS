@@ -9,7 +9,7 @@ library(scales)
 
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v12/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v13/"
 setwd(workingdirectory)
 
 # Import data
@@ -23,7 +23,12 @@ sim.test_gr_k<- readRDS("sim.test_gr_k.rds")
 sim.test_k_gr<- readRDS("sim.test_k_gr.rds")
 
 eq_grw_s <- readRDS("eq.test_gr_s.rds")
+sim.test_gr_s<- readRDS("sim.test_gr_s.rds")
+sim.test_s_gr<- readRDS("sim.test_s_gr.rds")
+
 eq_k_s <- readRDS("eq.test_k_s.rds")
+sim.test_k_s<- readRDS("sim.test_k_s.rds")
+sim.test_s_k<- readRDS("sim.test_s_k.rds")
 
 
 # create colorbar
@@ -102,7 +107,7 @@ plot.2niche_diff(kk_pca12,sn_pca12,pal50kk,pal50sn,"deeppink","green3")
 legend("topright", legend=c("RW 100%","RW 50%","SW 100%", "SW 50%","Background 100%"),
        col=c("green3","green3","deeppink","deeppink","black"), lty=c(1,2,1,2,1),lwd=2,cex=0.8)
 
-plot.2niche_diff(sn_pca12,grw_pca12,pal50sn,pal50grw,"deeppink","goldenrod4")
+plot.2niche_diff(sn_pca12,grw_pca12,pal50sn,pal50grw,"goldenrod4","deeppink")
 #title("b) niche difference", adj = 0)
 legend("topright", legend=c("GrW 100%","GrW 50%","SW 100%", "SW 50%","Background 100%"),
        col=c("goldenrod4","goldenrod4","deeppink","deeppink","black"), lty=c(1,2,1,2,1),lwd=2,cex=0.8)
@@ -145,18 +150,24 @@ ecospat.plot.overlap.test2 <- function(x, type, title,pos) {
   h0 <- hist(sim, plot = FALSE, nclass = 10)
   y0 <- max(h0$counts)
   d=density(sim)
-  plot(d,xlim = xlim0, col = "blue", main = title, xlab = "D")
+  plot(d,xlim = xlim0, col = "blue", main = title, xlab = "D",cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
   legend(pos, legend=c(paste("mean sim.D=",round(mean(sim),2)),paste("sd sim.D=",round(sd(sim),2)),
                              paste("obs.D=",round(obs,2))),paste("p.value = ", round(p, 5)),cex=0.8)
   polygon(d, col="lightblue", border="blue")
-  lines(c(obs, obs), c(y0/2, 0), col = "red")
+  lines(c(obs, obs), c(y0/2, 0), col = "red",lwd=3)
   points(obs, y0/2, pch = 18, cex = 2, col = "red")
   invisible()
 }
 
-ecospat.plot.overlap.test2(eq_grw_kk,"D","Equivalency **","topleft")
-ecospat.plot.overlap.test2(eq_k_s,"D","Equivalency **","topleft")
-ecospat.plot.overlap.test2(eq_grw_s,"D","Equivalency **","topleft")
+ecospat.plot.overlap.test2(eq_grw_kk,"D","Equivalency ***","topleft")
+ecospat.plot.overlap.test2(eq_k_s,"D","Equivalency ***","topleft")
+ecospat.plot.overlap.test2(eq_grw_s,"D","Equivalency ***","topleft")
 
-ecospat.plot.overlap.test2(sim.test_gr_k,"D","Similiraty RW->GrW","topright")
-ecospat.plot.overlap.test2(sim.test_k_gr,"D","Similiraty GrW->RW","topright")
+ecospat.plot.overlap.test2(sim.test_gr_k,"D","Similiraty* RW->GrW","topright")
+ecospat.plot.overlap.test2(sim.test_k_gr,"D","Similiraty* GrW->RW","topright")
+
+ecospat.plot.overlap.test2(sim.test_k_s,"D","Similiraty* SW->RW","topright")
+ecospat.plot.overlap.test2(sim.test_s_k,"D","Similiraty* RW->SW","topright")
+
+ecospat.plot.overlap.test2(sim.test_gr_s,"D","Similiraty* SW->GrW","topright")
+ecospat.plot.overlap.test2(sim.test_s_gr,"D","Similiraty* GrW->SW","topright")
