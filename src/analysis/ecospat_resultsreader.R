@@ -1,7 +1,7 @@
 library(ecospat)
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v12/"
+workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v13/"
 setwd(workingdirectory)
 
 # PCA 1 vs PCA 2
