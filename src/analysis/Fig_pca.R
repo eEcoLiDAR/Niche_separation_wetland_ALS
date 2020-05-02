@@ -102,3 +102,4 @@ legend("topright", legend=c("Background 100%","Background 50%","Occ.niche 100% =
        col=c("black","black","deeppink","deeppink"), lty=c(1,2,1,2),lwd=2,cex=0.8)
 
 
+
