@@ -3,7 +3,7 @@ library(plot3D)
 library(rgdal)
 library(sp)
 
-workdirectory=setwd("C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/PointCloud_Vis/")
+workdirectory=setwd("C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/PointCloud_Vis/Kampen/")
 
 # Cut example files
 
@@ -25,13 +25,18 @@ writeLAS(clipped_4,"grw_2.laz")
 writeLAS(clipped_5,"sn_2.laz")
 writeLAS(clipped_6,"kk_2.laz")
 
-plot(clipped_1, color = "Classification")
-plot(clipped_2, color = "Classification")
-plot(clipped_3, color = "Classification")
+clipped_7=lasclipCircle(catalog,188843,514837,100)
+clipped_8=lasclipCircle(catalog,188658,514598,100)
+clipped_9=lasclipCircle(catalog,188930,514575,100)
 
-plot(clipped_4, color = "Classification")
-plot(clipped_5, color = "Classification")
-plot(clipped_6, color = "Classification")
+writeLAS(clipped_7,"grw_3.laz")
+writeLAS(clipped_8,"sn_3.laz")
+writeLAS(clipped_9,"kk_3.laz")
+
+plot(clipped_7, color = "Classification")
+plot(clipped_8, color = "Classification")
+plot(clipped_9, color = "Classification")
+
 
 # Visualization with Plot3D
 
@@ -42,6 +47,10 @@ clipped_3=readLAS("kk_1.laz")
 clipped_4=readLAS("grw_2.laz")
 clipped_5=readLAS("sn_2.laz")
 clipped_6=readLAS("kk_2.laz")
+
+clipped_7=readLAS("grw_3.laz")
+clipped_8=readLAS("sn_3.laz")
+clipped_9=readLAS("kk_3.laz")
 
 clipped_4@data$NormZ=clipped_4@data$Z
 write.csv(clipped_4@data,"grw_forvis.csv")
@@ -65,6 +74,8 @@ defcolpal=palette(c("chartreuse","gold","darkorange4","chartreuse4"))
 defcolpal=addalpha(defcolpal, 0.45)
 
 rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
+  
+  # remove water related plot and calc if do not have water
   
   clipped_4_nonveg = lasfilter(clipped_4, Classification != 1)
   
@@ -129,29 +140,29 @@ rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
   
 }
 
-rasterplot(clipped_4,x=184877,y=511157,bird="Great reed warbler")
-rasterplot(clipped_5,x=184606,y=510973,bird="Savi's warbler")
-rasterplot(clipped_3,x=198263,y=516790,bird="Reed warbler")
+rasterplot(clipped_7,x=188843,y=514837,bird="Great reed warbler")
+rasterplot(clipped_8,x=188658,y=514598,bird="Savi's warbler")
+rasterplot(clipped_9,x=188930,y=514575,bird="Reed warbler")
 
 #crossplot
 
 crossplot<-function(clipped_4,x=184877,y=511157){
-  las_cross_ver=lasclipRectangle(clipped_4,x-1,y-60,x+1,y+40)
+  las_cross_ver=lasclipRectangle(clipped_4,x-1,y-80,x+1,y+80)
   las_cross_ver@data$cross=(las_cross_ver@data$Y-y+100)-40
   
   plot(x = las_cross_ver@data$cross, 
        y = las_cross_ver@data$Z, col = c("forestgreen", "grey", "blue","blue","blue","blue","blue","blue","blue","blue")[las_cross_ver@data$Classification],
        frame = FALSE, 
        xlab = "Distance[m]", ylab = "Height[m]",pch=19,ylim=c(0,20),
-       main="Observation point")
+       main="Observation point",cex.lab=1.5)
   abline(v=60,lty=3)
-  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"))
+  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"),cex=1.5)
   
 }
 
-crossplot(clipped_4,x=184877,y=511157)
-crossplot(clipped_5,x=184606,y=510973)
-crossplot(clipped_3,x=198263,y=516790)
+crossplot(clipped_7,x=188843,y=514837)
+crossplot(clipped_8,x=188658,y=514598)
+crossplot(clipped_9,x=188930,y=514575)
 
 # 3D pcloudpot
 
