@@ -147,8 +147,8 @@ rasterplot(clipped_9,x=188930,y=514575,bird="Reed warbler")
 #crossplot
 
 crossplot<-function(clipped_4,x=184877,y=511157){
-  las_cross_ver=lasclipRectangle(clipped_4,x-1,y-80,x+1,y+80)
-  las_cross_ver@data$cross=(las_cross_ver@data$Y-y+100)-40
+  las_cross_ver=lasclipRectangle(clipped_4,x-80,y-1,x+80,y+1)
+  las_cross_ver@data$cross=(las_cross_ver@data$X-x+100)-40
   
   plot(x = las_cross_ver@data$cross, 
        y = las_cross_ver@data$Z, col = c("forestgreen", "grey", "blue","blue","blue","blue","blue","blue","blue","blue")[las_cross_ver@data$Classification],
