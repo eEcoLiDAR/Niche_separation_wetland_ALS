@@ -37,6 +37,9 @@ plot(clipped_7, color = "Classification")
 plot(clipped_8, color = "Classification")
 plot(clipped_9, color = "Classification")
 
+clipped_10=lasclipCircle(catalog,188951,514459,100)
+writeLAS(clipped_10,"kk_4.laz")
+plot(clipped_10, color = "Classification")
 
 # Visualization with Plot3D
 
@@ -50,7 +53,7 @@ clipped_6=readLAS("kk_2.laz")
 
 clipped_7=readLAS("grw_3.laz")
 clipped_8=readLAS("sn_3.laz")
-clipped_9=readLAS("kk_3.laz")
+clipped_9=readLAS("kk_4.laz")
 
 clipped_4@data$NormZ=clipped_4@data$Z
 write.csv(clipped_4@data,"grw_forvis.csv")
@@ -142,7 +145,7 @@ rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
 
 rasterplot(clipped_7,x=188843,y=514837,bird="Great reed warbler")
 rasterplot(clipped_8,x=188658,y=514598,bird="Savi's warbler")
-rasterplot(clipped_9,x=188930,y=514575,bird="Reed warbler")
+rasterplot(clipped_9,x=188951,y=514459,bird="Reed warbler")
 
 #crossplot
 
@@ -160,9 +163,23 @@ crossplot<-function(clipped_4,x=184877,y=511157){
   
 }
 
+crossplot_vert<-function(clipped_4,x=184877,y=511157){
+  las_cross_ver=lasclipRectangle(clipped_4,x-1,y-80,x+1,y+80)
+  las_cross_ver@data$cross=(las_cross_ver@data$Y-y+100)-40
+  
+  plot(x = las_cross_ver@data$cross, 
+       y = las_cross_ver@data$Z, col = c("forestgreen", "grey", "blue","blue","blue","blue","blue","blue","blue","blue")[las_cross_ver@data$Classification],
+       frame = FALSE, 
+       xlab = "Distance[m]", ylab = "Height[m]",pch=19,ylim=c(0,20),
+       main="Observation point",cex.lab=1.5)
+  abline(v=60,lty=3)
+  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"),cex=1.5)
+  
+}
+
 crossplot(clipped_7,x=188843,y=514837)
 crossplot(clipped_8,x=188658,y=514598)
-crossplot(clipped_9,x=188930,y=514575)
+crossplot_vert(clipped_9,x=188951,y=514459)
 
 # 3D pcloudpot
 
