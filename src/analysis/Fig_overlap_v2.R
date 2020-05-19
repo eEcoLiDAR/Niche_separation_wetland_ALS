@@ -63,16 +63,19 @@ plot.2niche <- function(kk_pca12,grw_pca12,pal50kk,pal50grw,col1,col2) {
   
 }
 
+par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
 plot.2niche(kk_pca12,grw_pca12,pal50kk,pal50grw,"goldenrod4","green3")
 title("a) Great reed warbler compare to reed warbler [D=0.61]", adj = 0)
 legend("topright", legend=c("RW","GrW", "Background"),
        col=c("green3","goldenrod4","black"), lty=c(1,1,1),lwd=2,cex=0.8)
 
+par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
 plot.2niche(kk_pca12,sn_pca12,pal50kk,pal50sn,"deeppink","green3")
 title("b) Savi's warbler compare to reed warbler [D=0.56]", adj = 0)
 legend("topright", legend=c("RW","SW", "Background"),
        col=c("green3","deeppink","black"), lty=c(1,1,1),lwd=2,cex=0.8)
 
+par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
 plot.2niche(sn_pca12,grw_pca12,pal50sn,pal50grw,"goldenrod4","deeppink")
 title("c) Great reed warbler compare to Savi's warbler [D=0.46]", adj = 0)
 legend("topright", legend=c("GrW","SW", "Background"),
@@ -97,20 +100,23 @@ plot.2niche_diff <- function(kk_pca12,grw_pca12,pal50kk,pal50grw,col1,col2) {
   
 }
 
+par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
 plot.2niche_diff(kk_pca12,grw_pca12,pal50kk,pal50grw,"goldenrod4","green3")
 #title("b) niche difference", adj = 0)
 legend("topright", legend=c("RW 100%","RW 50%","GrW 100%", "GrW 50%","Background 100%"),
-       col=c("green3","green3","goldenrod4","goldenrod4","black"), lty=c(1,2,1,2,1),lwd=2,cex=0.8)
+       col=c("green3","green3","goldenrod4","goldenrod4","black"), lty=c(1,2,1,2,1),lwd=2)
 
+par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
 plot.2niche_diff(kk_pca12,sn_pca12,pal50kk,pal50sn,"deeppink","green3")
 #title("b) niche difference", adj = 0)
 legend("topright", legend=c("RW 100%","RW 50%","SW 100%", "SW 50%","Background 100%"),
-       col=c("green3","green3","deeppink","deeppink","black"), lty=c(1,2,1,2,1),lwd=2,cex=0.8)
+       col=c("green3","green3","deeppink","deeppink","black"), lty=c(1,2,1,2,1),lwd=2)
 
+par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
 plot.2niche_diff(sn_pca12,grw_pca12,pal50sn,pal50grw,"goldenrod4","deeppink")
 #title("b) niche difference", adj = 0)
 legend("topright", legend=c("GrW 100%","GrW 50%","SW 100%", "SW 50%","Background 100%"),
-       col=c("goldenrod4","goldenrod4","deeppink","deeppink","black"), lty=c(1,2,1,2,1),lwd=2,cex=0.8)
+       col=c("goldenrod4","goldenrod4","deeppink","deeppink","black"), lty=c(1,2,1,2,1),lwd=2)
 
 # plot color bar
 color.bar <- function(lut, min, max, nticks=11, ticks=seq(min, max, len=nticks), title='') {

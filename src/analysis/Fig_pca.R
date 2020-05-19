@@ -49,10 +49,10 @@ data_merged[is.na(data_merged)==TRUE] <- 0
 pca.env<-dudi.pca(data_merged[,1:noffea],scannf=FALSE,center=TRUE,nf=3)
 pca.env$co[2]=pca.env$co[2]*-1
 
-p1=fviz_pca_var(pca.env,axes = c(1, 2), col.var = "black",repel = TRUE,fontsize=14)
+p1=fviz_pca_var(pca.env,axes = c(1, 2), col.var = "black",repel = TRUE,labelsize = 7)
 
-p1+labs(x = "PCA 1 (37.2%)", y = "PCA 2 (23.9%)")+theme(axis.text=element_text(family="Sans",size=14),axis.title=element_text(family="Sans",size=14))+ggtitle("a) PCA")+
-  theme(text=element_text(family="Sans", size=14))
+p1+labs(x = "PCA 1 (37.2%)", y = "PCA 2 (23.9%)")+theme(axis.text=element_text(family="Sans",size=25),axis.title=element_text(family="Sans",size=25))+ggtitle("a) PCA")+
+  theme(text=element_text(family="Sans", size=25))
 
 # loadings
 
@@ -84,7 +84,7 @@ par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
 
 ecospat.plot.niche2(grw_pca12,name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50grw,"goldenrod4")
 title("b) Great reed warbler", adj = 0)
-legend("topright", legend=c("Background 100%","Background 50%","Occ.niche 100% = 64%", "Occ.niche 50% = 4.3%"),
+legend("topright", legend=c("Background 100%","Background 50%","Niche filling 100% = 64%", "Niche filling 50% = 4.3%"),
        col=c("black","black","goldenrod4","goldenrod4"), lty=c(1,2,1,2),lwd=2)
 
 pal2 <- colorRampPalette(c("grey95", "green3"))
@@ -93,7 +93,7 @@ par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
 
 ecospat.plot.niche2(kk_pca12,name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50kk,"green3")
 title("c) Reed warbler", adj = 0)
-legend("topright", legend=c("Background 100%","Background 50%","Occ.niche 100% = 94%", "Occ.niche 50% = 19.5%"),
+legend("topright", legend=c("Background 100%","Background 50%","Niche filling 100% = 94%", "Niche filling 50% = 19.5%"),
        col=c("black","black","green3","green3"), lty=c(1,2,1,2),lwd=2)
 
 pal3 <- colorRampPalette(c("grey95", "deeppink"))
@@ -102,7 +102,7 @@ par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
 
 ecospat.plot.niche2(sn_pca12,name.axis1 = "PCA 1",name.axis2 = "PCA 2",cor = FALSE,pal50sn,"deeppink")
 title("d) Savi's warbler", adj = 0)
-legend("topright", legend=c("Background 100%","Background 50%","Occ.niche 100% = 76%", "Occ.niche 50% = 13.5%"),
+legend("topright", legend=c("Background 100%","Background 50%","Niche filling 100% = 76%", "Niche filling 50% = 13.5%"),
        col=c("black","black","deeppink","deeppink"), lty=c(1,2,1,2),lwd=2)
 
 
