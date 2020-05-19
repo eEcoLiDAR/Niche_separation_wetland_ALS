@@ -73,7 +73,7 @@ addalpha <- function(colors, alpha=1.0) {
   return(rgb(r[1,], r[2,], r[3,], r[4,]))
 }
 
-defcolpal=palette(c("chartreuse","gold","darkorange4","chartreuse4"))
+defcolpal=palette(c("gray48","gold","lawngreen","chartreuse4"))
 defcolpal=addalpha(defcolpal, 0.45)
 
 rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
@@ -128,17 +128,19 @@ rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
   P12 = Polygon(coords3)
   line_cr2 = SpatialPolygons(list(Polygons(list(P12), ID = "a")), proj4string=CRS("+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs"))
   
-  defcolpal=palette(c("chartreuse","gold","darkorange4","chartreuse4"))
+  defcolpal=palette(c("gray48","gold","lawngreen","green4"))
   defcolpal=addalpha(defcolpal, 0.45)
   
   par(mfrow=c(1,1)) 
+  par(cex.lab=2, cex.axis=1.5, cex.main=2)
   plot(dsm_shd, col=grey(0:100/100), legend=FALSE, main=bird)
-  plot(birdpoint,pch=1,cex=3,lwd = 3,col="black",add=TRUE)
+  legend("topright",legend=c("Ground","Water"),xpd=TRUE,pch=19,col = c("grey","blue"),cex=1.5)
+  plot(birdpoint,pch=1,lwd = 3,col="black",add=TRUE)
   plot(line_cr, lwd=3,col="black",add=TRUE)
   plot(line_cr2, lwd=3,col="black",add=TRUE)
   plot(height_class, col=defcolpal,breaks=c(0,1,2,3,4), add=TRUE,
        lab.breaks = c("0","1","3","5","20"),
-       legend.args=list(text='Height [m]', side=4, font=2, line=2.5, cex=1.5))
+       legend.args=list(text='Height [m]', side=4, font=2, line=2.5,cex=2))
   plot(water_class, col="blue", legend=FALSE, add=TRUE)
   
 }
@@ -153,13 +155,14 @@ crossplot<-function(clipped_4,x=184877,y=511157){
   las_cross_ver=lasclipRectangle(clipped_4,x-80,y-1,x+80,y+1)
   las_cross_ver@data$cross=(las_cross_ver@data$X-x+100)-40
   
+  par(cex.lab=2, cex.axis=1.5, cex.main=2)
   plot(x = las_cross_ver@data$cross, 
        y = las_cross_ver@data$Z, col = c("forestgreen", "grey", "blue","blue","blue","blue","blue","blue","blue","blue")[las_cross_ver@data$Classification],
        frame = FALSE, 
        xlab = "Distance[m]", ylab = "Height[m]",pch=19,ylim=c(0,20),
-       main="Observation point",cex.lab=1.5)
+       main="Observation point",cex.lab=2)
   abline(v=60,lty=3)
-  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"),cex=1.5)
+  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"),cex=2)
   
 }
 
@@ -167,13 +170,14 @@ crossplot_vert<-function(clipped_4,x=184877,y=511157){
   las_cross_ver=lasclipRectangle(clipped_4,x-1,y-80,x+1,y+80)
   las_cross_ver@data$cross=(las_cross_ver@data$Y-y+100)-40
   
+  par(cex.lab=2, cex.axis=1.5, cex.main=2)
   plot(x = las_cross_ver@data$cross, 
        y = las_cross_ver@data$Z, col = c("forestgreen", "grey", "blue","blue","blue","blue","blue","blue","blue","blue")[las_cross_ver@data$Classification],
        frame = FALSE, 
        xlab = "Distance[m]", ylab = "Height[m]",pch=19,ylim=c(0,20),
-       main="Observation point",cex.lab=1.5)
+       main="Observation point",cex.lab=2)
   abline(v=60,lty=3)
-  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"),cex=1.5)
+  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"),cex=2)
   
 }
 
