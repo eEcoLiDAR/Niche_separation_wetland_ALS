@@ -82,41 +82,56 @@ legend("topright", legend=c("GrW","SW", "Background"),
        col=c("goldenrod4","deeppink","black"), lty=c(1,1,1),lwd=2,cex=0.8)
 
 #plot niche difference
-plot.2niche_diff <- function(kk_pca12,grw_pca12,pal50kk,pal50grw,col1,col2) {
+plot.2niche_diff <- function(kk_pca12,grw_pca12,pal50kk,pal50grw,col1,col2,pal50diff) {
   diff=grw_pca12$z.uncor-kk_pca12$z.uncor
   
   image(x=kk_pca12$x,y=kk_pca12$y,z=t(as.matrix(diff))[,nrow(as.matrix(diff)):1], col = alpha(pal50diff,1), zlim = c(-1,1), 
         xlab = "PCA 1", ylab = "PCA 2")
   
-  grw_pca12$uncor.norm<-t(as.matrix(grw_pca12$z.uncor))[,nrow(as.matrix(grw_pca12$z.uncor)):1]
-  contour(x=grw_pca12$x,y=grw_pca12$y,grw_pca12$uncor.norm, levels = quantile(grw_pca12$uncor.norm[grw_pca12$uncor.norm > 0], c(0, 0.5)), drawlabels = FALSE,
-          lty = c(1, 2),col=col1,lwd=2,add=TRUE)
-  kk_pca12$uncor.norm<-t(as.matrix(kk_pca12$z.uncor))[,nrow(as.matrix(kk_pca12$z.uncor)):1]
-  contour(x=kk_pca12$x,y=kk_pca12$y,kk_pca12$uncor.norm, add = TRUE, levels = quantile(kk_pca12$uncor.norm[kk_pca12$uncor.norm > 0], c(0, 0.5)), drawlabels = FALSE,
-          lty = c(1, 2),col=col2,lwd=2)
+  #grw_pca12$uncor.norm<-t(as.matrix(grw_pca12$z.uncor))[,nrow(as.matrix(grw_pca12$z.uncor)):1]
+  #contour(x=grw_pca12$x,y=grw_pca12$y,grw_pca12$uncor.norm, levels = quantile(grw_pca12$uncor.norm[grw_pca12$uncor.norm > 0], c(0, 0.5)), drawlabels = FALSE,
+          #lty = c(1, 2),col=col1,lwd=2,add=TRUE)
+  #kk_pca12$uncor.norm<-t(as.matrix(kk_pca12$z.uncor))[,nrow(as.matrix(kk_pca12$z.uncor)):1]
+  #contour(x=kk_pca12$x,y=kk_pca12$y,kk_pca12$uncor.norm, add = TRUE, levels = quantile(kk_pca12$uncor.norm[kk_pca12$uncor.norm > 0], c(0, 0.5)), drawlabels = FALSE,
+          #lty = c(1, 2),col=col2,lwd=2)
   kk_pca12$Z<-t(as.matrix(kk_pca12$Z))[,nrow(as.matrix(kk_pca12$Z)):1]
   contour(x=kk_pca12$x,y=kk_pca12$y,kk_pca12$Z, add = TRUE, levels = quantile(kk_pca12$Z[kk_pca12$Z > 0], c(0)), drawlabels = FALSE,
           lty = c(1),lwd=2)
   
 }
 
-par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
-plot.2niche_diff(kk_pca12,grw_pca12,pal50kk,pal50grw,"goldenrod4","green3")
-#title("b) niche difference", adj = 0)
-legend("topright", legend=c("RW 100%","RW 50%","GrW 100%", "GrW 50%","Background 100%"),
-       col=c("green3","green3","goldenrod4","goldenrod4","black"), lty=c(1,2,1,2,1),lwd=2)
+paldiff <- colorRampPalette(c("green3","white","goldenrod4"))
+pal50diff<- paldiff(50)
 
-par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
-plot.2niche_diff(kk_pca12,sn_pca12,pal50kk,pal50sn,"deeppink","green3")
+par(cex.lab=2, cex.axis=2, cex.main=2)
+plot.2niche_diff(kk_pca12,grw_pca12,pal50kk,pal50grw,"goldenrod4","green3",pal50diff)
 #title("b) niche difference", adj = 0)
-legend("topright", legend=c("RW 100%","RW 50%","SW 100%", "SW 50%","Background 100%"),
-       col=c("green3","green3","deeppink","deeppink","black"), lty=c(1,2,1,2,1),lwd=2)
+legend("topright", legend=c("Background 100%"),
+       col=c("black"), lty=c(1),lwd=2,cex=1.5)
+axis(3,labels=FALSE,tck=0.000001)
+axis(2,at=c(-5,6))
 
-par(cex.lab=1.5, cex.axis=1.5, cex.main=2)
-plot.2niche_diff(sn_pca12,grw_pca12,pal50sn,pal50grw,"goldenrod4","deeppink")
+paldiff <- colorRampPalette(c("green3","white","deeppink"))
+pal50diff<- paldiff(50)
+
+par(cex.lab=2, cex.axis=2, cex.main=2)
+plot.2niche_diff(kk_pca12,sn_pca12,pal50kk,pal50sn,"deeppink","green3",pal50diff)
 #title("b) niche difference", adj = 0)
-legend("topright", legend=c("GrW 100%","GrW 50%","SW 100%", "SW 50%","Background 100%"),
-       col=c("goldenrod4","goldenrod4","deeppink","deeppink","black"), lty=c(1,2,1,2,1),lwd=2)
+legend("topright", legend=c("Background 100%"),
+       col=c("black"), lty=c(1),lwd=2,cex=1.5)
+axis(3,labels=FALSE,tck=0.000001)
+axis(2,at=c(-5,6))
+
+paldiff <- colorRampPalette(c("deeppink","white","goldenrod4"))
+pal50diff<- paldiff(50)
+
+par(cex.lab=2, cex.axis=2, cex.main=2)
+plot.2niche_diff(sn_pca12,grw_pca12,pal50sn,pal50grw,"goldenrod4","deeppink",pal50diff)
+#title("b) niche difference", adj = 0)
+legend("topright", legend=c("Background 100%"),
+       col=c("black"), lty=c(1),lwd=2,cex=1.5)
+axis(3,labels=FALSE,tck=0.000001)
+axis(2,at=c(-5,6))
 
 # plot color bar
 color.bar <- function(lut, min, max, nticks=11, ticks=seq(min, max, len=nticks), title='') {
