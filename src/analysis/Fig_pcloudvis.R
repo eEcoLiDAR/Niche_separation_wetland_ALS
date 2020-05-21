@@ -41,6 +41,14 @@ clipped_10=lasclipCircle(catalog,188951,514459,100)
 writeLAS(clipped_10,"kk_4.laz")
 plot(clipped_10, color = "Classification")
 
+clipped_7=lasclipCircle(catalog,188843,514837,200)
+clipped_8=lasclipCircle(catalog,188658,514598,200)
+clipped_9=lasclipCircle(catalog,188951,514459,200)
+
+writeLAS(clipped_7,"grw_200m.laz")
+writeLAS(clipped_8,"sn_200m.laz")
+writeLAS(clipped_9,"kk_200m.laz")
+
 # Visualization with Plot3D
 
 clipped_1=readLAS("grw_1.laz")
@@ -51,18 +59,9 @@ clipped_4=readLAS("grw_2.laz")
 clipped_5=readLAS("sn_2.laz")
 clipped_6=readLAS("kk_2.laz")
 
-clipped_7=readLAS("grw_3.laz")
-clipped_8=readLAS("sn_3.laz")
-clipped_9=readLAS("kk_4.laz")
-
-clipped_4@data$NormZ=clipped_4@data$Z
-write.csv(clipped_4@data,"grw_forvis.csv")
-
-clipped_5@data$NormZ=clipped_5@data$Z
-write.csv(clipped_5@data,"sw_forvis.csv")
-
-clipped_3@data$NormZ=clipped_3@data$Z
-write.csv(clipped_3@data,"rw_forvis.csv")
+clipped_7=readLAS("grw_200m.laz")
+clipped_8=readLAS("sn_200m.laz")
+clipped_9=readLAS("kk_200m.laz")
 
 #rasterplot
 addalpha <- function(colors, alpha=1.0) {
@@ -132,7 +131,7 @@ rasterplot<-function(clipped_4,x=184877,y=511157,bird="Great reed warbler"){
   defcolpal=addalpha(defcolpal, 0.45)
   
   par(mfrow=c(1,1)) 
-  par(cex.lab=2, cex.axis=1.5, cex.main=2)
+  par(cex.lab=2, cex.axis=2.5, cex.main=2)
   plot(dsm_shd, col=grey(0:100/100), legend=FALSE, main=bird)
   legend("topright",legend=c("Ground","Water"),xpd=TRUE,pch=19,col = c("grey","blue"),cex=1.5)
   plot(birdpoint,pch=1,lwd = 3,col="black",add=TRUE)
@@ -155,14 +154,14 @@ crossplot<-function(clipped_4,x=184877,y=511157){
   las_cross_ver=lasclipRectangle(clipped_4,x-80,y-1,x+80,y+1)
   las_cross_ver@data$cross=(las_cross_ver@data$X-x+100)-40
   
-  par(cex.lab=2, cex.axis=1.5, cex.main=2)
+  par(cex.lab=2, cex.axis=2.5, cex.main=2)
   plot(x = las_cross_ver@data$cross, 
        y = las_cross_ver@data$Z, col = c("forestgreen", "grey", "blue","blue","blue","blue","blue","blue","blue","blue")[las_cross_ver@data$Classification],
        frame = FALSE, 
        xlab = "Distance[m]", ylab = "Height[m]",pch=19,ylim=c(0,20),
        main="Observation point",cex.lab=2)
   abline(v=60,lty=3)
-  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"),cex=2)
+  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"),cex=2.5)
   
 }
 
@@ -170,19 +169,19 @@ crossplot_vert<-function(clipped_4,x=184877,y=511157){
   las_cross_ver=lasclipRectangle(clipped_4,x-1,y-80,x+1,y+80)
   las_cross_ver@data$cross=(las_cross_ver@data$Y-y+100)-40
   
-  par(cex.lab=2, cex.axis=1.5, cex.main=2)
+  par(cex.lab=2, cex.axis=2.5, cex.main=2)
   plot(x = las_cross_ver@data$cross, 
        y = las_cross_ver@data$Z, col = c("forestgreen", "grey", "blue","blue","blue","blue","blue","blue","blue","blue")[las_cross_ver@data$Classification],
        frame = FALSE, 
        xlab = "Distance[m]", ylab = "Height[m]",pch=19,ylim=c(0,20),
        main="Observation point",cex.lab=2)
   abline(v=60,lty=3)
-  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"),cex=2)
+  legend("topright",legend=c("Ground","Vegetation","Water"),xpd=TRUE,pch=19,col = c("grey", "forestgreen","blue"),cex=2.5)
   
 }
 
 crossplot(clipped_7,x=188843,y=514837)
-crossplot(clipped_8,x=188658,y=514598)
+crossplot_vert(clipped_8,x=188658,y=514598)
 crossplot_vert(clipped_9,x=188951,y=514459)
 
 # 3D pcloudpot
