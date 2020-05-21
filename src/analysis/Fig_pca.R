@@ -33,6 +33,10 @@ sn_pca12 <- readRDS("sn_kdens.rds")
 # PCA plot
 data_merged=rbind(GrW,KK,Sn,Bgr)
 
+GrW_lgn8 <- subset(GrW, lgn8 %in% c(16,17,30,322,332,41,42,43))
+KK_lgn8 <- subset(KK, lgn8 %in% c(16,17,30,322,332,41,42,43))
+Sn_lgn8 <- subset(Sn, lgn8 %in% c(16,17,30,322,332,41,42,43))
+
 noffea=9
 
 # 200 m only reed
