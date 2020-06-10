@@ -180,7 +180,7 @@ crossplot_vert<-function(clipped_4,x=184877,y=511157){
   
 }
 
-crossplot(clipped_7,x=188843,y=514837)
+crossplot_vert(clipped_7,x=188843,y=514837)
 crossplot_vert(clipped_8,x=188658,y=514598)
 crossplot_vert(clipped_9,x=188951,y=514459)
 
