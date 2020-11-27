@@ -1,10 +1,4 @@
-# PhDPaper2: Separating habitat niches of selected wetland birds using country-wide ALS data
-
-This repository consist the scripts which was used for 
-
-Z. Koma, M. W. Grootes, C. W. Meijer, F. Nattino, A. C. Seijmonsbergen, H. Sierdsema, R. Foppen & W. D. Kissling (in prep.): Niche separation of wetland birds revealed from fine-scale LiDAR metrics
-
-The codes are still under a cleaning process. 
+# Separating habitat niches of selected wetland birds using country-wide ALS data
 
 # Instructions for usage
 
