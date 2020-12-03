@@ -1,13 +1,11 @@
 library(ecospat)
-library(FactoMineR)
-library(factoextra)
 library(corrplot)
 
 library(dplyr)
 library(stringr)
 
 # Global
-workingdirectory="D:/Koma/_PhD/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v13/"
+workingdirectory="D:/Koma/Sync_PhD/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v15_sensitivity_1000/"
 setwd(workingdirectory)
 
 # Import data
@@ -69,9 +67,9 @@ scores.clim.background$Axis2=scores.clim.background$Axis2*-1
 
 # PCA 1 vs PCA 2
 
-grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=500) 
-grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=500) 
-grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=500) 
+grid.clim.grotekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.grotekarakiet[,c(1,2)], R=1000) 
+grid.clim.kleinekarakiet<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.kleinekarakiet[,c(1,2)], R=1000) 
+grid.clim.snor<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,2)], glob1=scores.clim.background[,c(1,2)], sp=scores.sp.snor[,c(1,2)], R=1000) 
 
 saveRDS(grid.clim.grotekarakiet, "grw_kdens.rds")
 saveRDS(grid.clim.kleinekarakiet, "kk_kdens.rds")
@@ -79,9 +77,9 @@ saveRDS(grid.clim.snor, "sn_kdens.rds")
 
 # PCA 1 vs PCA 3
 
-grid.clim.grotekarakiet2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.background[,c(1,3)], sp=scores.sp.grotekarakiet[,c(1,3)], R=500) 
-grid.clim.kleinekarakiet2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.background[,c(1,3)], sp=scores.sp.kleinekarakiet[,c(1,3)], R=500) 
-grid.clim.snor2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.background[,c(1,3)], sp=scores.sp.snor[,c(1,3)], R=500) 
+grid.clim.grotekarakiet2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.background[,c(1,3)], sp=scores.sp.grotekarakiet[,c(1,3)], R=1000) 
+grid.clim.kleinekarakiet2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.background[,c(1,3)], sp=scores.sp.kleinekarakiet[,c(1,3)], R=1000) 
+grid.clim.snor2<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(1,3)], glob1=scores.clim.background[,c(1,3)], sp=scores.sp.snor[,c(1,3)], R=1000) 
 
 saveRDS(grid.clim.grotekarakiet2, "grw_kdens2.rds")
 saveRDS(grid.clim.kleinekarakiet2, "kk_kdens2.rds")
@@ -89,9 +87,9 @@ saveRDS(grid.clim.snor2, "sn_kdens2.rds")
 
 # PCA 2 vs PCA 3
 
-grid.clim.grotekarakiet3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.background[,c(2,3)], sp=scores.sp.grotekarakiet[,c(2,3)], R=500) 
-grid.clim.kleinekarakiet3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.background[,c(2,3)], sp=scores.sp.kleinekarakiet[,c(2,3)], R=500) 
-grid.clim.snor3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.background[,c(2,3)], sp=scores.sp.snor[,c(2,3)], R=500) 
+grid.clim.grotekarakiet3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.background[,c(2,3)], sp=scores.sp.grotekarakiet[,c(2,3)], R=1000) 
+grid.clim.kleinekarakiet3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.background[,c(2,3)], sp=scores.sp.kleinekarakiet[,c(2,3)], R=1000) 
+grid.clim.snor3<-ecospat.grid.clim.dyn(glob=scores.globclim[,c(2,3)], glob1=scores.clim.background[,c(2,3)], sp=scores.sp.snor[,c(2,3)], R=1000) 
 
 saveRDS(grid.clim.grotekarakiet3, "grw_kdens3.rds")
 saveRDS(grid.clim.kleinekarakiet3, "kk_kdens3.rds")

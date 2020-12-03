@@ -1,12 +1,12 @@
 library(ecospat)
 
 # Global
-workingdirectory="C:/Koma/Sync/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v13/"
+workingdirectory="D:/Koma/Sync_PhD/_Amsterdam/_PhD/Chapter3_wetlandniche/3_Dataprocessing/Niche_v14_sensitivity/"
 setwd(workingdirectory)
 
 # PCA 1 vs PCA 2
 
-eq.test_gr_k<- readRDS("eq.test_gr_k.rds")
+eq.test_gr_k<- readRDS("eq.test_gr_k.rds") # to get mean and sd (reported in the table) should use:mean(eq.test_gr_k[["sim"]][["D"]]) and sd(eq.test_gr_k[["sim"]][["D"]])
 sim.test_gr_k<- readRDS("sim.test_gr_k.rds")
 sim.test_k_gr<- readRDS("sim.test_k_gr.rds")
 
