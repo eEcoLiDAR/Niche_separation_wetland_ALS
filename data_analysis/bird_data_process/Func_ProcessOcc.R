@@ -1,5 +1,4 @@
 "
-@author: Zsofia Koma, UvA
 Aim: Helping unctions for organizing bird observation data
 "
 

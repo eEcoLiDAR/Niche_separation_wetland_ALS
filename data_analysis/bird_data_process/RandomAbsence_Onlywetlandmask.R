@@ -1,5 +1,4 @@
 "
-@author: Zsofia Koma, UvA
 Aim: Place absence into survey plots
 "
 

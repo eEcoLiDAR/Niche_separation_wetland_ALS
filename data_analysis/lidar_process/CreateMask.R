@@ -1,5 +1,4 @@
 "
-@author: Zsofia Koma, UvA
 Aim: Apply cadastre and landcover based filters prior of data aggregation
 "
 library(gdalUtils)

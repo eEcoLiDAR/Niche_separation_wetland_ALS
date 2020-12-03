@@ -1,5 +1,4 @@
 "
-@author: Zsofia Koma, UvA
 Aim: Pre-process presence bird data (territory)
 "
 
